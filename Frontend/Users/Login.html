@@ -143,6 +143,14 @@ body{
     font-size:20px;
 }
 
+.error-message{
+    display:none;
+    color:#e02424;
+    font-size:13px;
+    margin-top:8px;
+    padding-left:2px;
+}
+
 .forgot{
     text-align:right;
     margin-bottom:25px;
@@ -236,8 +244,9 @@ body{
         <div class="input-group">
             <label>Email Address</label>
             <div class="input-box">
-                <input type="email" placeholder="Enter your email">
+                <input type="email" id="email" placeholder="Enter your email">
             </div>
+            <span class="error-message" id="emailError">Please enter a valid email</span>
         </div>
 
         <div class="input-group">
@@ -274,6 +283,31 @@ function togglePassword() {
         eye.textContent = "👁"; // Changes back when hidden
     }
 }
+
+// Email validation on Enter key press
+const emailInput = document.getElementById("email");
+const emailError = document.getElementById("emailError");
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        const emailValue = emailInput.value.trim();
+
+        if (!emailRegex.test(emailValue)) {
+            emailError.style.display = "block";
+        } else {
+            emailError.style.display = "none";
+        }
+    }
+});
+
+// Hide the error as soon as the user starts correcting the email
+emailInput.addEventListener("input", function() {
+    if (emailError.style.display === "block") {
+        emailError.style.display = "none";
+    }
+});
 </script>
 
 </body>
