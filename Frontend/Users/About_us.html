@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>CMS About Us</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:white;
+}
+
+.logo-section{
+    position:absolute;
+    top:15px;
+    left:20px;
+
+    display:flex;
+    align-items:center;
+
+    width:420px;
+    max-width: calc(100vw - 240px);
+}
+
+.logo-section img{
+    width:110px;
+    height:auto;
+    margin-right:15px;
+}
+
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.logo-text h2{
+    color:#555;
+    font-size:11px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.logo-text p{
+    color:#1E64C8;
+    font-size:11px;
+    font-weight:600;
+    font-weight:bold;
+}
+
+.buttons{
+    position: absolute;
+    top: 30px;
+    right: 20px;
+
+    display: flex;
+    gap: 6px;
+}
+
+.buttons button{
+    background: transparent;
+    border: none;
+    color: #0B2D6D;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 6px;
+}
+
+.buttons button:hover{
+    background-color: #0B2D6D;
+    color: white;
+}
+
+ .about{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+    padding:50px 60px 30px;
+    flex-wrap:wrap;
+  }
+ 
+  .about-text{
+    flex:1;
+    min-width:300px;
+  }
+ 
+  .about-text h2{
+    color:var(--navy);
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:20px;
+  }
+ 
+  .about-text p{
+    font-size:16px;
+    line-height:1.8;
+    color:#333;
+    margin-bottom:18px;
+    max-width:560px;
+  }
+ 
+  .about-image-placeholder{
+    margin-top:50px;
+    flex:1;
+    min-width:300px;
+    max-width:480px;
+    height:340px;
+    border:2px dashed #b9c0d6;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--gray);
+    font-size:14px;
+    background:#fff;
+  }
+
+    .features-heading{
+    padding:10px 60px 0;
+  }
+ 
+  .features-heading h2{
+    color:var(--navy);
+    font-size:28px;
+    font-weight:700;
+  }
+ 
+  .features{
+    border-top:1px solid var(--border);
+    margin-top:24px;
+    padding:40px 60px;
+  }
+ 
+  .features-image-placeholder{
+    width:100%;
+    min-height:260px;
+    border:2px dashed #b9c0d6;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--gray);
+    font-size:14px;
+    background:#fff;
+  }
+ 
+   @media (max-width: 768px){
+    header{ padding:16px 20px; }
+    nav ul{ gap:20px; }
+    .about{ padding:40px 24px; }
+    .features-heading{ padding:10px 24px 0; }
+    .features{ padding:30px 24px; }
+  }
+
+</style>
+</head>
+<body>
+    <div class="logo-section">
+    <img src="logo.png" alt="Logo">
+    <div class="logo-text">
+        <h1>KATHMANDU VALLEY</h1>
+        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+        <p>Report, Track and Resolve Together for a Better Valley</p>
+    </div>
+    </div>
+
+    <div class="buttons">
+        <button>Home</button>
+        <button>About</button>
+        <button>Contact Us</button>
+        <button>Login</button>
+    </div>
+
+     <section class="about">
+    <div class="about-text">
+      <h2>About Us</h2>
+      <p>The Complaint Management System is designed to make the process of registering, tracking, and resolving complaints simple, efficient, and transparent for both users and administrators.</p>
+      <p>Our mission is to provide a user-friendly platform that ensures every complaint is addressed and resolved in a timely manner.</p>
+    </div>
+    <div class="about-image-placeholder">
+      About Us Image
+    </div>
+  </section>
+
+   <div class="features-heading">
+    <h2>Our Features</h2>
+  </div>
+ 
+  <section class="features">
+    <div class="features-image-placeholder">
+      Our Features Image
+    </div>
+  </section>
+</body>
+</html>
