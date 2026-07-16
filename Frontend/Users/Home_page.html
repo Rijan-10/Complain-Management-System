@@ -86,20 +86,16 @@ body{
 
 .hero{
     width:100%;
-    min-height:120px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-top:120px;
-
-    padding:40px 80px;
+    padding:120px 80px 40px 80px;
 }
 
 /* LEFT SIDE */
 
 .hero-left{
-    width:45%;
+    width:40%;
 }
 
 .hero-left h1{
@@ -248,6 +244,18 @@ body{
 
 }
 
+.image{
+    flex:1;
+    display:flex;
+    justify-content:flex-end;   /* Pushes image to the far right */
+    align-items:center;
+}
+
+.image img{
+    width:400px;   /* Adjust size as needed */
+    height:auto;
+}
+
 </style>
 
 </head>
@@ -292,6 +300,10 @@ body{
 
     </div>
 
+    <div class="image">
+        <img src="https://raw.githubusercontent.com/Rijan-10/Complain-Management-System/main/Photos/Screenshot_2026-07-15_155537-removebg-preview_upscayl_4x_digital-art-4x.png">
+    </div>  
+
 </section>
 
 <section class="features">
@@ -328,9 +340,6 @@ body{
     </div>
 
 </section>
-<div class ="Photo">
-    <img src="https://github.com/Rijan-10/Complain-Management-System/blob/main/Photos/Screenshot%202026-07-15%20155537.png">
-</div>
 
 </body>
 </html>
