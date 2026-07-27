@@ -146,6 +146,201 @@ body{
 .nav-item:hover svg{
     stroke:#1E64C8;
 }
+/* ==========================
+   MAIN CONTENT
+========================== */
+
+.main-content{
+    flex:1;
+    padding:30px;
+    background:#F8FAFC;
+    min-height:calc(100vh - 130px);
+    overflow-x:auto;
+}
+
+/* Dashboard Title */
+
+.page-title{
+    font-size:42px;
+    color:#123A80;
+    font-weight:bold;
+    margin-bottom:30px;
+}
+
+/* Summary Cards */
+
+.summary-cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin-bottom:35px;
+}
+
+.card{
+    background:#fff;
+    border-radius:20px;
+    padding:28px;
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+}
+
+.card h3{
+    font-size:18px;
+    color:#333;
+    margin-bottom:30px;
+}
+
+.card-number{
+    height:70px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:50px;
+    font-weight:bold;
+    user-select:none;
+}
+
+/* Number Colors */
+
+.total{
+    color:#2962FF;
+}
+
+.progress{
+    color:#FF6A1A;
+}
+
+.resolved{
+    color:#08B64B;
+}
+
+.closed{
+    color:#111;
+}
+
+/* Table */
+
+.table-container{
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+    overflow:hidden;
+}
+
+.table-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 30px;
+    border-bottom:1px solid #ECECEC;
+}
+
+.table-header h2{
+    font-size:22px;
+    color:#222;
+}
+
+/* View All Button */
+
+.view-btn{
+    background:#2962FF;
+    color:white;
+    text-decoration:none;
+    padding:12px 28px;
+    border-radius:12px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.view-btn:hover{
+    background:#174BC5;
+}
+
+/* Complaint Table */
+
+.complaint-table{
+    width:100%;
+    border-collapse:collapse;
+    pointer-events:none;
+    user-select:none;
+}
+
+.complaint-table th{
+    background:#FAFAFA;
+    color:#333;
+    padding:18px;
+    font-size:17px;
+    border-bottom:1px solid #EAEAEA;
+}
+
+.complaint-table td{
+    padding:22px 18px;
+    text-align:center;
+    border-bottom:1px solid #F2F2F2;
+    color:#444;
+}
+
+/* Status */
+
+.status{
+    display:inline-block;
+    min-width:120px;
+    padding:8px 18px;
+    border-radius:12px;
+    color:white;
+    font-weight:bold;
+}
+
+.status-progress{
+    background:#FF6A1A;
+}
+
+.status-resolved{
+    background:#08B64B;
+}
+
+.status-closed{
+    background:#111;
+}
+
+/* Empty Placeholder */
+
+.empty-placeholder{
+    text-align:center;
+    padding:60px 20px;
+    color:#888;
+    font-size:17px;
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+    .summary-cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:650px){
+
+    .wrapper{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+
+    .main-content{
+        padding:20px;
+    }
+
+    .summary-cards{
+        grid-template-columns:1fr;
+    }
+
+}
  
 
 </style>
@@ -191,7 +386,78 @@ body{
             Change Password
         </div>
     </div>
+<div class="main-content">
 
+    <h1 class="page-title">Dashboard</h1>
+
+    <!-- Summary Cards -->
+
+    <div class="summary-cards">
+
+        <div class="card">
+            <h3>Total Complaints</h3>
+            <div class="card-number total"></div>
+        </div>
+
+        <div class="card">
+            <h3>In Progress</h3>
+            <div class="card-number progress"></div>
+        </div>
+
+        <div class="card">
+            <h3>Resolved</h3>
+            <div class="card-number resolved"></div>
+        </div>
+
+        <div class="card">
+            <h3>Closed</h3>
+            <div class="card-number closed"></div>
+        </div>
+
+    </div>
+
+    <!-- Recent Complaints -->
+
+    <div class="table-container">
+
+        <div class="table-header">
+
+            <h2>Recent Complaints</h2>
+
+            <a href="My_complaint.html" class="view-btn">
+                View All
+            </a>
+
+        </div>
+
+        <table class="complaint-table">
+
+            <thead>
+
+                <tr>
+                    <th>Complaint ID</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td colspan="4" class="empty-placeholder">
+                        Complaint information will be displayed here.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 </div>
 </body>
 </html>
