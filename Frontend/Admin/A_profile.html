@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS Admin Profile</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:white;
+}
+
+.logo-section{
+    position:absolute;
+    top:15px;
+    left:20px;
+
+    display:flex;
+    align-items:center;
+
+    width:420px;
+    max-width: calc(100vw - 160px);
+}
+
+@media (max-width: 480px){
+    .top-header{
+        flex-wrap:wrap;
+        height:auto;
+        padding:15px 15px 90px;
+    }
+    .logo-section{
+        position:static;
+        width:100%;
+        max-width:100%;
+        margin-bottom:10px;
+    }
+    .user-info{
+        margin-left:auto;
+    }
+}
+
+.logo-section img{
+    width:110px;
+    height:auto;
+    margin-right:15px;
+}
+
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.logo-text h2{
+    color:#555;
+    font-size:11px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.logo-text p{
+    color:#1E64C8;
+    font-size:11px;
+    font-weight:600;
+    font-weight:bold;
+}
+
+.top-header{
+    position:relative;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    height:110px;
+    padding:0 30px;
+    background:#F7F8FA;
+    border-bottom:1px solid #E4E7EB;
+}
+
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.user-info:hover{
+    background:#E8F0FE;
+}
+
+.profile-placeholder{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#E4E8EE;
+    border:1px solid #C9CFD8;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.user-info span{
+    font-size:15px;
+    color:#333;
+}
+
+.dropdown-arrow{
+    flex-shrink:0;
+}
+
+.wrapper{
+    display:flex;
+    align-items:flex-start;
+}
+
+.sidebar{
+    width:270px;
+    background:white;
+    border-right:1px solid #E4E7EB;
+    padding:25px 15px;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 18px;
+    border-radius:8px;
+    margin-bottom:6px;
+    font-weight:bold;
+    font-size:15px;
+    color:#1A1A1A;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+.nav-item svg{
+    stroke:#1A1A1A;
+    transition:stroke 0.2s ease;
+    flex-shrink:0;
+}
+
+.nav-item:hover{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+
+.nav-item:hover svg{
+    stroke:#1E64C8;
+}
+
+.nav-item.active{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+
+.nav-item.active svg{
+    stroke:#1E64C8;
+}
+
+.main-content{
+    flex:1;
+    padding:30px 40px;
+    background:#FAFBFC;
+    min-height:calc(100vh - 110px);
+}
+
+.page-title{
+    color:#0B2D6D;
+    font-size:26px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.card{
+    background:white;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    padding:25px 30px;
+    margin-bottom:20px;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-group:last-child{
+    margin-bottom:0;
+}
+
+.form-group label{
+    display:block;
+    font-size:14px;
+    color:#333;
+    margin-bottom:8px;
+}
+
+.profile-layout{
+    display:flex;
+    align-items:flex-start;
+    gap:20px;
+}
+
+.profile-card{
+    flex:1;
+}
+
+.side-column{
+    width:340px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.section-title{
+    font-size:16px;
+    font-weight:800;
+    color:#1A1A1A;
+    padding-bottom:14px;
+    margin-bottom:22px;
+    border-bottom:1px solid #E4E7EB;
+}
+
+.profile-body{
+    display:flex;
+    gap:40px;
+}
+
+.profile-picture-col{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+    flex-shrink:0;
+}
+
+.avatar-placeholder{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    border:3px solid #1A1A1A;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:white;
+    flex-shrink:0;
+}
+
+.avatar-placeholder svg{
+    width:70%;
+    height:70%;
+    stroke:#1A1A1A;
+}
+
+.change-picture-btn{
+    background:white;
+    color:#1E64C8;
+    border:1.5px solid #1E64C8;
+    padding:10px 18px;
+    border-radius:8px;
+    font-weight:bold;
+    font-size:14px;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+.change-picture-btn:hover{
+    background:#1E64C8;
+    color:white;
+}
+
+.profile-fields{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.profile-fields .form-group input{
+    width:100%;
+    padding:12px 15px;
+    border:1px solid #C9CFD8;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    color:#1A1A1A;
+}
+
+.profile-fields .form-group input:focus{
+    border-color:#1E64C8;
+}
+
+.profile-fields .form-group input.input-error{
+    border-color:#C0392B;
+    box-shadow:0 0 0 1px #C0392B;
+}
+
+.field-error{
+    display:none;
+    color:#C0392B;
+    font-size:12px;
+    margin-top:6px;
+}
+
+.change-password-link{
+    align-self:flex-end;
+    color:#0B2D6D;
+    font-weight:700;
+    font-size:14px;
+    text-decoration:none;
+    margin-top:10px;
+}
+
+.change-password-link:hover{
+    color:#1E64C8;
+    text-decoration:underline;
+}
+
+.activity-row{
+    padding:14px 0;
+    border-bottom:1px solid #EEF0F3;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.activity-row:last-child{
+    border-bottom:none;
+    padding-bottom:0;
+}
+
+.activity-label{
+    font-size:13px;
+    color:#666;
+}
+
+.activity-value{
+    font-size:15px;
+    color:#1A1A1A;
+    font-weight:700;
+}
+
+.status-badge{
+    display:inline-block;
+    width:fit-content;
+    background:#E4E7EB;
+    color:#555;
+    font-weight:700;
+    font-size:13px;
+    padding:6px 16px;
+    border-radius:20px;
+}
+
+.status-badge.status-active{ background:#DFF5E3; color:#1F8A4C; }
+.status-badge.status-inactive{ background:#FBE3E3; color:#C0392B; }
+
+.logout-btn{
+    width:100%;
+    background:#EDEFF2;
+    color:#1A1A1A;
+    border:1px solid #D7DBE1;
+    padding:14px;
+    border-radius:8px;
+    font-weight:800;
+    font-size:15px;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.logout-btn:hover{
+    background:#E1E4E9;
+}
+
+@media (max-width:900px){
+    .profile-layout{ flex-direction:column; }
+    .side-column{ width:100%; }
+    .profile-body{ flex-direction:column; align-items:center; text-align:center; }
+    .change-password-link{ align-self:center; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-header">
+    <div class="logo-section">
+        <img src="logo.png" alt="Logo">
+        <div class="logo-text">
+            <h1>KATHMANDU VALLEY</h1>
+            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+            <p>Report, Track and Resolve Together for a Better Valley</p>
+        </div>
+    </div>
+
+    <div class="user-info">
+        <div class="profile-placeholder">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </div>
+        <span>Admin CMS</span>
+        <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+            Dashboard
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5S15.5 16.4 15.5 20"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 13.2c2.9.4 5 2.7 5 6.8"/></svg>
+            Users
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+            Complaints
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 12h3M8 16h8M8 8h8"/></svg>
+            Reports
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
+            Settings
+        </div>
+        <div class="nav-item active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+            Profile
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1 class="page-title">Admin Profile</h1>
+
+        <div class="profile-layout">
+
+            <div class="card profile-card">
+                <h3 class="section-title">Profile Information</h3>
+
+                <div class="profile-body">
+                    <div class="profile-picture-col">
+                        <div class="avatar-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                        </div>
+                        <button type="button" class="change-picture-btn">Change Picture</button>
+                    </div>
+
+                    <div class="profile-fields">
+
+                        <div class="form-group">
+                            <label for="fullNameInput">Full Name</label>
+                            <input type="text" id="fullNameInput" placeholder="Enter full name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailInput">Email Address</label>
+                            <input type="email" id="emailInput" placeholder="Enter email address">
+                            <span class="field-error" id="emailError">Please enter a valid email</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phoneInput">Phone Number</label>
+                            <input type="tel" id="phoneInput" placeholder="Enter number" maxlength="10" inputmode="numeric">
+                        </div>
+
+                        <a href="Change_password.html" class="change-password-link">
+                            Change Password
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="side-column">
+                <div class="card">
+                    <h3 class="section-title">Account Activity</h3>
+
+                    <div class="activity-row">
+                        <span class="activity-label">Last Login</span>
+                        <span class="activity-value" id="lastLoginValue">--</span>
+                    </div>
+
+                    <div class="activity-row">
+                        <span class="activity-label">Account Status</span>
+                        <span class="status-badge" id="accountStatusValue">--</span>
+                    </div>
+                </div>
+
+                <button type="button" class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+const emailInput = document.getElementById("emailInput");
+const emailError = document.getElementById("emailError");
+const emailRegex = /^[^\s@]+@gmail\.com$/;
+
+emailInput.addEventListener("input", function(){
+    emailInput.classList.remove("input-error");
+    emailError.style.display = "none";
+});
+
+emailInput.addEventListener("blur", function(){
+    if(this.value.length > 0 && !emailRegex.test(this.value)){
+        emailInput.classList.add("input-error");
+        emailError.style.display = "block";
+    } else {
+        emailInput.classList.remove("input-error");
+        emailError.style.display = "none";
+    }
+});
+
+const phoneInput = document.getElementById("phoneInput");
+const phoneRegex = /^9\d{9}$/;
+
+phoneInput.addEventListener("input", function(){
+    this.value = this.value.replace(/\D/g, "").slice(0, 10);
+    phoneInput.classList.remove("input-error");
+});
+
+phoneInput.addEventListener("blur", function(){
+    if(this.value.length > 0 && !phoneRegex.test(this.value)){
+        phoneInput.classList.add("input-error");
+    } else {
+        phoneInput.classList.remove("input-error");
+    }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", function(){
+    window.location.href = "A_logout.html";
+});
+</script>
+
+</body>
+</html>
