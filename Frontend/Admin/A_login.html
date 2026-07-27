@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS Login Page</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:white;
+}
+
+.logo-section{
+    position:absolute;
+    top:15px;
+    left:20px;
+
+    display:flex;
+    align-items:center;
+
+    width:450px;     
+}
+
+.logo-section img{
+    width:110px;
+    height:auto;
+    margin-right:15px;
+}
+
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.logo-text h2{
+    color:#555;
+    font-size:12px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.logo-text p{
+    color:#1E64C8;
+    font-size:12px;
+    font-weight:600;
+    font-weight:bold;
+}
+body{
+    background:#f8f9fc;
+}
+
+.container{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:60px;
+    padding:40px;
+}
+
+/* Left Side (Image Space) */
+
+.left-section{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.image-placeholder{
+    width:420px;
+    height:420px;
+    border:2px dashed #c7c7c7;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#999;
+    font-size:22px;
+    border-radius:10px;
+}
+
+/* Right Side */
+
+.login-card{
+    width:500px;
+    background:#fff;
+    padding:45px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.login-card h1{
+    color:#1f3c7a;
+    margin-bottom:8px;
+}
+
+.login-card p{
+    color:#444;
+    margin-bottom:30px;
+}
+
+.input-group{
+    margin-bottom:22px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:10px;
+    font-size:18px;
+}
+
+.input-box{
+    position:relative;
+}
+
+.input-box input{
+    width:100%;
+    padding:15px 50px 15px 18px;
+    border:none;
+    background:#f2f2f2;
+    border-radius:10px;
+    font-size:17px;
+    outline:none;
+}
+
+.icon{
+    position:absolute;
+    right:18px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    font-size:20px;
+}
+
+.error-message{
+    display:none;
+    color:#e02424;
+    font-size:13px;
+    margin-top:8px;
+    padding-left:2px;
+}
+
+.forgot{
+    text-align:right;
+    margin-bottom:25px;
+}
+
+.forgot a{
+    text-decoration:none;
+    color:#1f3c7a;
+    font-weight:bold;
+}
+
+.forgot a:hover{
+    text-decoration: underline;
+}
+
+.login-btn{
+    width:100%;
+    padding:15px;
+    background:#2d6cdf;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:20px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.login-btn:hover{
+    background:#154db4;
+    transform:translateY(-2px);
+}
+
+.signup{
+    text-align:center;
+    margin-top:35px;
+    font-size:18px;
+}
+
+.signup a{
+    color:#1f3c7a;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.signup a:hover{
+    text-decoration:underline;
+}
+
+@media(max-width:900px){
+
+.container{
+    flex-direction:column;
+}
+
+.login-card{
+    width:100%;
+    max-width:500px;
+}
+
+.image-placeholder{
+    width:300px;
+    height:300px;
+}
+
+</style>
+</head>
+<body>
+<div class="logo-section">
+    <img src="logo.png" alt="Logo">
+    <div class="logo-text">
+        <h1>KATHMANDU VALLEY</h1>
+        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+        <p>Report, Track and Resolve Together for a Better Valley</p>
+    </div>
+</div>
+<div class="container">
+
+    <!-- Image Space -->
+    <div class="left-section">
+        <div class="image-placeholder">
+            Image Here
+        </div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="login-card">
+
+        <h1>Welcome Back</h1>
+        <p>Login to your account</p>
+
+        <div class="input-group">
+            <label>Email Address</label>
+            <div class="input-box">
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <span class="error-message" id="emailError">Please enter a valid email</span>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <div class="input-box">
+                <input type="password" id="password" placeholder="Enter your password">
+                <span class="icon" onclick="togglePassword()">👁</span>
+            </div>
+        </div>
+
+        <div class="forgot">
+            <a href="#">Forgot Password?</a>
+        </div>
+
+        <button class="login-btn">Login</button>
+
+        <div class="signup">
+            Don't have an account?
+            <a href="#">Sign Up</a>
+        </div>
+
+    </div>
+
+</div>
+<script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    const eye = document.querySelector(".icon");
+
+    if (password.type === "password") {
+        password.type = "text";
+    } else {
+        password.type = "password";
+        eye.textContent = "👁"; // Changes back when hidden
+    }
+}
+
+// Email validation on Enter key press
+const emailInput = document.getElementById("email");
+const emailError = document.getElementById("emailError");
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        const emailValue = emailInput.value.trim();
+
+        if (!emailRegex.test(emailValue)) {
+            emailError.style.display = "block";
+        } else {
+            emailError.style.display = "none";
+        }
+    }
+});
+
+// Hide the error as soon as the user starts correcting the email
+emailInput.addEventListener("input", function() {
+    if (emailError.style.display === "block") {
+        emailError.style.display = "none";
+    }
+});
+</script>
+
+</body>
+</html>
