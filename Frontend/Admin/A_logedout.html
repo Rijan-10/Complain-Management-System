@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kathmandu Valley CMS</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:white;
+}
+
+.logo-section{
+    position:absolute;
+    top:15px;
+    left:20px;
+
+    display:flex;
+    align-items:center;
+
+    width:420px;
+    max-width: calc(100vw - 240px);
+}
+
+.logo-section img{
+    width:110px;
+    height:auto;
+    margin-right:15px;
+}
+
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.logo-text h2{
+    color:#555;
+    font-size:11px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.logo-text p{
+    color:#1E64C8;
+    font-size:11px;
+    font-weight:600;
+    font-weight:bold;
+}
+
+.buttons{
+    position: absolute;
+    top: 30px;
+    right: 20px;
+
+    display: flex;
+    gap: 6px;
+}
+
+.buttons button{
+    background: transparent;
+    border: none;
+    color: #0B2D6D;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 6px;
+}
+
+.buttons button:hover{
+    background-color: #0B2D6D;
+    color: white;
+}
+
+/* Logout Section */
+
+.logout-container{
+    width:85%;
+    height:500px;
+    margin:150px auto 40px;
+    background:#f8fbff;
+    border-radius:25px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:60px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+/* Left side image */
+.logout-image{
+    width:350px;
+    height:350px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.logout-image img{
+    width:100%;
+    max-width:320px;
+}
+
+/* Right side */
+.logout-content{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.logout-content h1{
+    color:#2f66d8;
+    font-size:36px;
+    line-height:1.3;
+    margin-bottom:40px;
+}
+
+/* Buttons */
+
+.logout-buttons{
+    display:flex;
+    flex-direction:column;
+    align-items:center;      /* Centers the buttons horizontally */
+    justify-content:center;
+    gap:18px;
+    width:100%;
+}
+
+.logout-buttons button{
+    width:270px;
+    padding:18px;
+    border:none;
+    border-radius:12px;
+    background:#3d73ea;
+    color:white;
+    font-size:24px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.logout-buttons button:hover{
+    background:#0B2D6D;
+    transform:translateY(-3px);
+    box-shadow:0 8px 18px rgba(0,0,0,0.2);
+}
+
+/* Optional different hover colors */
+
+.login-btn:hover{
+    background:#2458c6;
+}
+
+.home-btn:hover{
+    background:#173f97;
+}
+
+.home-icon{
+    font-size:38px;
+    margin-right:-4px;
+    vertical-align:middle;
+    line-height:0;
+}
+.home-icon{
+    font-size:38px;
+    display:inline-flex;
+    align-items:center;
+    position:relative;
+    top:-6px;
+    left:-2px;
+}
+
+/* Responsive */
+@media(max-width:900px){
+
+.logout-container{
+    flex-direction:column;
+    height:auto;
+    padding:40px 20px;
+    margin-top:170px;
+}
+
+.logout-image{
+    width:250px;
+    height:250px;
+}
+
+.logout-content h1{
+    font-size:34px;
+}
+
+.logout-buttons button{
+    width:240px;
+    font-size:20px;
+}
+
+.home-icon{
+    font-size:32px;   /* Increase or decrease as needed */
+    margin-right:8px;
+    vertical-align:middle;
+}
+
+}
+</style>
+</head>
+<body>
+
+<div class="logo-section">
+    <img src="logo.png" alt="Logo">
+    <div class="logo-text">
+        <h1>KATHMANDU VALLEY</h1>
+        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+        <p>Report, Track and Resolve Together for a Better Valley</p>
+    </div>
+</div>
+
+<div class="buttons">
+    <button>Home</button>
+    <button>About</button>
+    <button>Contact Us</button>
+    <button>Log in </button>
+</div>
+
+<!-- Logout Body -->
+<div class="logout-container">
+
+    <!-- Leave this space for your logout image -->
+    <div class="logout-image">
+        <!-- Replace logout-image.png with your image -->
+        <img src="logout-image.png" alt="Logged Out">
+    </div>
+
+    <div class="logout-content">
+        <h1>You have been<br>successfully logged out</h1>
+
+        <div class="logout-buttons">
+            <button class="login-btn">
+                &#10227; Login Again
+            </button>
+
+            <button class="home-btn">
+                <span class="home-icon">&#8962;</span> Back to Home
+            </button>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
