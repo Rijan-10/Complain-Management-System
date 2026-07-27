@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS Contact Us</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:white;
+}
+
+.logo-section{
+    position:absolute;
+    top:15px;
+    left:20px;
+
+    display:flex;
+    align-items:center;
+
+    width:420px;
+    max-width: calc(100vw - 240px);
+}
+
+.logo-section img{
+    width:110px;
+    height:auto;
+    margin-right:15px;
+}
+
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.logo-text h2{
+    color:#555;
+    font-size:11px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.logo-text p{
+    color:#1E64C8;
+    font-size:11px;
+    font-weight:600;
+    font-weight:bold;
+}
+
+.buttons{
+    position: absolute;
+    top: 30px;
+    right: 20px;
+
+    display: flex;
+    gap: 6px;
+}
+
+.buttons button{
+    background: transparent;
+    border: none;
+    color: #0B2D6D;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 6px;
+}
+
+.buttons button:hover{
+    background-color: #0B2D6D;
+    color: white;
+
+
+}
+:root{
+    --navy:#0B2D6D;
+    --blue:#1E64C8;
+    --blue-dark:#164d9c;
+    --blue-pale:#eaf0ff;
+    --bg:#f4f6f9;
+    --card:#ffffff;
+    --input-bg:#e9e9ec;
+    --sage:#eef3f0;
+    --red:#e0393e;
+    --border:#e3e6ec;
+    --text-muted:#5b6577;
+ 
+    /* Height reserved so page content clears the absolutely-positioned header.
+       Tweak this one number if your real logo.png is taller/shorter than assumed. */
+    --header-clearance:130px;
+}
+ 
+.page-content{
+    padding-top:var(--header-clearance);
+    padding-left:32px;
+    padding-right:32px;
+    padding-bottom:72px;
+    max-width:1180px;
+    margin:0 auto;
+}
+ 
+.page-heading h2{ margin:0 0 8px; font-size:2rem; color:var(--navy); }
+.page-heading p{ margin:0 0 32px; color:var(--text-muted); max-width:560px; line-height:1.5; }
+ 
+.contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:32px;
+    align-items:start;
+}
+ 
+/* ---- form card ---- */
+.form-card{
+    background:var(--card);
+    border-radius:12px;
+    padding:28px;
+    box-shadow:0 1px 3px rgba(16,24,40,.08);
+    border:1px solid var(--border);
+}
+.form-card h3{ margin:0 0 20px; font-size:1.15rem; color:var(--navy); }
+ 
+.form-group{ margin-bottom:20px; position:relative; }
+.form-group label{ display:block; font-size:.9rem; font-weight:600; margin-bottom:8px; color:var(--navy); }
+.required{ color:var(--red); }
+ 
+.form-group input,
+.form-group textarea{
+    width:100%;
+    border:1px solid transparent;
+    background:var(--input-bg);
+    border-radius:6px;
+    padding:12px 14px;
+    font-size:.95rem;
+    font-family:inherit;
+    color:var(--navy);
+    resize:vertical;
+    transition:border-color .15s ease, box-shadow .15s ease;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder{ color:#8b8f97; }
+.form-group input:focus,
+.form-group textarea:focus{
+    outline:none;
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px var(--blue-pale);
+}
+.form-group input.invalid{
+    border-color:var(--red);
+    box-shadow:0 0 0 3px rgba(224,57,62,.12);
+}
+ 
+/* Red popup that appears just below the email box, only on submit attempt */
+.field-error{
+    display:none;
+    align-items:center;
+    gap:6px;
+    margin-top:8px;
+    padding:8px 12px;
+    background:#fdecec;
+    border:1px solid #f3b9bb;
+    color:var(--red);
+    font-size:.82rem;
+    font-weight:600;
+    border-radius:6px;
+    position:relative;
+    animation:popIn .15s ease;
+}
+.field-error.show{ display:flex; }
+.field-error::before{
+    content:"";
+    position:absolute;
+    top:-6px;
+    left:18px;
+    width:10px;
+    height:10px;
+    background:#fdecec;
+    border-left:1px solid #f3b9bb;
+    border-top:1px solid #f3b9bb;
+    transform:rotate(45deg);
+}
+@keyframes popIn{
+    from{ opacity:0; transform:translateY(-4px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+ 
+.submit-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--blue);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:13px 26px;
+    font-size:.95rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+}
+.submit-btn:hover{ background:var(--blue-dark); }
+.submit-btn:active{ transform:translateY(1px); }
+ 
+.success-msg{
+    display:none;
+    margin-top:14px;
+    color:#1f8a4c;
+    font-weight:600;
+    font-size:.88rem;
+}
+.success-msg.show{ display:block; }
+ 
+/* ---- right column ---- */
+.info-column{ display:flex; flex-direction:column; gap:24px; }
+ 
+.image-placeholder{
+    min-height:260px;
+    border:2px dashed #c6cedd;
+    border-radius:12px;
+    background:#fbfcfe;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#93a0b5;
+    padding:20px;
+}
+.image-placeholder .ph-inner{ max-width:260px; }
+.image-placeholder svg{ width:40px; height:40px; margin-bottom:10px; opacity:.7; }
+.image-placeholder p{ margin:0; font-size:.85rem; font-weight:600; line-height:1.4; }
+/* To use your real image: remove the contents of .image-placeholder and put
+   <img src="your-image.png" alt="Contact illustration" style="width:100%;height:100%;object-fit:contain;">
+   inside it. */
+ 
+.info-card{
+    background:var(--card);
+    border-radius:12px;
+    padding:28px;
+    box-shadow:0 1px 3px rgba(16,24,40,.08);
+    border:1px solid var(--border);
+}
+.info-card h3{ margin:0 0 18px; font-size:1.15rem; color:var(--navy); }
+ 
+.info-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+ 
+.info-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--sage);
+    border-radius:10px;
+    padding:14px;
+}
+ 
+.icon-circle{
+    flex:0 0 auto;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.icon-circle svg{ width:20px; height:20px; }
+.icon-filled{ background:var(--blue); }
+.icon-filled svg{ stroke:#fff; }
+.icon-outline{ background:var(--blue-pale); border:1px solid var(--blue); }
+.icon-outline svg{ stroke:var(--blue); }
+ 
+.info-item h4{ margin:0 0 2px; font-size:.85rem; color:var(--navy); }
+.info-item p{ margin:0; font-size:.82rem; color:var(--text-muted); line-height:1.35; }
+ 
+@media (max-width:900px){
+    .contact-grid{ grid-template-columns:1fr; }
+}
+@media (max-width:700px){
+    :root{ --header-clearance:230px; } /* header text wraps onto more lines on narrow screens */
+}
+@media (max-width:520px){
+    .info-grid{ grid-template-columns:1fr; }
+    .page-content{ padding-left:18px; padding-right:18px; }
+    :root{ --header-clearance:250px; }
+}
+</style>
+</head>
+<body>
+
+<div class="logo-section">
+    <img src="logo.png" alt="Logo">
+    <div class="logo-text">
+        <h1>KATHMANDU VALLEY</h1>
+        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+        <p>Report, Track and Resolve Together for a Better Valley</p>
+    </div>
+</div>
+
+<div class="buttons">
+    <button>Home</button>
+    <button>About</button>
+    <button>Contact Us</button>
+    <button>Log in </button>
+</div>
+<div class="page-content">
+ 
+    <div class="page-heading">
+        <h2>Contact Us</h2>
+        <p>We are here to help! Reach out to us for any queries, suggestions or support.</p>
+    </div>
+ 
+    <div class="contact-grid">
+ 
+        <!-- FORM -->
+        <section class="form-card">
+            <h3>Send Us a Message</h3>
+            <form id="contactForm" novalidate>
+ 
+                <div class="form-group">
+                    <label for="fullName">Full name <span class="required">*</span></label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                </div>
+ 
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="text" id="email" name="email" placeholder="Enter your email" required>
+                    <div class="field-error" id="emailError">Please enter a valid email address.</div>
+                </div>
+ 
+                <div class="form-group">
+                    <label for="message">Message<span class="required">*</span></label>
+                    <textarea id="message" name="message" rows="5" placeholder="Type your message here...." required></textarea>
+                </div>
+ 
+                <button type="submit" class="submit-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    Send Message
+                </button>
+ 
+                <p class="success-msg" id="successMsg">Your message has been sent successfully!</p>
+            </form>
+        </section>
+ 
+        <!-- RIGHT COLUMN -->
+        <div class="info-column">
+ 
+            <!-- Reserved space for the illustration image -->
+            <div class="image-placeholder">
+                <div class="ph-inner">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#93a0b5" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+                    <p>Space reserved for illustration image<br>(insert your image here)</p>
+                </div>
+            </div>
+ 
+            <section class="info-card">
+                <h3>Contact Information</h3>
+                <div class="info-grid">
+ 
+                    <div class="info-item">
+                        <div class="icon-circle icon-filled">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                        <div>
+                            <h4>Our Location</h4>
+                            <p>Kathmandu, Nepal</p>
+                        </div>
+                    </div>
+ 
+                    <div class="info-item">
+                        <div class="icon-circle icon-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M22 6l-10 7L2 6"></path></svg>
+                        </div>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>support@cms.com</p>
+                        </div>
+                    </div>
+ 
+                    <div class="info-item">
+                        <div class="icon-circle icon-filled">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"></path></svg>
+                        </div>
+                        <div>
+                            <h4>Call Us</h4>
+                            <p>+977 9876543210</p>
+                        </div>
+                    </div>
+ 
+                    <div class="info-item">
+                        <div class="icon-circle icon-outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <div>
+                            <h4>Office Hours</h4>
+                            <p>Monday - Friday<br>10:00 AM - 5:00 PM</p>
+                        </div>
+                    </div>
+ 
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+ 
+<script>
+    const form        = document.getElementById('contactForm');
+    const emailInput  = document.getElementById('email');
+    const emailError  = document.getElementById('emailError');
+    const successMsg  = document.getElementById('successMsg');
+ 
+    function isValidEmail(value){
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    }
+ 
+    function showEmailError(){
+        emailError.classList.add('show');
+        emailInput.classList.add('invalid');
+    }
+ 
+    function hideEmailError(){
+        emailError.classList.remove('show');
+        emailInput.classList.remove('invalid');
+    }
+ 
+    // Validation (and the popup) only runs when the form is actually submitted —
+    // pressing Enter in a field, or clicking "Send Message".
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        successMsg.classList.remove('show');
+ 
+        if (!isValidEmail(emailInput.value)){
+            showEmailError();
+            emailInput.focus();
+            return;
+        }
+ 
+        hideEmailError();
+        successMsg.classList.add('show');
+        form.reset();
+    });
+ 
+    // Clear the error once the user edits the email after a failed attempt.
+    emailInput.addEventListener('input', function(){
+        if (emailError.classList.contains('show')){
+            hideEmailError();
+        }
+    });
+</script>
+</body>
+</html>
