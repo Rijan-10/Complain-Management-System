@@ -81,13 +81,17 @@ body{
 .image-placeholder{
     width:420px;
     height:420px;
-    border:2px dashed #c7c7c7;
     display:flex;
     justify-content:center;
     align-items:center;
-    color:#999;
-    font-size:22px;
     border-radius:10px;
+    overflow:hidden;
+}
+
+.image-placeholder img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
 }
 
 /* Right Side */
@@ -230,10 +234,10 @@ body{
 
     <!-- Image Space -->
     <div class="left-section">
-        <div class="image-placeholder">
-            Image Here
-        </div>
+    <div class="image-placeholder">
+        <img src="../../Photos/User_Login_1.png" alt="User Login">
     </div>
+</div>
 
     <!-- Login Form -->
     <div class="login-card">
