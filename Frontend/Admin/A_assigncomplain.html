@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS Admin - Assign Complaint</title>
+ 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+ 
+body{
+    background:white;
+}
+ 
+.logo-section{
+    position:absolute;
+    top:15px;
+    left:20px;
+ 
+    display:flex;
+    align-items:center;
+ 
+    width:420px;
+    max-width: calc(100vw - 160px);
+}
+ 
+@media (max-width: 480px){
+    .top-header{
+        flex-wrap:wrap;
+        height:auto;
+        padding:15px 15px 90px;
+    }
+    .logo-section{
+        position:static;
+        width:100%;
+        max-width:100%;
+        margin-bottom:10px;
+    }
+    .user-info{
+        margin-left:auto;
+    }
+}
+ 
+.logo-section img{
+    width:110px;
+    height:auto;
+    margin-right:15px;
+}
+ 
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+ 
+.logo-text h2{
+    color:#555;
+    font-size:11px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+ 
+.logo-text p{
+    color:#1E64C8;
+    font-size:11px;
+    font-weight:600;
+    font-weight:bold;
+}
+ 
+.top-header{
+    position:relative;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:20px;
+    height:110px;
+    padding:0 30px;
+    background:#F7F8FA;
+    border-bottom:1px solid #E4E7EB;
+}
+ 
+.bell-icon{
+    cursor:pointer;
+    stroke:#333;
+    flex-shrink:0;
+}
+ 
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+ 
+.user-info:hover{
+    background:#E8F0FE;
+}
+ 
+.profile-placeholder{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#E4E8EE;
+    border:1px solid #C9CFD8;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+ 
+.user-info span{
+    font-size:15px;
+    color:#333;
+}
+ 
+.dropdown-arrow{
+    flex-shrink:0;
+}
+ 
+.wrapper{
+    display:flex;
+    align-items:flex-start;
+}
+ 
+.sidebar{
+    width:270px;
+    background:white;
+    border-right:1px solid #E4E7EB;
+    padding:25px 15px;
+}
+ 
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 18px;
+    border-radius:8px;
+    margin-bottom:6px;
+    font-weight:bold;
+    font-size:15px;
+    color:#1A1A1A;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+    text-decoration:none;
+}
+ 
+.nav-item svg{
+    stroke:#1A1A1A;
+    transition:stroke 0.2s ease;
+    flex-shrink:0;
+}
+ 
+.nav-item:hover{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+ 
+.nav-item:hover svg{
+    stroke:#1E64C8;
+}
+ 
+.nav-item.active{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+ 
+.nav-item.active svg{
+    stroke:#1E64C8;
+}
+ 
+.main-content{
+    flex:1;
+    padding:30px 40px;
+    background:#FAFBFC;
+    min-height:calc(100vh - 110px);
+}
+ 
+.page-title{
+    color:#0B2D6D;
+    font-size:26px;
+    font-weight:800;
+    margin-bottom:18px;
+}
+ 
+/* ---- Complaint summary strip (ID | Subject) ---- */
+.summary-strip{
+    display:inline-flex;
+    align-items:center;
+    gap:0;
+    border:1px solid #C9D6EE;
+    background:#F3F7FE;
+    border-radius:8px;
+    padding:12px 20px;
+    margin-bottom:26px;
+    font-weight:800;
+    font-size:14px;
+    color:#0B2D6D;
+}
+ 
+/* ---- Two column layout ---- */
+.assign-layout{
+    display:flex;
+    align-items:flex-start;
+    gap:24px;
+}
+ 
+.assign-form-card{
+    flex:1.6;
+    background:white;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    padding:26px 30px;
+}
+ 
+.summary-card{
+    flex:1;
+    background:white;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    padding:24px 26px;
+}
+ 
+.summary-title{
+    font-size:18px;
+    font-weight:800;
+    color:#0B2D6D;
+    margin-bottom:18px;
+}
+ 
+.summary-row{
+    padding:14px 0;
+    border-bottom:1px solid #EEF0F3;
+}
+ 
+.summary-row:last-child{
+    border-bottom:none;
+    padding-bottom:0;
+}
+ 
+.summary-label{
+    display:block;
+    font-size:14px;
+    font-weight:800;
+    color:#1A1A1A;
+    margin-bottom:6px;
+}
+ 
+.summary-value{
+    font-size:14px;
+    color:#333;
+}
+ 
+.status-badge{
+    display:inline-block;
+    font-weight:700;
+    font-size:13px;
+    padding:6px 18px;
+    border-radius:20px;
+    color:white;
+    background:#E8720C; /* always orange - complaint being assigned = In Progress */
+}
+ 
+/* ---- Form fields ---- */
+.form-group{
+    margin-bottom:20px;
+}
+ 
+.form-group:last-of-type{
+    margin-bottom:0;
+}
+ 
+.form-group label{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    color:#333;
+    margin-bottom:8px;
+}
+ 
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="date"]{
+    width:100%;
+    height:46px;
+    padding:0 15px;
+    border:1px solid #C9CFD8;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    color:#1A1A1A;
+    background:white;
+}
+ 
+.form-group select{
+    cursor:pointer;
+    appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 15px center;
+    padding-right:38px;
+}
+ 
+.form-group select:focus,
+.form-group input:focus{
+    border-color:#1E64C8;
+}
+ 
+.form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:16px;
+    margin-top:26px;
+}
+ 
+.btn-outline{
+    height:44px;
+    padding:0 26px;
+    border:1.5px solid #1E64C8;
+    background:white;
+    color:#1E64C8;
+    border-radius:8px;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+ 
+.btn-outline:hover{
+    background:#1E64C8;
+    color:white;
+}
+ 
+.btn-solid{
+    height:44px;
+    padding:0 26px;
+    border:1.5px solid #1E64C8;
+    background:#1E64C8;
+    color:white;
+    border-radius:8px;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+ 
+.btn-solid:hover{
+    background:#0B2D6D;
+}
+ 
+/* ---- Bottom back button (matches Complaint Details page placement) ---- */
+.bottom-action-row{
+    margin-top:26px;
+    display:flex;
+    justify-content:flex-end;
+}
+ 
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    height:44px;
+    padding:0 22px;
+    background:#1E64C8;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+    transition:background 0.2s ease;
+    text-decoration:none;
+}
+ 
+.back-btn:hover{
+    background:#0B2D6D;
+}
+ 
+@media (max-width:900px){
+    .assign-layout{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+<body>
+ 
+<div class="top-header">
+    <div class="logo-section">
+        <img src="logo.png" alt="Logo">
+        <div class="logo-text">
+            <h1>KATHMANDU VALLEY</h1>
+            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+            <p>Report, Track and Resolve Together for a Better Valley</p>
+        </div>
+    </div>
+ 
+    <div class="user-info">
+        <div class="profile-placeholder">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </div>
+        <span>Admin CMS</span>
+        <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+</div>
+ 
+<div class="wrapper">
+    <div class="sidebar">
+        <a href="Dashboard.html" class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+            Dashboard
+        </a>
+        <a href="Users.html" class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5S15.5 16.4 15.5 20"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 13.2c2.9.4 5 2.7 5 6.8"/></svg>
+            Users
+        </a>
+        <a href="Complaints.html" class="nav-item active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+            Complaints
+        </a>
+        <a href="Reports.html" class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 12h3M8 16h8M8 8h8"/></svg>
+            Reports
+        </a>
+        <a href="Settings.html" class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
+            Settings
+        </a>
+        <a href="Profile.html" class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+            Profile
+        </a>
+    </div>
+ 
+    <div class="main-content">
+ 
+        <h1 class="page-title">Assign Complaint</h1>
+ 
+        <!-- Complaint ID | Subject strip - populated from Django backend -->
+        <div class="summary-strip" id="summaryStrip">
+            <span id="summaryComplaintId"><!-- {{ complaint.complaint_id }} --></span>&nbsp;|&nbsp;Subject:&nbsp;<span id="summarySubject"><!-- {{ complaint.subject }} --></span>
+        </div>
+ 
+        <div class="assign-layout">
+ 
+            <!-- ===================== ASSIGN FORM ====================== -->
+            <div class="assign-form-card">
+ 
+                <div class="form-group">
+                    <label for="officerSelect">Assign to Officer</label>
+                    <select id="officerSelect">
+                        <option value="">Select Officer</option>
+                        
+                    </select>
+                </div>
+ 
+                <div class="form-group">
+                    <label for="prioritySelect">Priority</label>
+                    <select id="prioritySelect">
+                        <option value="">Priority</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                        
+                    </select>
+                </div>
+ 
+                <div class="form-group">
+                    <label for="dueDateInput">Due Date</label>
+                    <input type="date" id="dueDateInput">
+                    <!-- Native date input shows a calendar picker (year/month/day) on click -->
+                </div>
+ 
+                <div class="form-group">
+                    <label for="noteInput">Note (Optional)</label>
+                    <input type="text" id="noteInput" placeholder="Add a note for Officer">
+                </div>
+ 
+                <div class="form-actions">
+                    <button type="button" class="btn-outline" id="cancelBtn">Cancel</button>
+                    <button type="button" class="btn-solid" id="assignBtn">Assign</button>
+                </div>
+ 
+            </div>
+ 
+            <!-- ===================== COMPLAINT SUMMARY ====================== -->
+            <div class="summary-card">
+                <h3 class="summary-title">Complaint Summary</h3>
+ 
+                <div class="summary-row">
+                    <span class="summary-label">Category</span>
+                    <span class="summary-value" id="categoryValue"><!-- {{ complaint.category }} --></span>
+                </div>
+ 
+                <div class="summary-row">
+                    <span class="summary-label">Location</span>
+                    <span class="summary-value" id="locationValue"><!-- {{ complaint.location }} --></span>
+                </div>
+ 
+                <div class="summary-row">
+                    <span class="summary-label">Submitted By</span>
+                    <span class="summary-value" id="submittedByValue"><!-- {{ complaint.submitted_by }} --></span>
+                </div>
+ 
+                <div class="summary-row">
+                    <span class="summary-label">Date</span>
+                    <span class="summary-value" id="dateValue"><!-- {{ complaint.date }} --></span>
+                </div>
+ 
+                <div class="summary-row">
+                    <span class="summary-label">Status</span>
+                    <span class="status-badge">In Progress</span>
+                    <!-- Status is always "In Progress" (orange) on this page,
+                         since assigning a complaint puts it into progress. -->
+                </div>
+            </div>
+ 
+        </div>
+ 
+        <div class="bottom-action-row">
+            <a href="Complaint-details.html" class="back-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                Back to complaints
+            </a>
+        </div>
+ 
+    </div>
+</div>
+ 
+<script>
+/*
+    ---------------------------------------------------------------
+    Placeholder data object. Replace with real values rendered by
+    the Django backend (via template tags) or fetched from an API,
+    e.g. fetch(`/api/complaints/${complaintId}/`).
+    ---------------------------------------------------------------
+*/
+const complaintSummaryData = {
+    complaintId: "",
+    subject: "",
+    category: "",
+    location: "",
+    submittedBy: "",
+    date: ""
+};
+ 
+function renderAssignSummary(data){
+    document.getElementById("summaryComplaintId").textContent = data.complaintId || "";
+    document.getElementById("summarySubject").textContent = data.subject || "";
+    document.getElementById("categoryValue").textContent = data.category || "";
+    document.getElementById("locationValue").textContent = data.location || "";
+    document.getElementById("submittedByValue").textContent = data.submittedBy || "";
+    document.getElementById("dateValue").textContent = data.date || "";
+}
+ 
+renderAssignSummary(complaintSummaryData);
+ 
+document.getElementById("cancelBtn").addEventListener("click", function(){
+    window.location.href = "Complaint-details.html";
+});
+ 
+document.getElementById("assignBtn").addEventListener("click", function(){
+    const officer = document.getElementById("officerSelect").value;
+    const priority = document.getElementById("prioritySelect").value;
+    const dueDate = document.getElementById("dueDateInput").value;
+    const note = document.getElementById("noteInput").value;
+ 
+ 
+    alert("Complaint assigned successfully.");
+});
+</script>
+ 
+</body>
+</html>
+ 
