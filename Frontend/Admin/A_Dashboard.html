@@ -442,7 +442,6 @@ body{
                         __<!-- {{ total_complaints_change }}% -->
                     </span>
                 </div>
-                <span class="stat-sub">vs last month</span>
             </div>
  
             <div class="stat-card progress">
@@ -453,7 +452,6 @@ body{
                         __<!-- {{ in_progress_change }}% -->
                     </span>
                 </div>
-                <span class="stat-sub">vs last month</span>
             </div>
  
             <div class="stat-card resolved">
@@ -464,7 +462,6 @@ body{
                         __<!-- {{ resolved_change }}% -->
                     </span>
                 </div>
-                <span class="stat-sub">vs last month</span>
             </div>
  
             <div class="stat-card closed">
@@ -475,7 +472,6 @@ body{
                         __<!-- {{ closed_change }}% -->
                     </span>
                 </div>
-                <span class="stat-sub">vs last month</span>
             </div>
  
         </div>
@@ -511,7 +507,7 @@ body{
 </div>
  
 <script>
-
+ 
  // Toggle empty-state message based on whether the table has rows.
 function updateEmptyState(){
     const tbody = document.getElementById("recentComplaintsBody");
@@ -526,3 +522,4 @@ document.getElementById("viewAllBtn").addEventListener("click", function(){
 </script>
  </body>
 </html>
+ 
