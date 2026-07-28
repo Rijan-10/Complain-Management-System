@@ -146,8 +146,333 @@ body{
 .nav-item:hover svg{
     stroke:#1E64C8;
 }
- 
 
+/* ===== Main content / New Complaint form ===== */
+
+.main-content{
+    flex:1;
+    padding:30px 35px;
+}
+
+.content-card{
+    background:#fff;
+    border:1px solid #E4E7EB;
+    border-radius:14px;
+    padding:30px 35px 35px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
+}
+
+.page-title{
+    color:#0B2D6D;
+    font-size:22px;
+    font-weight:800;
+    padding-bottom:20px;
+    margin-bottom:26px;
+    border-bottom:1px solid #E4E7EB;
+}
+
+.form-section{
+    margin-bottom:26px;
+}
+
+.section-label{
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    color:#1A1A1A;
+    margin-bottom:12px;
+}
+
+/* Photo upload */
+.photo-upload-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+}
+
+.photo-thumb{
+    position:relative;
+    width:150px;
+    height:110px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid #E4E7EB;
+    flex-shrink:0;
+}
+
+.photo-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.remove-photo-btn{
+    position:absolute;
+    top:6px;
+    right:6px;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.55);
+    color:#fff;
+    border:none;
+    font-size:15px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transition:opacity 0.2s ease, background 0.2s ease;
+}
+
+.photo-thumb:hover .remove-photo-btn{
+    opacity:1;
+}
+
+.remove-photo-btn:hover{
+    background:rgba(0,0,0,0.8);
+}
+
+.photo-add-box{
+    width:150px;
+    height:110px;
+    border-radius:10px;
+    background:#F1F3F6;
+    border:1.5px dashed #C9CFD8;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
+    flex-shrink:0;
+    text-align:center;
+    padding:0 8px;
+    transition:background 0.2s ease, border-color 0.2s ease;
+}
+
+.photo-add-box:hover{
+    background:#E8F0FE;
+    border-color:#1E64C8;
+}
+
+.photo-add-box svg{
+    stroke:#4B5563;
+    transition:stroke 0.2s ease;
+}
+
+.photo-add-box:hover svg{
+    stroke:#1E64C8;
+}
+
+.photo-add-box span{
+    font-size:12.5px;
+    font-weight:600;
+    color:#4B5563;
+    transition:color 0.2s ease;
+}
+
+.photo-add-box:hover span{
+    color:#1E64C8;
+}
+
+/* Location */
+.location-row{
+    display:flex;
+    gap:16px;
+}
+
+.location-input{
+    flex:1;
+    background:#F1F3F6;
+    border:1px solid #E4E7EB;
+    border-radius:8px;
+    padding:13px 18px;
+    font-size:14px;
+    color:#8A93A3;
+    cursor:not-allowed;
+}
+
+.location-input::placeholder{
+    color:#8A93A3;
+}
+
+/* Category select */
+.select-wrapper{
+    position:relative;
+}
+
+.category-select{
+    width:100%;
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    background:#F1F3F6;
+    border:1px solid #E4E7EB;
+    border-radius:8px;
+    padding:13px 44px 13px 18px;
+    font-size:14px;
+    color:#1A1A1A;
+    cursor:pointer;
+}
+
+.select-chevron{
+    position:absolute;
+    right:16px;
+    top:50%;
+    transform:translateY(-50%);
+    pointer-events:none;
+}
+
+/* Description */
+.description-box{
+    width:100%;
+    min-height:120px;
+    background:#F1F3F6;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    padding:16px 18px;
+    font-size:14px;
+    color:#1A1A1A;
+    font-family:inherit;
+    resize:vertical;
+}
+
+.description-box::placeholder{
+    color:#ABB2BD;
+}
+
+/* Actions */
+.form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:14px;
+    margin-top:10px;
+}
+
+.btn-cancel{
+    padding:12px 30px;
+    border-radius:8px;
+    border:1px solid #C9CFD8;
+    background:#fff;
+    color:#333;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-cancel:hover{
+    background:#F1F3F6;
+    border-color:#8A93A3;
+}
+
+.btn-submit{
+    padding:12px 30px;
+    border-radius:8px;
+    border:none;
+    background:#1E64C8;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.btn-submit:hover{
+    background:#164C9A;
+}
+
+/* Confirmation modal */
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,15,25,0.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:999;
+}
+
+.modal-overlay.active{
+    display:flex;
+}
+
+.modal-box{
+    background:#fff;
+    border-radius:14px;
+    padding:30px 26px 26px;
+    max-width:380px;
+    width:100%;
+    box-shadow:0 12px 32px rgba(0,0,0,0.18);
+    text-align:center;
+}
+
+.modal-text{
+    font-size:15px;
+    color:#333;
+    line-height:1.55;
+    margin-bottom:24px;
+}
+
+.modal-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+}
+
+.btn-modal-no{
+    padding:11px 26px;
+    border-radius:8px;
+    border:1px solid #C9CFD8;
+    background:#fff;
+    color:#333;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.btn-modal-no:hover{
+    background:#F1F3F6;
+}
+
+.btn-modal-yes{
+    padding:11px 26px;
+    border-radius:8px;
+    border:none;
+    background:#DC2626;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.btn-modal-yes:hover{
+    background:#B91C1C;
+}
+
+@media (max-width: 480px){
+    .main-content{
+        padding:20px 15px;
+    }
+    .content-card{
+        padding:22px 18px 28px;
+    }
+    .location-row{
+        flex-direction:column;
+    }
+    .form-actions{
+        flex-direction:column-reverse;
+    }
+    .form-actions button{
+        width:100%;
+    }
+}
 </style>
 </head>
 <body>
@@ -192,6 +517,150 @@ body{
         </div>
     </div>
 
+    <div class="main-content">
+        <div class="content-card">
+            <h2 class="page-title">Submit New Complaint</h2>
+
+            <div class="form-section">
+                <label class="section-label">Upload Photo</label>
+                <div class="photo-upload-row" id="photoUploadRow"></div>
+                <input type="file" id="photoInput" accept="image/*" multiple hidden>
+            </div>
+
+            <div class="form-section">
+                <label class="section-label">Location detected</label>
+                <div class="location-row">
+                    <input type="text" class="location-input" id="latitudeInput" placeholder="Latitude:" disabled readonly>
+                    <input type="text" class="location-input" id="longitudeInput" placeholder="Longitude:" disabled readonly>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="section-label">Select Category</label>
+                <div class="select-wrapper">
+                    <select class="category-select" id="categorySelect">
+                        <option value="" selected disabled>Category</option>
+                        <option value="sanitation">Sanitation</option>
+                        <option value="infrastructure">Infrastructure</option>
+                    </select>
+                    <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="section-label">Description</label>
+                <textarea class="description-box" id="descriptionInput" placeholder="Describe your complaint in detail"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+                <button type="button" class="btn-submit" id="submitBtn">Submit Complaint</button>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<div class="modal-overlay" id="cancelModal">
+    <div class="modal-box">
+        <p class="modal-text">Are you sure you want to cancel this complaint?<br>Everything you've entered will be lost.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-modal-no" id="modalNoBtn">No, Go Back</button>
+            <button type="button" class="btn-modal-yes" id="modalYesBtn">Yes, Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const photoInput = document.getElementById('photoInput');
+    const photoUploadRow = document.getElementById('photoUploadRow');
+    const categorySelect = document.getElementById('categorySelect');
+    const descriptionInput = document.getElementById('descriptionInput');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const cancelModal = document.getElementById('cancelModal');
+    const modalNoBtn = document.getElementById('modalNoBtn');
+    const modalYesBtn = document.getElementById('modalYesBtn');
+
+    let uploadedPhotos = []; // holds object URLs for previewed images
+
+    const cameraIconSVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1.5l1-1.5h7l1 1.5H18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+
+    function renderPhotos(){
+        photoUploadRow.innerHTML = '';
+
+        uploadedPhotos.forEach((url, index) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'photo-thumb';
+            thumb.innerHTML =
+                '<img src="' + url + '" alt="Uploaded complaint photo">' +
+                '<button type="button" class="remove-photo-btn" data-index="' + index + '" title="Remove photo">&times;</button>';
+            photoUploadRow.appendChild(thumb);
+        });
+
+        const addBox = document.createElement('div');
+        addBox.className = 'photo-add-box';
+        addBox.innerHTML = cameraIconSVG + '<span>' + (uploadedPhotos.length === 0 ? 'Add Photo' : 'Add Another Photo') + '</span>';
+        addBox.addEventListener('click', () => photoInput.click());
+        photoUploadRow.appendChild(addBox);
+
+        photoUploadRow.querySelectorAll('.remove-photo-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(btn.getAttribute('data-index'), 10);
+                URL.revokeObjectURL(uploadedPhotos[idx]);
+                uploadedPhotos.splice(idx, 1);
+                renderPhotos();
+            });
+        });
+    }
+
+    photoInput.addEventListener('change', (e) => {
+        Array.from(e.target.files || []).forEach(file => {
+            uploadedPhotos.push(URL.createObjectURL(file));
+        });
+        photoInput.value = '';
+        renderPhotos();
+    });
+
+    function hasFormData(){
+        return uploadedPhotos.length > 0 ||
+               categorySelect.value !== '' ||
+               descriptionInput.value.trim() !== '';
+    }
+
+    function resetForm(){
+        uploadedPhotos.forEach(url => URL.revokeObjectURL(url));
+        uploadedPhotos = [];
+        renderPhotos();
+        categorySelect.value = '';
+        descriptionInput.value = '';
+    }
+
+    cancelBtn.addEventListener('click', () => {
+        if (hasFormData()){
+            cancelModal.classList.add('active');
+        }
+    });
+
+    modalNoBtn.addEventListener('click', () => {
+        cancelModal.classList.remove('active');
+    });
+
+    modalYesBtn.addEventListener('click', () => {
+        resetForm();
+        cancelModal.classList.remove('active');
+    });
+
+    cancelModal.addEventListener('click', (e) => {
+        if (e.target === cancelModal){
+            cancelModal.classList.remove('active');
+        }
+    });
+
+    renderPhotos();
+})();
+</script>
+
 </body>
 </html>
