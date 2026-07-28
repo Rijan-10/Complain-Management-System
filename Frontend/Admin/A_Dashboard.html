@@ -236,27 +236,6 @@ body{
     color:#1E64C8;
 }
  
-.stat-change{
-    display:flex;
-    align-items:center;
-    gap:3px;
-    font-size:13px;
-    font-weight:700;
-    color:#1F8A4C;
-}
- 
-.stat-change.up svg{
-    stroke:#1F8A4C;
-}
- 
-.stat-change.down{
-    color:#C0392B;
-}
- 
-.stat-change.down svg{
-    stroke:#C0392B;
-}
- 
 .stat-sub{
     font-size:14px;
     color:#333;
@@ -268,11 +247,6 @@ body{
 .stat-card.progress .stat-value{ color:#E8720C; }
 .stat-card.resolved .stat-value{ color:#1F8A4C; }
 .stat-card.closed .stat-value{ color:#1A1A1A; }
- 
-.stat-card.total .stat-change{ color:#1E64C8; }
-.stat-card.progress .stat-change{ color:#E8720C; }
-.stat-card.resolved .stat-change{ color:#1F8A4C; }
-.stat-card.closed .stat-change{ color:#1A1A1A; }
  
 /* ---- Recent complaints card ---- */
 .card{
@@ -417,7 +391,7 @@ body{
         </div>
         <div class="nav-item">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-            Change Password
+            Settings
         </div>
         <div class="nav-item">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
@@ -438,9 +412,6 @@ body{
                 <span class="stat-label">Total Complaints</span>
                 <div class="stat-value-row">
                     <span class="stat-value" id="totalComplaintsValue"><!-- {{ total_complaints }} --></span>
-                    <span class="stat-change up" id="totalComplaintsChange">
-                        __<!-- {{ total_complaints_change }}% -->
-                    </span>
                 </div>
             </div>
  
@@ -448,9 +419,6 @@ body{
                 <span class="stat-label">In Progress</span>
                 <div class="stat-value-row">
                     <span class="stat-value" id="inProgressValue"><!-- {{ in_progress_count }} --></span>
-                    <span class="stat-change up" id="inProgressChange">
-                        __<!-- {{ in_progress_change }}% -->
-                    </span>
                 </div>
             </div>
  
@@ -458,9 +426,6 @@ body{
                 <span class="stat-label">Resolved</span>
                 <div class="stat-value-row">
                     <span class="stat-value" id="resolvedValue"><!-- {{ resolved_count }} --></span>
-                    <span class="stat-change up" id="resolvedChange">
-                        __<!-- {{ resolved_change }}% -->
-                    </span>
                 </div>
             </div>
  
@@ -468,9 +433,6 @@ body{
                 <span class="stat-label">Closed</span>
                 <div class="stat-value-row">
                     <span class="stat-value" id="closedValue"><!-- {{ closed_count }} --></span>
-                    <span class="stat-change up" id="closedChange">
-                        __<!-- {{ closed_change }}% -->
-                    </span>
                 </div>
             </div>
  
@@ -508,7 +470,6 @@ body{
  
 <script>
  
- // Toggle empty-state message based on whether the table has rows.
 function updateEmptyState(){
     const tbody = document.getElementById("recentComplaintsBody");
     const emptyState = document.getElementById("emptyState");
@@ -523,3 +484,7 @@ document.getElementById("viewAllBtn").addEventListener("click", function(){
  </body>
 </html>
  
+
+
+
+
