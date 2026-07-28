@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS New Complaints</title>
+ 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+ 
+body{
+    background:white;
+}
+
+.top-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: white;
+    border-bottom: 1px solid #E4E7EB;
+    min-height: 130px;
+}
+ 
+.logo-section{
+    display:flex;
+    align-items:center;
+}
+ 
+@media (max-width: 480px){
+    .top-header{
+        flex-wrap:wrap;
+        height:auto;
+        padding:15px 15px 90px;
+    }
+    .logo-section{
+        position:static;
+        width:100%;
+        max-width:100%;
+        margin-bottom:10px;
+    }
+    .user-info{
+        margin-left:auto;
+    }
+}
+ 
+.logo-section img{
+    width:110px;
+    height:auto;
+    margin-right:15px;
+}
+ 
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+ 
+.logo-text h2{
+    color:#555;
+    font-size:11px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+ 
+.logo-text p{
+    color:#1E64C8;
+    font-size:11px;
+    font-weight:600;
+    font-weight:bold;
+}
+
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+ 
+.user-info:hover{
+    background:#E8F0FE;
+}
+ 
+.profile-placeholder{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#E4E8EE;
+    border:1px solid #C9CFD8;
+    flex-shrink:0;
+}
+ 
+.user-info span{
+    font-size:15px;
+    color:#333;
+}
+.wrapper{
+    display:flex;
+    align-items:flex-start;
+}
+ 
+.sidebar{
+    width:270px;
+    min-height:calc(100vh - 130px);
+    border-right:1px solid #E4E7EB;
+    background:white;
+    padding:25px 15px;
+}
+ 
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 18px;
+    border-radius:8px;
+    margin-bottom:6px;
+    font-weight:bold;
+    font-size:15px;
+    color:#1A1A1A;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+ 
+.nav-item svg{
+    stroke:#1A1A1A;
+    transition:stroke 0.2s ease;
+    flex-shrink:0;
+}
+ 
+.nav-item:hover{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+ 
+.nav-item:hover svg{
+    stroke:#1E64C8;
+}
+.main-content{
+    flex:1;
+    padding:25px 30px;
+    background:#F7F8FA;
+    min-height:calc(100vh - 130px);
+}
+ 
+.status-card{
+    background:white;
+    border:1px solid #E4E7EB;
+    border-radius:12px;
+    overflow:hidden;
+    max-width:750px;
+}
+ 
+.status-card-header{
+    padding:18px 25px;
+    border-bottom:1px solid #E4E7EB;
+}
+ 
+.status-card-header h2{
+    color:#0B2D6D;
+    font-size:18px;
+    font-weight:800;
+}
+ 
+.status-table{
+    width:100%;
+    border-collapse:collapse;
+}
+ 
+.status-table tr{
+    border-bottom:1px solid #E4E7EB;
+}
+ 
+.status-table tr:last-child{
+    border-bottom:none;
+}
+ 
+.status-table td{
+    padding:16px 25px;
+    font-size:15px;
+    vertical-align:middle;
+}
+ 
+.status-table td.label{
+    width:200px;
+    color:#555;
+    font-weight:bold;
+}
+ 
+.status-table td.value{
+    color:#1A1A1A;
+}
+ 
+/* Base badge: grey — this is also the default/no-data state */
+.status-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:100px;
+    height:28px;
+    padding:0 16px;
+    border-radius:20px;
+    background:#E4E7EB;
+    color:#555;
+    font-size:13px;
+    font-weight:600;
+    line-height:1;
+    white-space:nowrap;
+}
+ 
+/* Backend: add one of these classes alongside "status-badge" based on the
+   complaint's status value, e.g.
+   <span class="status-badge status-inprogress">In Progress</span> */
+.status-badge.status-inprogress{
+    background:#FFEBD1;
+    color:#C2660A;
+}
+ 
+.status-badge.status-resolved{
+    background:#DDF5E2;
+    color:#177A32;
+}
+ 
+.status-badge.status-closed{
+    background:#1A1A1A;
+    color:#FFFFFF;
+}
+ 
+@media (max-width: 768px){
+    .wrapper{
+        flex-direction:column;
+    }
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+    .main-content{
+        padding:20px 15px;
+    }
+    .status-table td.label{
+        width:140px;
+    }
+}
+ 
+
+</style>
+</head>
+<body>
+ 
+<div class="top-header">
+    <div class="logo-section">
+        <img src="logo.png" alt="Logo">
+        <div class="logo-text">
+            <h1>KATHMANDU VALLEY</h1>
+            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+            <p>Report, Track and Resolve Together for a Better Valley</p>
+        </div>
+    </div>
+ 
+    <div class="user-info">
+        <div class="profile-placeholder"></div>
+        <span>Hello, User</span>
+    </div>
+</div>
+ 
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+            Dashboard
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            New Complaint
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+            My Complaints
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+            Profile
+        </div>
+        <div class="nav-item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            Change Password
+        </div>
+    </div>
+     <div class="main-content">
+        <div class="status-card">
+            <div class="status-card-header">
+                <h2>Status Result</h2>
+            </div>
+            <table class="status-table">
+                <tbody>
+                    <tr>
+                        <td class="label">Complaint ID</td>
+                        <td class="value">--</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Subject</td>
+                        <td class="value">--</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Date</td>
+                        <td class="value">--</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Status</td>
+                        <td class="value">
+                            <!-- Backend: this stays plain "status-badge" (grey) until there's
+                                 real data. Once wired up, add the matching class:
+                                 status-inprogress (orange) / status-resolved (green) / status-closed (black) -->
+                            <span class="status-badge">--</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">Description</td>
+                        <td class="value">--</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
