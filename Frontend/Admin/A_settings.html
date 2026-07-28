@@ -191,13 +191,13 @@ body{
     color:#0B2D6D;
     font-size:26px;
     font-weight:800;
-    margin-bottom:6px;
+    margin-bottom:24px;
 }
  
-.page-subtitle{
-    color:#555;
+.breadcrumb{
+    color:#666;
     font-size:14px;
-    margin-bottom:22px;
+    margin-bottom:25px;
 }
  
 .card{
@@ -208,13 +208,34 @@ body{
     margin-bottom:20px;
 }
  
-.section-title{
-    font-size:16px;
-    font-weight:800;
-    color:#1A1A1A;
-    padding-bottom:14px;
-    margin-bottom:22px;
-    border-bottom:1px solid #E4E7EB;
+.info-banner{
+    display:flex;
+    align-items:center;
+    gap:25px;
+    background:linear-gradient(90deg, #EAF1FF, #F7FAFF);
+}
+ 
+/* space reserved for the security picture that used to sit here */
+.icon-placeholder{
+    width:100px;
+    height:100px;
+    border-radius:12px;
+    background:#E4EBFA;
+    border:1px dashed #A9C2EE;
+    flex-shrink:0;
+}
+
+ 
+.info-text h3{
+    color:#0B2D6D;
+    font-size:19px;
+    margin-bottom:6px;
+}
+ 
+.info-text p{
+    color:#666;
+    font-size:14px;
+    line-height:1.5;
 }
  
 .form-group{
@@ -228,35 +249,8 @@ body{
 .form-group label{
     display:block;
     font-size:14px;
-    font-weight:600;
     color:#333;
     margin-bottom:8px;
-}
- 
-.form-group input{
-    width:100%;
-    padding:12px 15px;
-    border:1px solid #C9CFD8;
-    border-radius:8px;
-    font-size:14px;
-    outline:none;
-    color:#1A1A1A;
-}
- 
-.form-group input:focus{
-    border-color:#1E64C8;
-}
- 
-.form-group input.input-error{
-    border-color:#C0392B;
-    box-shadow:0 0 0 1px #C0392B;
-}
- 
-.field-error{
-    display:none;
-    color:#C0392B;
-    font-size:12px;
-    margin-top:6px;
 }
  
 .password-field{
@@ -264,49 +258,51 @@ body{
 }
  
 .password-field input{
-    padding-right:45px;
+    width:100%;
+    padding:12px 45px 12px 15px;
+    border:1px solid #C9CFD8;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
 }
  
-.toggle-password{
+.password-field input:focus{
+    border-color:#1E64C8;
+}
+ 
+.toggle-eye{
     position:absolute;
+    right:15px;
     top:50%;
-    right:14px;
     transform:translateY(-50%);
     cursor:pointer;
-    stroke:#555;
-    background:none;
+    color:#666;
+    user-select:none;
+}
+ 
+.error-msg{
+    color:#D93025;
+    font-size:13px;
+    margin-top:8px;
+    display:none;
+}
+ 
+.update-btn{
+    display:block;
+    margin:10px auto 0;
+    background:#1E64C8;
+    color:white;
     border:none;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
- 
-.save-row{
-    display:flex;
-    justify-content:center;
-    margin-top:10px;
-}
- 
-.save-btn{
-    background:#EDEFF2;
-    color:#1A1A1A;
-    border:1px solid #D7DBE1;
-    padding:12px 40px;
+    padding:14px 40px;
     border-radius:8px;
-    font-weight:800;
     font-size:15px;
+    font-weight:bold;
     cursor:pointer;
     transition:background 0.2s ease;
 }
  
-.save-btn:hover{
-    background:#E1E4E9;
-}
- 
-@media (max-width:700px){
-    .form-group input{
-        font-size:13px;
-    }
+.update-btn:hover{
+    background:#17509E;
 }
 </style>
 </head>
@@ -351,7 +347,7 @@ body{
         </div>
         <div class="nav-item active">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-            Settings
+            Change Password
         </div>
         <div class="nav-item">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
@@ -359,208 +355,118 @@ body{
         </div>
     </div>
  
-    <div class="main-content">
+<div class="main-content">
+        <h1 class="page-title">Change Password</h1>
+      
  
-        <h1 class="page-title">System Settings</h1>
-        <p class="page-subtitle">Manage all system configuration and preferences</p>
+        <div class="card info-banner">
+            <div class="icon-placeholder"></div>
+            <div class="info-text">
+                <h3>Update Your Password</h3>
+                <p>For your security, please choose a strong password<br>that you don't use on other websites.</p>
+            </div>
+        </div>
  
-        <!-- ===================== GENERAL ====================== -->
         <div class="card">
-            <h3 class="section-title">General</h3>
- 
             <div class="form-group">
-                <label for="siteNameInput">Site Name</label>
-                <input type="text" id="siteNameInput" placeholder="Enter site name" value="Complaint Management System">
+                <label for="currentPassword">Current Password</label>
+                <div class="password-field">
+                    <input type="password" id="currentPassword" placeholder="Enter current password">
+                    <span class="toggle-eye" onclick="togglePassword('currentPassword')">👁</span>
+                </div>
+                <p class="error-msg" id="currentPasswordError">Please Enter the Current Password</p>
             </div>
  
             <div class="form-group">
-                <label for="supportEmailInput">Support Email</label>
-                <input type="email" id="supportEmailInput" placeholder="Enter support email">
-                <span class="field-error" id="emailError">Please enter a valid email</span>
+                <label for="newPassword">New Password</label>
+                <div class="password-field">
+                    <input type="password" id="newPassword" placeholder="Enter new password">
+                    <span class="toggle-eye" onclick="togglePassword('newPassword')">👁</span>
+                </div>
+                <p class="error-msg" id="newPasswordError">Please Enter the New Password</p>
             </div>
  
             <div class="form-group">
-                <label for="phoneInput">Phone Number</label>
-                <input type="tel" id="phoneInput" placeholder="Enter phone number" maxlength="10" inputmode="numeric">
-                <span class="field-error" id="phoneError">Please enter a valid phone number</span>
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="password-field">
+                    <input type="password" id="confirmPassword" placeholder="Re-enter new password">
+                    <span class="toggle-eye" onclick="togglePassword('confirmPassword')">👁</span>
+                </div>
+                <p class="error-msg" id="errorMsg">Passwords Don't Match</p>
             </div>
         </div>
  
-        <!-- ===================== SECURITY ====================== -->
-        <div class="card">
-            <h3 class="section-title">Security</h3>
- 
-            <div class="form-group">
-                <label for="currentPasswordInput">Current Password</label>
-                <div class="password-field">
-                    <input type="password" id="currentPasswordInput" placeholder="Enter current password" maxlength="15">
-                    <button type="button" class="toggle-password" data-target="currentPasswordInput">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </button>
-                </div>
-                <span class="field-error" id="currentPasswordError">Password must be at least 8 characters</span>
-            </div>
- 
-            <div class="form-group">
-                <label for="newPasswordInput">New Password</label>
-                <div class="password-field">
-                    <input type="password" id="newPasswordInput" placeholder="Enter new password" maxlength="15">
-                    <button type="button" class="toggle-password" data-target="newPasswordInput">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </button>
-                </div>
-                <span class="field-error" id="newPasswordError">Password must be at least 8 characters</span>
-            </div>
- 
-            <div class="form-group">
-                <label for="confirmPasswordInput">Confirm Password</label>
-                <div class="password-field">
-                    <input type="password" id="confirmPasswordInput" placeholder="Re-enter new password" maxlength="15">
-                    <button type="button" class="toggle-password" data-target="confirmPasswordInput">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </button>
-                </div>
-                <span class="field-error" id="confirmPasswordError">Passwords do not match</span>
-            </div>
-        </div>
- 
-        <div class="save-row">
-            <button type="button" class="save-btn" id="saveBtn">Save</button>
-        </div>
- 
+        <button class="update-btn" onclick="updatePassword()">Update Password</button>
     </div>
 </div>
  
 <script>
-/* ---------------- Email validation ---------------- */
-const emailInput = document.getElementById("supportEmailInput");
-const emailError = document.getElementById("emailError");
-const emailRegex = /^[^\s@]+@gmail\.com$/;
+function togglePassword(id){
+    const input = document.getElementById(id);
+    input.type = (input.type === "password") ? "text" : "password";
+}
  
-emailInput.addEventListener("input", function(){
-    emailInput.classList.remove("input-error");
-    emailError.style.display = "none";
-});
+const currentPasswordInput = document.getElementById('currentPassword');
+const newPasswordInput = document.getElementById('newPassword');
+const confirmInput = document.getElementById('confirmPassword');
+const errorMsg = document.getElementById('errorMsg');
+const currentPasswordError = document.getElementById('currentPasswordError');
+const newPasswordError = document.getElementById('newPasswordError');
  
-emailInput.addEventListener("blur", function(){
-    if(this.value.length > 0 && !emailRegex.test(this.value)){
-        emailInput.classList.add("input-error");
-        emailError.style.display = "block";
-    } else {
-        emailInput.classList.remove("input-error");
-        emailError.style.display = "none";
-    }
-});
- 
-/* ---------------- Phone validation ---------------- */
-const phoneInput = document.getElementById("phoneInput");
-const phoneError = document.getElementById("phoneError");
-const phoneRegex = /^9\d{9}$/;
- 
-phoneInput.addEventListener("input", function(){
-    this.value = this.value.replace(/\D/g, "").slice(0, 10);
-    phoneInput.classList.remove("input-error");
-    phoneError.style.display = "none";
-});
- 
-phoneInput.addEventListener("blur", function(){
-    if(this.value.length > 0 && !phoneRegex.test(this.value)){
-        phoneInput.classList.add("input-error");
-        phoneError.style.display = "block";
-    } else {
-        phoneInput.classList.remove("input-error");
-        phoneError.style.display = "none";
-    }
-});
- 
-/* ---------------- Password length validation (Current Password) ---------------- */
-const currentPasswordInput = document.getElementById("currentPasswordInput");
-const currentPasswordError = document.getElementById("currentPasswordError");
- 
-currentPasswordInput.addEventListener("input", function(){
-    this.value = this.value.slice(0, 15);
-    currentPasswordInput.classList.remove("input-error");
-    currentPasswordError.style.display = "none";
-});
- 
-currentPasswordInput.addEventListener("blur", function(){
-    if(this.value.length > 0 && this.value.length < 8){
-        currentPasswordInput.classList.add("input-error");
-        currentPasswordError.style.display = "block";
-    } else {
-        currentPasswordInput.classList.remove("input-error");
-        currentPasswordError.style.display = "none";
-    }
-});
- 
-/* ---------------- Password length validation (New Password) ---------------- */
-const newPasswordInput = document.getElementById("newPasswordInput");
-const newPasswordError = document.getElementById("newPasswordError");
- 
-newPasswordInput.addEventListener("input", function(){
-    this.value = this.value.slice(0, 15);
-    newPasswordInput.classList.remove("input-error");
-    newPasswordError.style.display = "none";
-});
- 
-newPasswordInput.addEventListener("blur", function(){
-    if(this.value.length > 0 && this.value.length < 8){
-        newPasswordInput.classList.add("input-error");
-        newPasswordError.style.display = "block";
-    } else {
-        newPasswordInput.classList.remove("input-error");
-        newPasswordError.style.display = "none";
-    }
-});
- 
-/* ---------------- Confirm Password match validation ---------------- */
-const confirmPasswordInput = document.getElementById("confirmPasswordInput");
-const confirmPasswordError = document.getElementById("confirmPasswordError");
- 
-confirmPasswordInput.addEventListener("input", function(){
-    this.value = this.value.slice(0, 15);
-    confirmPasswordInput.classList.remove("input-error");
-    confirmPasswordError.style.display = "none";
-});
- 
-confirmPasswordInput.addEventListener("blur", function(){
-    if(this.value.length > 0 && this.value !== newPasswordInput.value){
-        confirmPasswordInput.classList.add("input-error");
-        confirmPasswordError.style.display = "block";
-    } else {
-        confirmPasswordInput.classList.remove("input-error");
-        confirmPasswordError.style.display = "none";
-    }
-});
- 
-/* ---------------- Show/Hide password toggle ---------------- */
-document.querySelectorAll(".toggle-password").forEach(function(btn){
-    btn.addEventListener("click", function(){
-        const targetInput = document.getElementById(this.getAttribute("data-target"));
-        if(targetInput.type === "password"){
-            targetInput.type = "text";
+// Only warn once the user has pressed Enter in the confirm password field
+confirmInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+        e.preventDefault();
+        if(confirmInput.value.trim() === ''){
+            errorMsg.textContent = "Please Enter the Confirm Password";
+            errorMsg.style.display = 'block';
+        } else if(newPasswordInput.value !== confirmInput.value){
+            errorMsg.textContent = "Passwords Don't Match";
+            errorMsg.style.display = 'block';
         } else {
-            targetInput.type = "password";
+            errorMsg.style.display = 'none';
         }
-    });
+    }
 });
  
-/* ---------------- Save button ---------------- */
-document.getElementById("saveBtn").addEventListener("click", function(){
-    // Trigger validation on all fields before saving
-    emailInput.dispatchEvent(new Event("blur"));
-    phoneInput.dispatchEvent(new Event("blur"));
-    currentPasswordInput.dispatchEvent(new Event("blur"));
-    newPasswordInput.dispatchEvent(new Event("blur"));
-    confirmPasswordInput.dispatchEvent(new Event("blur"));
+function updatePassword(){
+    let hasEmptyField = false;
  
-    const hasError = document.querySelector(".input-error");
-    if(hasError){
+    if(currentPasswordInput.value.trim() === ''){
+        currentPasswordError.style.display = 'block';
+        hasEmptyField = true;
+    } else {
+        currentPasswordError.style.display = 'none';
+    }
+ 
+    if(newPasswordInput.value.trim() === ''){
+        newPasswordError.style.display = 'block';
+        hasEmptyField = true;
+    } else {
+        newPasswordError.style.display = 'none';
+    }
+ 
+    if(confirmInput.value.trim() === ''){
+        errorMsg.textContent = "Please Enter the Confirm Password";
+        errorMsg.style.display = 'block';
+        hasEmptyField = true;
+    } else {
+        errorMsg.style.display = 'none';
+    }
+ 
+    if(hasEmptyField){
         return;
     }
  
-    alert("Settings saved successfully.");
-});
+    if(newPasswordInput.value !== confirmInput.value){
+        errorMsg.textContent = "Passwords Don't Match";
+        errorMsg.style.display = 'block';
+        return;
+    }
+ 
+    errorMsg.style.display = 'none';
+    alert('Password updated successfully!');
+}
 </script>
  </body>
 </html>
