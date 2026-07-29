@@ -93,12 +93,24 @@ body{
 }
  
 .profile-placeholder{
-    width:40px;
-    height:40px;
+    width:50px;
+    height:50px;
     border-radius:50%;
-    background:#E4E8EE;
-    border:1px solid #C9CFD8;
+    overflow:hidden;
     flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #C9CFD8;
+    background:#E4E8EE;
+}
+
+.profile-placeholder img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
 }
  
 .user-info span{
@@ -266,7 +278,9 @@ body{
     </div>
  
     <div class="user-info">
-        <div class="profile-placeholder"></div>
+        <div class="profile-placeholder">
+            <img src="../../Photos/Profile_icon-.png" alt="Profile_picture">
+        </div>
         <span>Hello, User</span>
     </div>
 </div>
