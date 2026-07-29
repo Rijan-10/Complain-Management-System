@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>CMS About Us</title>
-
+ 
 <style>
 *{
     margin:0;
@@ -14,36 +14,47 @@
     box-sizing:border-box;
     font-family:Arial, Helvetica, sans-serif;
 }
-
+ 
+:root{
+    --navy:#0B2D6D;
+    --gray:#6b7280;
+    --border:#e5e7eb;
+}
+ 
 body{
     background:white;
 }
-
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
-
+ 
+.site-header{
     display:flex;
     align-items:center;
-
+    justify-content:space-between;
+    flex-wrap:wrap;
+    padding:15px 20px;
+    border-bottom:1px solid var(--border);
+}
+ 
+.logo-section{
+    display:flex;
+    align-items:center;
+ 
     width:420px;
     max-width: calc(100vw - 240px);
 }
-
+ 
 .logo-section img{
     width:110px;
     height:auto;
     margin-right:15px;
 }
-
+ 
 .logo-text h1{
     color:#0B2D6D;
     font-size:16px;
     font-weight:800;
     margin-bottom:8px;
 }
-
+ 
 .logo-text h2{
     color:#555;
     font-size:11px;
@@ -52,23 +63,19 @@ body{
     letter-spacing:1px;
     margin-bottom:10px;
 }
-
+ 
 .logo-text p{
     color:#1E64C8;
     font-size:11px;
     font-weight:600;
     font-weight:bold;
 }
-
+ 
 .buttons{
-    position: absolute;
-    top: 30px;
-    right: 20px;
-
     display: flex;
     gap: 6px;
 }
-
+ 
 .buttons button{
     background: transparent;
     border: none;
@@ -80,12 +87,12 @@ body{
     transition: 0.3s;
     border-radius: 6px;
 }
-
+ 
 .buttons button:hover{
     background-color: #0B2D6D;
     color: white;
 }
-
+ 
  .about{
     display:flex;
     align-items:center;
@@ -121,15 +128,16 @@ body{
     justify-content:center;
     align-items:center;
     margin-top:30px;
+    min-height:380px;
 }
-
+ 
 .about-image img{
     width:100%;
     max-width:520px;
     height:auto;
     object-fit:contain;
 }
-
+ 
     .features-heading{
     padding:10px 60px 0;
   }
@@ -147,7 +155,7 @@ body{
   }
  
   .features-image-placeholder{
-    width:50%;
+    width:100%;
     min-height:260px;
     border:2px dashed #b9c0d6;
     border-radius:12px;
@@ -166,37 +174,39 @@ body{
     .features-heading{ padding:10px 24px 0; }
     .features{ padding:30px 24px; }
   }
-
+ 
 </style>
 </head>
 <body>
-    <div class="logo-section">
-    <img src="logo" alt="Logo">
-    <div class="logo-text">
-        <h1>KATHMANDU VALLEY</h1>
-        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-        <p>Report, Track and Resolve Together for a Better Valley</p>
-    </div>
-    </div>
-
-    <div class="buttons">
+    <header class="site-header">
+      <div class="logo-section">
+        <img src="logo" alt="Logo">
+        <div class="logo-text">
+            <h1>KATHMANDU VALLEY</h1>
+            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+            <p>Report, Track and Resolve Together for a Better Valley</p>
+        </div>
+      </div>
+ 
+      <div class="buttons">
         <button>Home</button>
         <button>About</button>
         <button>Contact Us</button>
         <button>Login</button>
-    </div>
-
+      </div>
+    </header>
+ 
      <section class="about">
     <div class="about-text">
       <h2>About Us</h2>
       <p>The Complaint Management System is designed to make the process of registering, tracking, and resolving complaints simple, efficient, and transparent for both users and administrators.</p>
       <p>Our mission is to provide a user-friendly platform that ensures every complaint is addressed and resolved in a timely manner.</p>
     </div>
-    <div class="about-image-placeholder">
-      <img src="photo">
+    <div class="about-image">
+      <img src="photo" alt="About us illustration">
     </div>
   </section>
-
+ 
    <div class="features-heading">
     <h2>Our Features</h2>
   </div>
@@ -208,3 +218,6 @@ body{
   </section>
 </body>
 </html>
+ 
+
+
