@@ -21,8 +21,10 @@ body{
     position:absolute;
     top:15px;
     left:20px;
+
     display:flex;
     align-items:center;
+
     width:420px;
     max-width: calc(100vw - 240px);
 }
@@ -43,6 +45,7 @@ body{
 .logo-text h2{
     color:#555;
     font-size:11px;
+    font-weight:500;
     font-weight:bold;
     letter-spacing:1px;
     margin-bottom:10px;
@@ -51,32 +54,34 @@ body{
 .logo-text p{
     color:#1E64C8;
     font-size:11px;
+    font-weight:600;
     font-weight:bold;
 }
 
 .buttons{
-    position:absolute;
-    top:30px;
-    right:20px;
-    display:flex;
-    gap:6px;
+    position: absolute;
+    top: 30px;
+    right: 20px;
+
+    display: flex;
+    gap: 6px;
 }
 
 .buttons button{
-    background:transparent;
-    border:none;
-    color:#0B2D6D;
-    font-size:14px;
-    font-weight:bold;
-    padding:6px 12px;
-    cursor:pointer;
-    transition:.3s;
-    border-radius:6px;
+    background: transparent;
+    border: none;
+    color: #0B2D6D;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 6px;
 }
 
 .buttons button:hover{
-    background:#0B2D6D;
-    color:white;
+    background-color: #0B2D6D;
+    color: white;
 }
 
 /* Logout Section */
@@ -87,18 +92,20 @@ body{
     margin:150px auto 40px;
     background:#f8fbff;
     border-radius:25px;
+
     display:flex;
     justify-content:center;
     align-items:center;
     gap:60px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
 }
 
-/* Left Image */
-
+/* Left side image */
 .logout-image{
     width:350px;
     height:350px;
+
     display:flex;
     justify-content:center;
     align-items:center;
@@ -109,8 +116,7 @@ body{
     max-width:320px;
 }
 
-/* Right Side */
-
+/* Right side */
 .logout-content{
     display:flex;
     flex-direction:column;
@@ -131,7 +137,7 @@ body{
 .logout-buttons{
     display:flex;
     flex-direction:column;
-    align-items:center;
+    align-items:center;      /* Centers the buttons horizontally */
     justify-content:center;
     gap:18px;
     width:100%;
@@ -147,14 +153,16 @@ body{
     font-size:24px;
     font-weight:bold;
     cursor:pointer;
-    transition:.3s;
+    transition:0.3s;
 }
 
 .logout-buttons button:hover{
     background:#0B2D6D;
     transform:translateY(-3px);
-    box-shadow:0 8px 18px rgba(0,0,0,.2);
+    box-shadow:0 8px 18px rgba(0,0,0,0.2);
 }
+
+/* Optional different hover colors */
 
 .login-btn:hover{
     background:#2458c6;
@@ -163,7 +171,12 @@ body{
 .home-btn:hover{
     background:#173f97;
 }
-
+.home-icon{
+    font-size:38px;
+    margin-right:-4px;
+    vertical-align:middle;
+    line-height:0;
+}
 .home-icon{
     font-size:38px;
     display:inline-flex;
@@ -187,7 +200,7 @@ body{
 .logout-image{
     width:250px;
     height:250px;
-}
+}add
 
 .logout-content h1{
     font-size:34px;
@@ -199,7 +212,7 @@ body{
 }
 
 .home-icon{
-    font-size:32px;
+    font-size:32px;   /* Increase or decrease as needed */
     margin-right:8px;
     vertical-align:middle;
 }
@@ -207,12 +220,10 @@ body{
 }
 </style>
 </head>
-
 <body>
 
 <div class="logo-section">
-   <img src="../../Photos/CMS_Logo.png" alt="Logo">
-
+    <img src="../../Photos/CMS_Logo.png" alt="Logo">
     <div class="logo-text">
         <h1>KATHMANDU VALLEY</h1>
         <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
@@ -224,37 +235,32 @@ body{
     <button>Home</button>
     <button>About</button>
     <button>Contact Us</button>
-    <button>Log in</button>
+    <button>Log in </button>
 </div>
 
 <!-- Logout Body -->
-
 <div class="logout-container">
 
+    <!-- Leave this space for your logout image -->
     <div class="logout-image">
+        <!-- Replace logout-image.png with your image -->
         <img src="..\..\Photos\User_Logged_Out.png" alt="Logged Out">
     </div>
 
     <div class="logout-content">
-
         <h1>You have been<br>successfully logged out</h1>
 
         <div class="logout-buttons">
-
             <button class="login-btn">
                 &#10227; Login Again
             </button>
 
             <button class="home-btn">
-                <span class="home-icon">&#8962;</span>
-                Back to Home
+                <span class="home-icon">&#8962;</span> Back to Home
             </button>
-
         </div>
-
     </div>
 
 </div>
-
 </body>
 </html>
