@@ -67,6 +67,11 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'main.auth_backend.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 WSGI_APPLICATION = 'cms.wsgi.application'
 
 
