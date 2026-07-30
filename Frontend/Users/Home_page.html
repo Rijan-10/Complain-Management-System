@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -273,7 +274,7 @@ body{
 <body>
 
 <div class="logo-section">
-    <img src="../../Photos/CMS_Logo.png" alt="Logo">
+    <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
     <div class="logo-text">
         <h1>KATHMANDU VALLEY</h1>
         <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
@@ -282,10 +283,10 @@ body{
 </div>
 
 <div class="buttons">
-    <button>Home</button>
+    <button onclick="location.href='/'">Home</button>
     <button>About</button>
     <button>Contact Us</button>
-    <button>Log in </button>
+    <button onclick="location.href='/login/'">Log in</button>
 </div>
 
 <section class="hero">
@@ -304,8 +305,8 @@ body{
         </p>
 
         <div class="hero-buttons">
-            <button class="btn-primary">New Complaint</button>
-            <button class="btn-secondary">Track Complaint</button>
+            <button class="btn-primary" onclick="location.href='/login/'">New Complaint</button>
+            <button class="btn-secondary" onclick="location.href='/login/'">Track Complaint</button>
         </div>
 
     </div>
