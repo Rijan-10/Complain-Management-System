@@ -97,7 +97,7 @@
     padding:6px 18px;
     border-radius:20px;
     color:white;
-    background:#E8720C; /* always orange - complaint being assigned = In Progress */
+    background:#E8720C;
 }
  
 /* ---- Form fields ---- */
@@ -230,27 +230,29 @@
     {% include 'partials/admin_sidebar.html' with active='complaints' %}
 
     <div class="main-content">
- 
+  
         <h1 class="page-title">Assign Complaint</h1>
- 
+  
         <!-- Complaint ID | Subject strip - populated from Django backend -->
         <div class="summary-strip" id="summaryStrip">
-            <span id="summaryComplaintId"><!-- {{ complaint.complaint_id }} --></span>&nbsp;&nbsp;Subject:&nbsp;<span id="summarySubject"><!-- {{ complaint.subject }} --></span>
+            <span id="summaryComplaintId">{{ complaint.complaint_id }}</span>&nbsp;&nbsp;Subject:&nbsp;<span id="summarySubject">{{ complaint.description|truncatechars:50 }}</span>
         </div>
- 
+  
         <div class="assign-layout">
- 
+  
             <!-- ===================== ASSIGN FORM ====================== -->
             <div class="assign-form-card">
- 
+  
                 <div class="form-group">
                     <label for="officerSelect">Assign to Officer</label>
                     <select id="officerSelect">
                         <option value="">Select Officer</option>
-                        
+                        {% for admin in admins %}
+                        <option value="{{ admin.id }}">{{ admin.profile.full_name|default:admin.first_name }} ({{ admin.email }})</option>
+                        {% endfor %}
                     </select>
                 </div>
- 
+  
                 <div class="form-group">
                     <label for="prioritySelect">Priority</label>
                     <select id="prioritySelect">
@@ -258,115 +260,90 @@
                         <option value="high">High</option>
                         <option value="medium">Medium</option>
                         <option value="low">Low</option>
-                        
                     </select>
                 </div>
- 
+  
                 <div class="form-group">
                     <label for="dueDateInput">Due Date</label>
                     <input type="date" id="dueDateInput">
-                    <!-- Native date input shows a calendar picker (year/month/day) on click -->
                 </div>
- 
+  
                 <div class="form-group">
                     <label for="noteInput">Note (Optional)</label>
                     <input type="text" id="noteInput" placeholder="Add a note for Officer">
                 </div>
- 
+  
                 <div class="form-actions">
-                    <button type="button" class="btn-outline" id="cancelBtn">Cancel</button>
+                    <a href="{% url 'admin_complaint_detail' complaint.complaint_id %}" class="btn-outline" style="text-decoration:none; display:inline-flex; align-items:center;">Cancel</a>
                     <button type="button" class="btn-solid" id="assignBtn">Assign</button>
                 </div>
- 
+  
             </div>
- 
+  
             <!-- ===================== COMPLAINT SUMMARY ====================== -->
             <div class="summary-card">
                 <h3 class="summary-title">Complaint Summary</h3>
- 
+  
                 <div class="summary-row">
                     <span class="summary-label">Category</span>
-                    <span class="summary-value" id="categoryValue"><!-- {{ complaint.category }} --></span>
+                    <span class="summary-value">{{ complaint.get_category_display }}</span>
                 </div>
- 
+  
                 <div class="summary-row">
                     <span class="summary-label">Location</span>
-                    <span class="summary-value" id="locationValue"><!-- {{ complaint.location }} --></span>
+                    <span class="summary-value">{{ complaint.latitude }}, {{ complaint.longitude }}</span>
                 </div>
- 
+  
                 <div class="summary-row">
                     <span class="summary-label">Submitted By</span>
-                    <span class="summary-value" id="submittedByValue"><!-- {{ complaint.submitted_by }} --></span>
+                    <span class="summary-value">{{ complaint.user.email }}</span>
                 </div>
- 
+  
                 <div class="summary-row">
                     <span class="summary-label">Date</span>
-                    <span class="summary-value" id="dateValue"><!-- {{ complaint.date }} --></span>
+                    <span class="summary-value">{{ complaint.created_at|date:"M d, Y" }}</span>
                 </div>
- 
+  
                 <div class="summary-row">
                     <span class="summary-label">Status</span>
                     <span class="status-badge">In Progress</span>
-                    <!-- Status is always "In Progress" (orange) on this page,
-                         since assigning a complaint puts it into progress. -->
                 </div>
             </div>
- 
+  
         </div>
- 
+  
         <div class="bottom-action-row">
-            <a href="Complaint-details.html" class="back-btn">
+            <a href="{% url 'admin_complaints' %}" class="back-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
                 Back to complaints
             </a>
         </div>
- 
+  
     </div>
 </div>
- 
+  
 <script>
-/*
-    ---------------------------------------------------------------
-    Placeholder data object. Replace with real values rendered by
-    the Django backend (via template tags) or fetched from an API,
-    e.g. fetch(`/api/complaints/${complaintId}/`).
-    ---------------------------------------------------------------
-*/
-const complaintSummaryData = {
-    complaintId: "",
-    subject: "",
-    category: "",
-    location: "",
-    submittedBy: "",
-    date: ""
-};
- 
-function renderAssignSummary(data){
-    document.getElementById("summaryComplaintId").textContent = data.complaintId || "";
-    document.getElementById("summarySubject").textContent = data.subject || "";
-    document.getElementById("categoryValue").textContent = data.category || "";
-    document.getElementById("locationValue").textContent = data.location || "";
-    document.getElementById("submittedByValue").textContent = data.submittedBy || "";
-    document.getElementById("dateValue").textContent = data.date || "";
-}
- 
-renderAssignSummary(complaintSummaryData);
- 
-document.getElementById("cancelBtn").addEventListener("click", function(){
-    window.location.href = "Complaint-details.html";
+document.getElementById("cancelBtn")?.addEventListener("click", function(){
+    window.location.href = "{% url 'admin_complaints' %}";
 });
- 
+  
 document.getElementById("assignBtn").addEventListener("click", function(){
     const officer = document.getElementById("officerSelect").value;
     const priority = document.getElementById("prioritySelect").value;
     const dueDate = document.getElementById("dueDateInput").value;
     const note = document.getElementById("noteInput").value;
- 
- 
+
+    if (!officer) {
+        alert("Please select an officer to assign.");
+        return;
+    }
     alert("Complaint assigned successfully.");
+    window.location.href = "{% url 'admin_complaints' %}";
 });
 </script>
- 
+  
 </body>
 </html>
  
+
+

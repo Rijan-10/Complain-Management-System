@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kathmandu Valley CMS</title>
+<link rel="stylesheet" href="{% static 'css/common.css' %}">
 
 <style>
 *{
@@ -200,7 +201,7 @@ body{
 .logout-image{
     width:250px;
     height:250px;
-}add
+}
 
 .logout-content h1{
     font-size:34px;
@@ -222,40 +223,25 @@ body{
 </head>
 <body>
 
-<div class="logo-section">
-    <img src="../../Photos/CMS_Logo.png" alt="Logo">
-    <div class="logo-text">
-        <h1>KATHMANDU VALLEY</h1>
-        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-        <p>Report, Track and Resolve Together for a Better Valley</p>
-    </div>
-</div>
+{% include 'partials/header.html' %}
 
-<div class="buttons">
-    <button>Home</button>
-    <button>About</button>
-    <button>Contact Us</button>
-    <button>Log in </button>
-</div>
-
-<!-- Logout Body -->
 <div class="logout-container">
 
     <!-- Leave this space for your logout image -->
     <div class="logout-image">
         <!-- Replace logout-image.png with your image -->
-        <img src="..\..\Photos\User_Logged_Out.png" alt="Logged Out">
+        <img src="{% static 'User_Logged_Out.png' %}" alt="Logged Out">
     </div>
 
     <div class="logout-content">
         <h1>You have been<br>successfully logged out</h1>
 
         <div class="logout-buttons">
-            <button class="login-btn">
+            <button class="login-btn" onclick="location.href='{% url 'login' %}'">
                 &#10227; Login Again
             </button>
 
-            <button class="home-btn">
+            <button class="home-btn" onclick="location.href='{% url 'home' %}'">
                 <span class="home-icon">&#8962;</span> Back to Home
             </button>
         </div>

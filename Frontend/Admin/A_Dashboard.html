@@ -115,6 +115,7 @@
     font-size:14px;
     cursor:pointer;
     transition:background 0.2s ease;
+    text-decoration:none;
 }
  
 .view-all-btn:hover{
@@ -146,6 +147,15 @@
     border-bottom:none;
 }
  
+.complaints-table tbody tr{
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.complaints-table tbody tr:hover{
+    background:#F5F7FA;
+}
+ 
 .status-badge{
     display:inline-block;
     width:fit-content;
@@ -160,6 +170,7 @@
 .status-badge.status-in-progress{ background:#E8720C; }
 .status-badge.status-resolved{ background:#1F8A4C; }
 .status-badge.status-closed{ background:#000000; }
+.status-badge.status-pending{ background:#8A93A3; color:white; }
  
 .empty-state{
     padding:40px 0;
@@ -193,91 +204,92 @@
     {% include 'partials/admin_sidebar.html' with active='dashboard' %}
 
     <div class="main-content">
- 
+  
         <div class="page-header-row">
             <h1 class="page-title">Dashboard</h1>
             <svg class="next-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
- 
+  
         <div class="stats-row">
- 
+  
             <div class="stat-card total">
                 <span class="stat-label">Total Complaints</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="totalComplaintsValue"><!-- {{ total_complaints }} --></span>
+                    <span class="stat-value">{{ total_complaints }}</span>
                 </div>
             </div>
- 
+  
             <div class="stat-card progress">
                 <span class="stat-label">In Progress</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="inProgressValue"><!-- {{ in_progress_count }} --></span>
+                    <span class="stat-value">{{ in_progress_count }}</span>
                 </div>
             </div>
- 
+  
             <div class="stat-card resolved">
                 <span class="stat-label">Resolved</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="resolvedValue"><!-- {{ resolved_count }} --></span>
+                    <span class="stat-value">{{ resolved_count }}</span>
                 </div>
             </div>
- 
+  
             <div class="stat-card closed">
                 <span class="stat-label">Closed</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="closedValue"><!-- {{ closed_count }} --></span>
+                    <span class="stat-value">{{ closed_count }}</span>
                 </div>
             </div>
- 
+  
         </div>
- 
+  
         <!-- ===================== RECENT COMPLAINTS ====================== -->
         <div class="card">
             <div class="card-header-row">
                 <h3 class="card-title">Recent Complaints</h3>
-                <button type="button" class="view-all-btn" id="viewAllBtn">View All</button>
+                <a href="{% url 'admin_complaints' %}" class="view-all-btn">View All</a>
             </div>
- 
+  
             <table class="complaints-table">
                 <thead>
                     <tr>
                         <th>Complaint ID</th>
-                        <th>Subject</th>
+                        <th>Category</th>
+                        <th>Submitted by</th>
                         <th>Date</th>
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="recentComplaintsBody">
-                    
+                <tbody>
+                    {% if recent_complaints %}
+                        {% for complaint in recent_complaints %}
+                        <tr onclick="window.location.href='{% url 'admin_complaint_detail' complaint.complaint_id %}'">
+                            <td>{{ complaint.complaint_id }}</td>
+                            <td>{{ complaint.get_category_display }}</td>
+                            <td>{{ complaint.user.email }}</td>
+                            <td>{{ complaint.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="status-badge status-{{ complaint.status }}">
+                                    {{ complaint.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                Complaint Information will be displayed here.
+                            </td>
+                        </tr>
+                    {% endif %}
                 </tbody>
             </table>
- 
-            <!-- Shown only when there is no data yet / table body is empty -->
-            <div class="empty-state" id="emptyState">
-                Complaint Information will be displayed here.
-            </div>
         </div>
- 
+  
     </div>
 </div>
  
-<script>
- 
-function updateEmptyState(){
-    const tbody = document.getElementById("recentComplaintsBody");
-    const emptyState = document.getElementById("emptyState");
-    emptyState.style.display = tbody.children.length === 0 ? "block" : "none";
-}
-updateEmptyState();
- 
-document.getElementById("viewAllBtn").addEventListener("click", function(){
-    window.location.href = "Complaints.html";
-});
-</script>
- </body>
+</body>
 </html>
  
-
-
 
 

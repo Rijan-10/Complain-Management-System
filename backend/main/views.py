@@ -1,19 +1,37 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from main.models import Profile, Complaint, ComplaintImage
 
+
+def admin_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        try:
+            if request.user.profile.role != 'admin':
+                messages.error(request, 'Access denied. Admin privileges required.')
+                return redirect('user_dashboard')
+        except Profile.DoesNotExist:
+            messages.error(request, 'Access denied. Admin privileges required.')
+            return redirect('user_dashboard')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
 def home(request):
     return render(request, 'Home_page.html')
+
 
 def display_name(user):
     try:
         return user.profile.full_name or user.first_name
     except Profile.DoesNotExist:
         return user.first_name or user.username
+
 
 def signup_view(request):
     if request.method == 'POST':
@@ -51,6 +69,7 @@ def signup_view(request):
 
     return render(request, 'Signup.html')
 
+
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -66,11 +85,25 @@ def login_view(request):
             messages.error(request, 'Invalid email or password')
     return render(request, 'Login.html')
 
+
 @login_required(login_url='/login/')
 def user_dashboard(request):
+    user = request.user
+    complaints = Complaint.objects.filter(user=user)
+    total_complaints = complaints.count()
+    in_progress_count = complaints.filter(status='in_progress').count()
+    resolved_count = complaints.filter(status='resolved').count()
+    closed_count = complaints.filter(status='rejected').count()
+    recent_complaints = complaints.order_by('-created_at')[:5]
     return render(request, 'Dashboard.html', {
         'full_name': display_name(request.user),
+        'total_complaints': total_complaints,
+        'in_progress_count': in_progress_count,
+        'resolved_count': resolved_count,
+        'closed_count': closed_count,
+        'recent_complaints': recent_complaints,
     })
+
 
 @login_required(login_url='/login/')
 def profile_view(request):
@@ -84,9 +117,11 @@ def profile_view(request):
         'member_since': request.user.date_joined,
     })
 
+
 def logout_view(request):
     logout(request)
     return render(request, 'Logedout.html')
+
 
 @login_required(login_url='/login/')
 def my_complaints(request):
@@ -95,6 +130,7 @@ def my_complaints(request):
         'full_name': display_name(request.user),
         'complaints': complaints,
     })
+
 
 @login_required(login_url='/login/')
 def new_complaint(request):
@@ -144,6 +180,7 @@ def new_complaint(request):
         'cloudinary_folder': settings.CLOUDINARY_FOLDER,
     })
 
+
 @login_required(login_url='/login/')
 def complaint_success(request, complaint_id):
     complaint = get_object_or_404(Complaint, complaint_id=complaint_id, user=request.user)
@@ -151,6 +188,171 @@ def complaint_success(request, complaint_id):
         'complaint': complaint,
     })
 
-@login_required(login_url='/login/')
+
+# ===================== ADMIN VIEWS =====================
+
+@admin_required
 def admin_dashboard(request):
-    return render(request, 'A_Dashboard.html')
+    complaints = Complaint.objects.all()
+    total_complaints = complaints.count()
+    in_progress_count = complaints.filter(status='in_progress').count()
+    resolved_count = complaints.filter(status='resolved').count()
+    closed_count = complaints.filter(status='rejected').count()
+    recent_complaints = complaints.order_by('-created_at')[:5]
+    return render(request, 'A_Dashboard.html', {
+        'full_name': display_name(request.user),
+        'total_complaints': total_complaints,
+        'in_progress_count': in_progress_count,
+        'resolved_count': resolved_count,
+        'closed_count': closed_count,
+        'recent_complaints': recent_complaints,
+    })
+
+
+@admin_required
+def admin_complaints(request):
+    complaints = Complaint.objects.all().order_by('-created_at')
+    status_filter = request.GET.get('status', '')
+    category_filter = request.GET.get('category', '')
+    search_query = request.GET.get('search', '')
+
+    if status_filter:
+        complaints = complaints.filter(status=status_filter)
+    if category_filter:
+        complaints = complaints.filter(category=category_filter)
+    if search_query:
+        complaints = complaints.filter(complaint_id__icontains=search_query) | \
+                     complaints.filter(description__icontains=search_query) | \
+                     complaints.filter(user__email__icontains=search_query)
+
+    return render(request, 'A_complaints.html', {
+        'full_name': display_name(request.user),
+        'complaints': complaints,
+        'status_filter': status_filter,
+        'category_filter': category_filter,
+        'search_query': search_query,
+    })
+
+
+@admin_required
+def admin_users(request):
+    users = User.objects.filter(profile__role='user').order_by('-date_joined')
+    status_filter = request.GET.get('status', '')
+    search_query = request.GET.get('search', '')
+
+    if status_filter:
+        users = users.filter(profile__account_status=status_filter)
+    if search_query:
+        users = users.filter(email__icontains=search_query) | \
+               users.filter(first_name__icontains=search_query)
+
+    return render(request, 'A_Users.html', {
+        'full_name': display_name(request.user),
+        'users': users,
+        'status_filter': status_filter,
+        'search_query': search_query,
+    })
+
+
+@admin_required
+def admin_complaint_detail(request, complaint_id):
+    complaint = get_object_or_404(Complaint, complaint_id=complaint_id)
+    images = complaint.images.all()
+
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in dict(Complaint.STATUS_CHOICES):
+            complaint.status = new_status
+            complaint.save()
+            messages.success(request, f'Complaint {complaint_id} status updated to {complaint.get_status_display()}.')
+            return redirect('admin_complaint_detail', complaint_id=complaint_id)
+
+    return render(request, 'A_complaintdetail.html', {
+        'full_name': display_name(request.user),
+        'complaint': complaint,
+        'images': images,
+    })
+
+
+@admin_required
+def admin_assign_complaint(request, complaint_id):
+    complaint = get_object_or_404(Complaint, complaint_id=complaint_id)
+    admins = User.objects.filter(profile__role='admin')
+
+    if request.method == 'POST':
+        # Placeholder for assignment logic
+        messages.success(request, f'Complaint {complaint_id} assignment updated.')
+        return redirect('admin_complaints')
+
+    return render(request, 'A_assigncomplain.html', {
+        'full_name': display_name(request.user),
+        'complaint': complaint,
+        'admins': admins,
+    })
+
+
+@admin_required
+def admin_profile(request):
+    profile = request.user.profile
+    return render(request, 'A_profile.html', {
+        'full_name': display_name(request.user),
+        'email': request.user.email,
+        'phone': profile.phone,
+        'account_status': profile.account_status,
+        'last_login': request.user.last_login,
+        'member_since': request.user.date_joined,
+    })
+
+
+@admin_required
+def admin_reports(request):
+    complaints = Complaint.objects.all()
+    total_complaints = complaints.count()
+    in_progress_count = complaints.filter(status='in_progress').count()
+    resolved_count = complaints.filter(status='resolved').count()
+    closed_count = complaints.filter(status='rejected').count()
+
+    monthly_counts = [0] * 12
+    for c in complaints:
+        month = c.created_at.month - 1
+        monthly_counts[month] += 1
+
+    return render(request, 'A_reports.html', {
+        'full_name': display_name(request.user),
+        'total_complaints': total_complaints,
+        'in_progress_count': in_progress_count,
+        'resolved_count': resolved_count,
+        'closed_count': closed_count,
+        'monthly_counts': monthly_counts,
+    })
+
+
+@admin_required
+def admin_change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not request.user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+        elif new_password != confirm_password:
+            messages.error(request, 'New passwords do not match.')
+        elif len(new_password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+        else:
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            messages.success(request, 'Password changed successfully.')
+            return redirect('admin_profile')
+
+    return render(request, 'A_change_password.html', {
+        'full_name': display_name(request.user),
+    })
+
+
+@admin_required
+def admin_logout(request):
+    logout(request)
+    return render(request, 'A_logedout.html')

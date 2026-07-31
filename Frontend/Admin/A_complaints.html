@@ -146,6 +146,15 @@
     border-bottom:none;
 }
  
+.complaints-table tbody tr{
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.complaints-table tbody tr:hover{
+    background:#F5F7FA;
+}
+ 
 .status-badge{
     display:inline-block;
     width:fit-content;
@@ -157,17 +166,10 @@
     color:white;
 }
  
-.status-badge.status-in-progress{
-    background:#E8720C;
-}
- 
-.status-badge.status-resolved{
-    background:#1F8A4C;
-}
- 
-.status-badge.status-closed{
-    background:#000000;
-}
+.status-badge.status-in-progress{ background:#E8720C; }
+.status-badge.status-resolved{ background:#1F8A4C; }
+.status-badge.status-closed{ background:#000000; }
+.status-badge.status-pending{ background:#8A93A3; }
  
 .action-icons{
     display:flex;
@@ -206,59 +208,48 @@
     {% include 'partials/admin_sidebar.html' with active='complaints' %}
 
     <div class="main-content">
- 
+  
         <div class="page-header-row">
             <h1 class="page-title">Manage Complaints</h1>
             <svg class="next-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
- 
+  
         <div class="filters-row">
             <div class="filter-group search-group">
                 <span class="filter-label">Search Complaints</span>
-                <input type="text" class="filter-input" id="searchComplaintsInput" placeholder="Search Complaints">
+                <input type="text" class="filter-input" id="searchComplaintsInput" placeholder="Search Complaints" value="{{ search_query }}">
             </div>
- 
+  
             <div class="filter-group">
                 <span class="filter-label">Status</span>
                 <select class="filter-select" id="statusFilter">
                     <option value="">All Status</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="resolved">Resolved</option>
-                    <option value="closed">Closed</option>
+                    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>Resolved</option>
+                    <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Closed</option>
                 </select>
             </div>
- 
+  
             <div class="filter-group">
                 <span class="filter-label">Category</span>
                 <select class="filter-select" id="categoryFilter">
                     <option value="">All Category</option>
-                    <option value="road_pothole">Road Pothole</option>
-                    <option value="garbage">Garbage</option>
-                    <option value="drainage">Drainage</option>
+                    <option value="road_pothole" {% if category_filter == 'road_pothole' %}selected{% endif %}>Road Pothole</option>
+                    <option value="garbage" {% if category_filter == 'garbage' %}selected{% endif %}>Garbage</option>
+                    <option value="drainage" {% if category_filter == 'drainage' %}selected{% endif %}>Drainage</option>
                 </select>
             </div>
- 
-            <div class="filter-group">
-                <span class="filter-label">Date Range</span>
-                <select class="filter-select date-range-select" id="dateRangeFilter">
-                    <option value="">Select Date Range</option>
-                    <option value="today">Today</option>
-                    <option value="7days">Last 7 Days</option>
-                    <option value="30days">Last 30 Days</option>
-                    <option value="custom">Custom Range</option>
-                </select>
-            </div>
- 
+  
             <button type="button" class="enter-btn" id="enterBtn">Enter</button>
         </div>
- 
+  
         <!-- ===================== COMPLAINTS TABLE ====================== -->
         <div class="card">
             <table class="complaints-table">
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>Subject</th>
+                        <th>Complaint ID</th>
                         <th>Category</th>
                         <th>Submitted by</th>
                         <th>Date</th>
@@ -267,34 +258,63 @@
                     </tr>
                 </thead>
                 <tbody id="complaintsTableBody">
- 
+                    {% if complaints %}
+                        {% for complaint in complaints %}
+                        <tr onclick="window.location.href='{% url 'admin_complaint_detail' complaint.complaint_id %}'">
+                            <td>{{ complaint.complaint_id }}</td>
+                            <td>{{ complaint.get_category_display }}</td>
+                            <td>{{ complaint.user.email }}</td>
+                            <td>{{ complaint.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="status-badge status-{{ complaint.status }}">
+                                    {{ complaint.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'admin_complaint_detail' complaint.complaint_id %}" class="view-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                Complaint Information will be displayed here.
+                            </td>
+                        </tr>
+                    {% endif %}
                 </tbody>
             </table>
- 
-            <!-- Shown only when there is no data yet / table body is empty -->
-            <div class="empty-state" id="emptyState">
-                Complaint Information will be displayed here.
-            </div>
         </div>
- 
+  
     </div>
 </div>
- 
+  
 <script>
- 
-// Toggle empty-state message based on whether the table has rows.
+
 function updateEmptyState(){
     const tbody = document.getElementById("complaintsTableBody");
-    const emptyState = document.getElementById("emptyState");
-    emptyState.style.display = tbody.children.length === 0 ? "block" : "none";
+    const emptyState = tbody.querySelector(".empty-state");
+    if (emptyState) {
+        emptyState.style.display = tbody.children.length === 0 ? "block" : "none";
+    }
 }
 updateEmptyState();
- 
+
 document.getElementById("enterBtn").addEventListener("click", function(){
-    
+    const status = document.getElementById("statusFilter").value;
+    const category = document.getElementById("categoryFilter").value;
+    const search = document.getElementById("searchComplaintsInput").value;
+    let url = "{% url 'admin_complaints' %}?";
+    if (status) url += "status=" + encodeURIComponent(status) + "&";
+    if (category) url += "category=" + encodeURIComponent(category) + "&";
+    if (search) url += "search=" + encodeURIComponent(search) + "&";
+    window.location.href = url.slice(0, -1);
 });
 </script>
 </body>
 </html>
  
+
 

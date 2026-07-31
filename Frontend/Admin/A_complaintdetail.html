@@ -51,7 +51,7 @@
 }
  
 .status-badge{
-    display:none; /* shown only once real status data comes from the backend */
+    display:inline-block;
     font-weight:700;
     font-size:14px;
     padding:10px 22px;
@@ -62,6 +62,7 @@
 .status-badge.status-in-progress{ background:#E8720C; }
 .status-badge.status-resolved{ background:#1F8A4C; }
 .status-badge.status-closed{ background:#000000; }
+.status-badge.status-pending{ background:#8A93A3; }
  
 .page-title{
     color:#0B2D6D;
@@ -287,183 +288,115 @@
     {% include 'partials/admin_sidebar.html' with active='complaints' %}
 
     <div class="main-content">
- 
+  
         <div class="top-action-row">
             <h1 class="page-title">Complaint Details</h1>
- 
-            <span class="status-badge" id="topStatusBadge"></span>
+  
+            <span class="status-badge status-{{ complaint.status }}" id="topStatusBadge">{{ complaint.get_status_display }}</span>
         </div>
- 
+  
         <!-- ===================== BASIC INFO ====================== -->
         <div class="info-card">
             <div class="info-col">
                 <div class="info-row">
                     <span class="info-label">Complaint ID</span>
-                    <span class="info-value" id="complaintIdValue"></span>
+                    <span class="info-value">{{ complaint.complaint_id }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Category</span>
-                    <span class="info-value" id="categoryValue"></span>
+                    <span class="info-value">{{ complaint.get_category_display }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Submitted by</span>
-                    <span class="info-value" id="submittedByValue"></span>
+                    <span class="info-value">{{ complaint.user.email }}</span>
                 </div>
             </div>
- 
+  
             <div class="info-divider"></div>
- 
+  
             <div class="info-col">
                 <div class="info-row">
                     <span class="info-label">Date</span>
-                    <span class="info-value" id="dateValue"></span>
+                    <span class="info-value">{{ complaint.created_at|date:"M d, Y" }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Location</span>
-                    <span class="info-value" id="locationValue"></span>
+                    <span class="info-value">{{ complaint.latitude }}, {{ complaint.longitude }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Status</span>
-                    <select class="status-select" id="statusSelect">
-                        <option value="">Select Status</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="resolved">Resolved</option>
-                        <option value="closed">Closed</option>
-                    </select>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <select class="status-select" name="status" onchange="this.form.submit()">
+                            <option value="pending" {% if complaint.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="in_progress" {% if complaint.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="resolved" {% if complaint.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                            <option value="rejected" {% if complaint.status == 'rejected' %}selected{% endif %}>Closed</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </div>
- 
+  
         <!-- ===================== SUBJECT / DESCRIPTION / ATTACHMENTS + TIMELINE ====================== -->
         <div class="details-card">
- 
+  
             <div class="details-left">
                 <div class="detail-block">
-                    <h4>Subject</h4>
-                    <p id="subjectValue"></p>
-                </div>
- 
-                <div class="detail-block">
                     <h4>Description</h4>
-                    <p id="descriptionValue"></p>
+                    <p>{{ complaint.description }}</p>
                 </div>
- 
+  
                 <div class="detail-block">
                     <h4>Attachments</h4>
-                    <div class="attachment-box" id="attachmentBox">
-                        Attachment will be displayed here.
-                        <img id="attachmentImage" alt="Complaint attachment">
-                    </div>
+                    {% if images %}
+                        {% for img in images %}
+                        <div class="attachment-box">
+                            <img src="{{ img.image_url }}" alt="Complaint attachment" style="display:block;">
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="attachment-box">
+                            No attachments.
+                        </div>
+                    {% endif %}
                 </div>
- 
+  
                 <div class="details-actions">
-                    <button type="button" class="action-btn" id="assignOfficerBtn">Assign Officer</button>
-                    <button type="button" class="action-btn" id="updateBtn">Update</button>
+                    <a href="{% url 'admin_assign_complaint' complaint.complaint_id %}" class="action-btn">Assign Officer</a>
                 </div>
             </div>
- 
+  
             <div class="details-right">
                 <h3 class="timeline-title">Timeline</h3>
-                <ul class="timeline-list" id="timelineList"></ul>
-                <div class="empty-state" id="timelineEmptyState">
-                    Timeline will be displayed here.
-                </div>
+                <ul class="timeline-list">
+                    <li class="timeline-item">
+                        <div class="timeline-datetime">{{ complaint.created_at|date:"M d, Y, g:i a" }}</div>
+                        <div class="timeline-text">Complaint submitted</div>
+                    </li>
+                    {% if complaint.updated_at != complaint.created_at %}
+                    <li class="timeline-item">
+                        <div class="timeline-datetime">{{ complaint.updated_at|date:"M d, Y, g:i a" }}</div>
+                        <div class="timeline-text">Status updated to {{ complaint.get_status_display }}</div>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
- 
+  
         </div>
- 
+  
         <div class="bottom-action-row">
-            <a href="Complaints.html" class="back-btn">
+            <a href="{% url 'admin_complaints' %}" class="back-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
                 Back to complaints
             </a>
         </div>
- 
+  
     </div>
 </div>
- 
-<script>
- 
-
-const complaintData = {
-    complaintId: "",
-    category: "",
-    submittedBy: "",
-    date: "",
-    location: "",
-    status: "",       // "in-progress" | "resolved" | "closed"
-    subject: "",
-    description: "",
-    attachmentUrl: "",
-    timeline: []      // e.g. [{ datetime: "...", text: "..." }, ...]
-};
- 
-function renderComplaintDetails(data){
-    document.getElementById("complaintIdValue").textContent = data.complaintId || "";
-    document.getElementById("categoryValue").textContent = data.category || "";
-    document.getElementById("submittedByValue").textContent = data.submittedBy || "";
-    document.getElementById("dateValue").textContent = data.date || "";
-    document.getElementById("locationValue").textContent = data.location || "";
-    document.getElementById("subjectValue").textContent = data.subject || "";
-    document.getElementById("descriptionValue").textContent = data.description || "";
- 
-    // Status select + top-right status badge
-    const statusSelect = document.getElementById("statusSelect");
-    const topStatusBadge = document.getElementById("topStatusBadge");
-    if (data.status) {
-        statusSelect.value = data.status;
-        topStatusBadge.textContent =
-            data.status === "in-progress" ? "In Progress" :
-            data.status === "resolved" ? "Resolved" :
-            data.status === "closed" ? "Closed" : "";
-        topStatusBadge.className = "status-badge status-" + data.status;
-        topStatusBadge.style.display = "inline-block";
-    }
- 
-    // Attachment image
-    const attachmentBox = document.getElementById("attachmentBox");
-    const attachmentImage = document.getElementById("attachmentImage");
-    if (data.attachmentUrl) {
-        attachmentImage.src = data.attachmentUrl;
-        attachmentImage.style.display = "block";
-        attachmentBox.firstChild.textContent = "";
-    }
- 
-    // Timeline
-    const timelineList = document.getElementById("timelineList");
-    const timelineEmptyState = document.getElementById("timelineEmptyState");
-    timelineList.innerHTML = "";
-    if (data.timeline && data.timeline.length > 0) {
-        data.timeline.forEach(function(entry){
-            const li = document.createElement("li");
-            li.className = "timeline-item";
-            li.innerHTML =
-                '<div class="timeline-datetime">' + entry.datetime + '</div>' +
-                '<div class="timeline-text">' + entry.text + '</div>';
-            timelineList.appendChild(li);
-        });
-        timelineEmptyState.style.display = "none";
-    } else {
-        timelineEmptyState.style.display = "block";
-    }
-}
- 
-renderComplaintDetails(complaintData);
- 
-document.getElementById("assignOfficerBtn").addEventListener("click", function(){
-    // 
-document.getElementById("updateBtn").addEventListener("click", function(){
-    // 
-});
-</script>
+  
 </body>
 </html>
  
-
-
-
-
-
-
 
 

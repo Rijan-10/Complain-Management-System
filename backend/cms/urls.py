@@ -4,7 +4,9 @@ from django.contrib import admin
 from django.urls import path
 from main.views import (home, login_view, signup_view, logout_view, profile_view,
                         user_dashboard, admin_dashboard, new_complaint, complaint_success,
-                        my_complaints)
+                        my_complaints, admin_complaints, admin_users, admin_complaint_detail,
+                        admin_assign_complaint, admin_profile, admin_reports, admin_change_password,
+                        admin_logout)
 
 urlpatterns = [
     path('', home, name='home'),
@@ -17,6 +19,14 @@ urlpatterns = [
     path('complaint-success/<str:complaint_id>/', complaint_success, name='complaint_success'),
     path('profile/', profile_view, name='profile'),
     path('admin-dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('admin/complaints/', admin_complaints, name='admin_complaints'),
+    path('admin/complaints/<str:complaint_id>/', admin_complaint_detail, name='admin_complaint_detail'),
+    path('admin/complaints/<str:complaint_id>/assign/', admin_assign_complaint, name='admin_assign_complaint'),
+    path('admin/users/', admin_users, name='admin_users'),
+    path('admin/profile/', admin_profile, name='admin_profile'),
+    path('admin/reports/', admin_reports, name='admin_reports'),
+    path('admin/change-password/', admin_change_password, name='admin_change_password'),
+    path('admin/logout/', admin_logout, name='admin_logout'),
     path('django-admin/', admin.site.urls),
 ]
 
