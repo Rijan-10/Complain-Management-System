@@ -1,178 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Complaint Details</title>
- 
+<link rel="stylesheet" href="{% static 'css/common.css' %}">
+
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
- 
-body{
-    background:white;
-}
- 
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
- 
-    display:flex;
-    align-items:center;
- 
-    width:420px;
-    max-width: calc(100vw - 160px);
-}
- 
-@media (max-width: 480px){
-    .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
-    }
-    .logo-section{
-        position:static;
-        width:100%;
-        max-width:100%;
-        margin-bottom:10px;
-    }
-    .user-info{
-        margin-left:auto;
-    }
-}
- 
-.logo-section img{
-    width:96px;
-    height:auto;
-    margin-right:15px;
-}
- 
-.logo-text h1{
-    color:#0B2D6D;
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:8px;
-}
- 
-.logo-text h2{
-    color:#555;
-    font-size:11px;
-    font-weight:500;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:10px;
-}
- 
-.logo-text p{
-    color:#1E64C8;
-    font-size:11px;
-    font-weight:600;
-    font-weight:bold;
-}
- 
-.top-header{
-    position:relative;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    height:110px;
-    padding:0 30px;
-    background:#F7F8FA;
-    border-bottom:1px solid #E4E7EB;
-}
- 
-.user-info{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
- 
-.user-info:hover{
-    background:#E8F0FE;
-}
- 
-.profile-placeholder{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#E4E8EE;
-    border:1px solid #C9CFD8;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
- 
-.user-info span{
-    font-size:15px;
-    color:#333;
-}
- 
-.dropdown-arrow{
-    flex-shrink:0;
-}
- 
-.wrapper{
-    display:flex;
-    align-items:flex-start;
-}
- 
-.sidebar{
-    width:270px;
-    background:white;
-    border-right:1px solid #E4E7EB;
-    padding:25px 15px;
-}
- 
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:15px;
-    color:#1A1A1A;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-    text-decoration:none;
-}
- 
-.nav-item svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-    flex-shrink:0;
-}
- 
-.nav-item:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item:hover svg{
-    stroke:#1E64C8;
-}
- 
-.nav-item.active{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item.active svg{
-    stroke:#1E64C8;
-}
- 
 .main-content{
     flex:1;
     padding:30px 40px;
@@ -446,53 +281,11 @@ body{
 </head>
 <body>
  
-<div class="top-header">
-    <div class="logo-section">
-        <img src="../../Photos/CMS_Logo.png" alt="Logo">
-        <div class="logo-text">
-            <h1>KATHMANDU VALLEY</h1>
-            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-            <p>Report, Track and Resolve Together for a Better Valley</p>
-        </div>
-    </div>
- 
-    <div class="user-info">
-        <div class="profile-placeholder">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-        </div>
-        <span>Admin CMS</span>
-        <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
-</div>
- 
+{% include 'partials/header.html' %}
+
 <div class="wrapper">
-    <div class="sidebar">
-        <a href="Dashboard.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-            Dashboard
-        </a>
-        <a href="Users.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5S15.5 16.4 15.5 20"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 13.2c2.9.4 5 2.7 5 6.8"/></svg>
-            Users
-        </a>
-        <a href="Complaints.html" class="nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-            Complaints
-        </a>
-        <a href="Reports.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 12h3M8 16h8M8 8h8"/></svg>
-            Reports
-        </a>
-        <a href="Change Password.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-            Change Password
-        </a>
-        <a href="Profile.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-            Profile
-        </a>
-    </div>
- 
+    {% include 'partials/admin_sidebar.html' with active='complaints' %}
+
     <div class="main-content">
  
         <div class="top-action-row">

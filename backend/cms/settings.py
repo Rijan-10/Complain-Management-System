@@ -62,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'main.context_processors.user_info',
             ],
         },
     },
@@ -131,6 +132,7 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR.parent / 'Photos',
+    BASE_DIR.parent / 'Frontend' / 'static',
 ]
 
 MEDIA_URL = '/media/'

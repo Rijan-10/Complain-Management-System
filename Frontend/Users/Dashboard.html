@@ -5,253 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Dashboard</title>
- 
+<link rel="stylesheet" href="{% static 'css/common.css' %}">
+
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
- 
-body{
-    background:white;
-}
-
-.top-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
-    background: white;
-    border-bottom: 1px solid #E4E7EB;
-    min-height: 130px;
-}
- 
-.logo-section{
-    display:flex;
-    align-items:center;
-}
- 
-@media (max-width: 480px){
-    .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
-    }
-    .logo-section{
-        position:static;
-        width:100%;
-        max-width:100%;
-        margin-bottom:10px;
-    }
-    .user-info{
-        margin-left:auto;
-    }
-}
- 
-.logo-section img{
-    width:96px;
-    height:auto;
-    margin-right:15px;
-}
- 
-.logo-text h1{
-    color:#0B2D6D;
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:8px;
-}
- 
-.logo-text h2{
-    color:#555;
-    font-size:11px;
-    font-weight:500;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:10px;
-}
- 
-.logo-text p{
-    color:#1E64C8;
-    font-size:11px;
-    font-weight:600;
-    font-weight:bold;
-}
-
-.user-info{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
- 
-.user-info:hover{
-    background:#E8F0FE;
-}
- 
-.profile-placeholder{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    overflow:hidden;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid #C9CFD8;
-    background:#E4E8EE;
-}
-
-.profile-placeholder img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-}
- 
-.user-info span{
-    font-size:15px;
-    color:#333;
-}
-
-/* ==========================
-   USER DROPDOWN MENU
-========================== */
-
-.user-menu{
-    position:relative;
-}
-
-.chevron{
-    margin-left:4px;
-    stroke:#333;
-    transition:transform 0.2s ease;
-}
-
-.user-menu.open .chevron{
-    transform:rotate(180deg);
-}
-
-.user-dropdown{
-    position:absolute;
-    top:calc(100% + 10px);
-    right:0;
-    background:#fff;
-    border:1px solid #E4E7EB;
-    border-radius:10px;
-    box-shadow:0 12px 28px rgba(0,0,0,0.12);
-    min-width:200px;
-    padding:8px;
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(-6px);
-    transition:opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-    z-index:100;
-}
-
-.user-menu.open .user-dropdown{
-    opacity:1;
-    visibility:visible;
-    transform:translateY(0);
-}
-
-.user-dropdown a{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:11px 14px;
-    border-radius:8px;
-    color:#1A1A1A;
-    text-decoration:none;
-    font-size:14px;
-    font-weight:600;
-    transition:background 0.2s ease, color 0.2s ease;
-}
-
-.user-dropdown a:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
-
-.user-dropdown a svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-}
-
-.user-dropdown a:hover svg{
-    stroke:#1E64C8;
-}
-
-.user-dropdown .divider{
-    height:1px;
-    background:#E4E7EB;
-    margin:6px 10px;
-}
-
-.user-dropdown .logout-link,
-.user-dropdown .logout-link svg{
-    color:#C0392B;
-    stroke:#C0392B;
-}
-
-.user-dropdown .logout-link:hover{
-    background:#FBE3E3;
-}
-.wrapper{
-    display:flex;
-    align-items:flex-start;
-}
- 
-.sidebar{
-    width:270px;
-    min-height:calc(100vh - 130px);
-    border-right:1px solid #E4E7EB;
-    background:white;
-    padding:25px 15px;
-}
- 
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:15px;
-    color:#1A1A1A;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-}
- 
-.nav-item svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-    flex-shrink:0;
-}
- 
-.nav-item:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item:hover svg{
-    stroke:#1E64C8;
-}
-
-.nav-item.active{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item.active svg{
-    stroke:#1E64C8;
-}
 /* ==========================
    MAIN CONTENT
 ========================== */
@@ -429,15 +185,6 @@ body{
 
 @media(max-width:650px){
 
-    .wrapper{
-        flex-direction:column;
-    }
-
-    .sidebar{
-        width:100%;
-        min-height:auto;
-    }
-
     .main-content{
         padding:20px;
     }
@@ -447,67 +194,16 @@ body{
     }
 
 }
- 
 
 </style>
 </head>
 <body>
- 
-<div class="top-header">
-    <div class="logo-section">
-        <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
-        <div class="logo-text">
-            <h1>KATHMANDU VALLEY</h1>
-            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-            <p>Report, Track and Resolve Together for a Better Valley</p>
-        </div>
-    </div>
 
-    <div class="user-menu" id="userMenu">
-        <div class="user-info" id="userMenuToggle">
-            <div class="profile-placeholder">
-                <img src="{% static 'Profile_icon-.png' %}" alt="Profile">
-            </div>
-            <span>Hello, {{ full_name }}</span>
-            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-        </div>
-        <div class="user-dropdown" id="userDropdown">
-            <a href="{% url 'profile' %}">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-                Profile
-            </a>
-            <div class="divider"></div>
-            <a href="{% url 'logout' %}" class="logout-link">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-                Logout
-            </a>
-        </div>
-    </div>
-</div>
- 
+{% include 'partials/header.html' %}
+
 <div class="wrapper">
-    <div class="sidebar">
-        <div class="nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-            Dashboard
-        </div>
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-            New Complaint
-        </div>
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-            My Complaints
-        </div>
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-            Profile
-        </div>
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-            Change Password
-        </div>
-    </div>
+    {% include 'partials/user_sidebar.html' with active='dashboard' %}
+
 <div class="main-content">
 
     <h1 class="page-title">Dashboard</h1>
@@ -546,7 +242,7 @@ body{
 
             <h2>Recent Complaints</h2>
 
-            <a  class="view-btn">
+            <a class="view-btn">
                 View All
             </a>
 
@@ -581,21 +277,5 @@ body{
 
 </div>
 </div>
-<script>
-const userMenu = document.getElementById('userMenu');
-const userMenuToggle = document.getElementById('userMenuToggle');
-const userDropdown = document.getElementById('userDropdown');
-
-userMenuToggle.addEventListener('click', function(e){
-    e.stopPropagation();
-    userMenu.classList.toggle('open');
-});
-
-document.addEventListener('click', function(e){
-    if(!userMenu.contains(e.target)){
-        userMenu.classList.remove('open');
-    }
-});
-</script>
 </body>
 </html>
