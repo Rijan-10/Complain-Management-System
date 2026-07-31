@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -497,7 +498,7 @@ body{
 
 <div class="top-header">
     <div class="logo-section">
-       <img src="../../Photos/CMS_Logo.png" alt="Logo">
+       <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
         <div class="logo-text">
             <h1>KATHMANDU VALLEY</h1>
             <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
@@ -507,9 +508,9 @@ body{
 
     <div class="user-info">
         <div class="profile-placeholder">
-            <img src="..\..\Photos\Profile_icon-.png" alt="Profile_icon-">
+            <img src="{% static 'Profile_icon-.png' %}" alt="Profile_icon-">
         </div>
-        <span>Hello, User</span>
+        <span>Hello, {{ full_name }}</span>
     </div>
 </div>
 
@@ -557,17 +558,17 @@ body{
 
                             <div class="profile-info-row">
                                 <span class="profile-label">Full Name</span>
-                                <span class="profile-value" id="fullNameValue">User Name</span>
+                                <span class="profile-value" id="fullNameValue">{{ full_name }}</span>
                             </div>
 
                             <div class="profile-info-row">
                                 <span class="profile-label">Email Address</span>
-                                <span class="profile-value" id="emailValue">user@example.com</span>
+                                <span class="profile-value" id="emailValue">{{ email }}</span>
                             </div>
 
                             <div class="profile-info-row">
                                 <span class="profile-label">Phone Number</span>
-                                <span class="profile-value" id="phoneValue">98XXXXXXXX</span>
+                                <span class="profile-value" id="phoneValue">{{ phone }}</span>
                             </div>
 
                             <a  class="change-password-link">
@@ -585,19 +586,16 @@ body{
 
                     <div class="activity-row">
                         <span class="activity-label">Last Login</span>
-                        <!-- backend: document.getElementById('lastLoginValue').textContent = data.lastLogin -->
-                        <span class="activity-value" id="lastLoginValue">--</span>
+                        <span class="activity-value" id="lastLoginValue">{{ last_login|date:"M j, Y, g:i a" }}</span>
                     </div>
 
                     <div class="activity-row">
                         <span class="activity-label">Account Status</span>
-                        <!-- backend: set textContent to the status, and add class
-                             "status-active" or "status-inactive" to color the badge -->
-                        <span class="status-badge" id="accountStatusValue">--</span>
+                        <span class="status-badge status-{% if account_status == 'active' %}active{% else %}inactive{% endif %}" id="accountStatusValue">{{ account_status|capfirst }}</span>
                     </div>
                 </div>
 
-                <button type="button" class="logout-btn" id="logoutBtn">Logout</button>
+                <a href="{% url 'logout' %}" class="logout-btn" style="display:block; text-align:center; text-decoration:none;">Logout</a>
             </div>
 
         </div>

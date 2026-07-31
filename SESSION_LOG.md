@@ -14,7 +14,8 @@
 - **Django:** Connected to MariaDB (`project` database), migrated and working
 - **Home page:** Running at http://localhost:8000 — Login button linked to `/login/`
 - **Login page:** Working with Django auth — POST to `/login/`, error messages displayed
-- **Superuser:** admin / admin123
+- **Auth:** Custom `EmailAuthBackend` — users log in with email instead of username
+- **Superuser:** admin@example.com / admin123
 - **Branch:** `dev` — all changes committed
 
 ### Next Steps

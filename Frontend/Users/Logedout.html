@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -223,7 +224,7 @@ body{
 <body>
 
 <div class="logo-section">
-    <img src="../../Photos/CMS_Logo.png" alt="Logo">
+    <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
     <div class="logo-text">
         <h1>KATHMANDU VALLEY</h1>
         <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
@@ -232,10 +233,10 @@ body{
 </div>
 
 <div class="buttons">
-    <button>Home</button>
+    <button onclick="window.location.href='/'">Home</button>
     <button>About</button>
     <button>Contact Us</button>
-    <button>Log in </button>
+    <button onclick="window.location.href='/login/'">Log in </button>
 </div>
 
 <!-- Logout Body -->
@@ -244,18 +245,18 @@ body{
     <!-- Leave this space for your logout image -->
     <div class="logout-image">
         <!-- Replace logout-image.png with your image -->
-        <img src="..\..\Photos\User_Logged_Out.png" alt="Logged Out">
+        <img src="{% static 'User_Logged_Out.png' %}" alt="Logged Out">
     </div>
 
     <div class="logout-content">
         <h1>You have been<br>successfully logged out</h1>
 
         <div class="logout-buttons">
-            <button class="login-btn">
+            <button class="login-btn" onclick="window.location.href='/login/'">
                 &#10227; Login Again
             </button>
 
-            <button class="home-btn">
+            <button class="home-btn" onclick="window.location.href='/'">
                 <span class="home-icon">&#8962;</span> Back to Home
             </button>
         </div>
