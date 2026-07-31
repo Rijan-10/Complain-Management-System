@@ -249,11 +249,14 @@ body{
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div style="color:#e02424; margin-bottom:15px; font-size:14px;">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
+            {% if last_message %}
+            <div class="toast-overlay" id="toastOverlay">
+                <div class="toast-badge toast-{{ last_message.tags }}">
+                    <span class="toast-icon">{{ last_message.tags|yesno:'✓,!' }}</span>
+                    <span class="toast-text">{{ last_message }}</span>
+                </div>
+            </div>
+        {% endif %}
 
             <div class="input-group">
                 <label>Email Address</label>

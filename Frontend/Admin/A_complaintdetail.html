@@ -59,9 +59,10 @@
     color:white;
 }
  
-.status-badge.status-in-progress{ background:#E8720C; }
+.status-badge.status-in_progress{ background:#E8720C; }
 .status-badge.status-resolved{ background:#1F8A4C; }
-.status-badge.status-closed{ background:#000000; }
+.status-badge.status-rejected{ background:#000000; }
+.status-badge.status-pending{ background:#8A93A3; }
 .status-badge.status-pending{ background:#8A93A3; }
  
 .page-title{
@@ -199,19 +200,27 @@
 .action-btn{
     height:42px;
     padding:0 22px;
-    border:1px solid #1E64C8;
-    background:white;
-    color:#1E64C8;
+    border:none;
+    background:#1E64C8;
+    color:white;
     border-radius:8px;
     font-weight:700;
     font-size:14px;
     cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
+    transition:background 0.2s ease, transform 0.15s ease;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
 }
- 
+
 .action-btn:hover{
-    background:#1E64C8;
-    color:white;
+    background:#0B2D6D;
+    transform:translateY(-1px);
+}
+
+.action-btn:active{
+    transform:translateY(0);
 }
  
 .timeline-title{
@@ -294,6 +303,19 @@
   
             <span class="status-badge status-{{ complaint.status }}" id="topStatusBadge">{{ complaint.get_status_display }}</span>
         </div>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if forloop.last %}
+            <div class="toast-overlay" id="toastOverlay">
+                <div class="toast-badge toast-{{ message.tags }}">
+                    <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                    <span class="toast-text">{{ message }}</span>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
   
         <!-- ===================== BASIC INFO ====================== -->
         <div class="info-card">

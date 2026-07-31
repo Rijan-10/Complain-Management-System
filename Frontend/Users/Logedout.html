@@ -1,10 +1,12 @@
 {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kathmandu Valley CMS</title>
+<link rel="stylesheet" href="{% static 'css/common.css' %}">
 
 <style>
 *{
@@ -231,6 +233,19 @@ body{
         <p>Report, Track and Resolve Together for a Better Valley</p>
     </div>
 </div>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if forloop.last %}
+            <div class="toast-overlay" id="toastOverlay">
+                <div class="toast-badge toast-{{ message.tags }}">
+                    <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                    <span class="toast-text">{{ message }}</span>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
 <div class="buttons">
     <button onclick="window.location.href='/'">Home</button>

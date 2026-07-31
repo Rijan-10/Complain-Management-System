@@ -76,6 +76,9 @@ def login_view(request):
         password = request.POST.get('password')
         user = authenticate(request, email=email, password=password)
         if user is not None:
+            if user.profile.account_status != 'active':
+                messages.error(request, 'Your account has been disabled. Please contact support.')
+                return redirect('login')
             login(request, user)
             role = user.profile.role
             if role == 'admin':
@@ -83,7 +86,17 @@ def login_view(request):
             return redirect('user_dashboard')
         else:
             messages.error(request, 'Invalid email or password')
-    return render(request, 'Login.html')
+    
+    last_message = None
+    if request.method == 'GET':
+        storage = messages.get_messages(request)
+        messages_list = list(storage)
+        if messages_list:
+            last_message = messages_list[-1]
+    
+    return render(request, 'Login.html', {
+        'last_message': last_message,
+    })
 
 
 @login_required(login_url='/login/')
@@ -120,7 +133,17 @@ def profile_view(request):
 
 def logout_view(request):
     logout(request)
-    return render(request, 'Logedout.html')
+    messages.success(request, 'You have been logged out successfully.')
+    
+    last_message = None
+    storage = messages.get_messages(request)
+    messages_list = list(storage)
+    if messages_list:
+        last_message = messages_list[-1]
+    
+    return render(request, 'Logedout.html', {
+        'last_message': last_message,
+    })
 
 
 @login_required(login_url='/login/')
@@ -184,6 +207,7 @@ def new_complaint(request):
 @login_required(login_url='/login/')
 def complaint_success(request, complaint_id):
     complaint = get_object_or_404(Complaint, complaint_id=complaint_id, user=request.user)
+    messages.success(request, 'Complaint submitted successfully.')
     return render(request, 'Complained_Successfully.html', {
         'complaint': complaint,
     })
@@ -280,8 +304,16 @@ def admin_assign_complaint(request, complaint_id):
     admins = User.objects.filter(profile__role='admin')
 
     if request.method == 'POST':
-        # Placeholder for assignment logic
-        messages.success(request, f'Complaint {complaint_id} assignment updated.')
+        officer_id = request.POST.get('officer')
+        priority = request.POST.get('priority')
+        due_date = request.POST.get('due_date')
+        note = request.POST.get('note')
+        
+        if not officer_id:
+            messages.error(request, 'Please select an officer to assign.')
+            return redirect('admin_assign_complaint', complaint_id=complaint_id)
+        
+        messages.success(request, f'Complaint {complaint_id} has been assigned successfully.')
         return redirect('admin_complaints')
 
     return render(request, 'A_assigncomplain.html', {
@@ -307,6 +339,11 @@ def admin_profile(request):
 @admin_required
 def admin_reports(request):
     complaints = Complaint.objects.all()
+    category_filter = request.GET.get('category', '')
+
+    if category_filter:
+        complaints = complaints.filter(category=category_filter)
+
     total_complaints = complaints.count()
     in_progress_count = complaints.filter(status='in_progress').count()
     resolved_count = complaints.filter(status='resolved').count()
@@ -324,6 +361,8 @@ def admin_reports(request):
         'resolved_count': resolved_count,
         'closed_count': closed_count,
         'monthly_counts': monthly_counts,
+        'category_filter': category_filter,
+        'category_choices': Complaint.CATEGORY_CHOICES,
     })
 
 
@@ -353,6 +392,24 @@ def admin_change_password(request):
 
 
 @admin_required
+def toggle_user_status(request, user_id):
+    if request.method == 'POST':
+        user = get_object_or_404(User, id=user_id)
+        if user.profile.role == 'admin':
+            messages.error(request, 'Cannot change status of another admin.')
+            return redirect('admin_users')
+        if user.profile.account_status == 'active':
+            user.profile.account_status = 'inactive'
+            messages.success(request, f'Account for {user.email} has been disabled.')
+        else:
+            user.profile.account_status = 'active'
+            messages.success(request, f'Account for {user.email} has been enabled.')
+        user.profile.save()
+    return redirect('admin_users')
+
+
+@admin_required
 def admin_logout(request):
     logout(request)
+    messages.success(request, 'You have been logged out successfully.')
     return render(request, 'A_logedout.html')

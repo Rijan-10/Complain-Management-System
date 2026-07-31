@@ -154,10 +154,10 @@
                     {% if complaints %}
                         {% for complaint in complaints %}
                         <tr>
-                            <td>{{ complaint.complaint_id }}</td>
-                            <td>{{ complaint.get_category_display }}</td>
-                            <td>{{ complaint.created_at|date:"M d, Y" }}</td>
-                            <td>
+                            <td data-label="Complaint ID">{{ complaint.complaint_id }}</td>
+                            <td data-label="Category">{{ complaint.get_category_display }}</td>
+                            <td data-label="Date">{{ complaint.created_at|date:"M d, Y" }}</td>
+                            <td data-label="Status">
                                 <span class="
                                     {% if complaint.status == 'in_progress' %}
                                         status-progress

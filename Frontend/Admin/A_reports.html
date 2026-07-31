@@ -275,6 +275,106 @@
         margin-right:0;
     }
 }
+
+/* ---- Print styles ---- */
+@media print{
+    .buttons,
+    .sidebar,
+    .controls-row{
+        display:none !important;
+    }
+    .main-content{
+        padding:10px !important;
+        background:white !important;
+    }
+    .page-title{
+        font-size:18px !important;
+        margin-bottom:10px !important;
+    }
+    .stats-row{
+        grid-template-columns:repeat(4, 1fr) !important;
+        gap:10px !important;
+        margin-bottom:15px !important;
+    }
+    .stat-card{
+        border:1px solid #ccc !important;
+        border-radius:6px !important;
+        box-shadow:none !important;
+        padding:12px !important;
+        break-inside:avoid;
+    }
+    .stat-label{
+        font-size:11px !important;
+        margin-bottom:4px !important;
+    }
+    .stat-value{
+        font-size:20px !important;
+    }
+    .charts-row{
+        display:flex !important;
+        flex-wrap:wrap !important;
+        gap:12px !important;
+    }
+    .chart-card{
+        border:1px solid #ccc !important;
+        border-radius:6px !important;
+        box-shadow:none !important;
+        padding:12px !important;
+        break-inside:avoid;
+        margin-bottom:0 !important;
+        flex:1 1 260px !important;
+        min-width:250px !important;
+    }
+    .chart-title{
+        font-size:13px !important;
+        margin-bottom:8px !important;
+    }
+    .chart-canvas-wrap{
+        height:160px !important;
+    }
+    .donut-wrap{
+        display:flex !important;
+        flex-direction:row !important;
+        align-items:center !important;
+        justify-content:flex-start !important;
+        gap:25px !important;
+    }
+    .donut-canvas-wrap{
+        width:130px !important;
+        height:130px !important;
+        margin-right:0 !important;
+        flex-shrink:0 !important;
+    }
+    .donut-canvas-wrap canvas{
+        max-width:130px !important;
+        max-height:130px !important;
+    }
+    .donut-legend{
+        position:static !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:flex-start !important;
+        text-align:left !important;
+        margin-top:0 !important;
+        gap:5px !important;
+        right:auto !important;
+        bottom:auto !important;
+    }
+    .legend-item{
+        font-size:11px !important;
+    }
+    .legend-swatch{
+        width:10px !important;
+        height:10px !important;
+    }
+    body{
+        font-size:11px;
+    }
+    @page{
+        size:A4;
+        margin:15mm;
+    }
+}
 </style>
 </head>
 <body>
@@ -294,8 +394,10 @@
             <div class="control-group">
                 <label for="reportTypeSelect">Report Type</label>
                 <select id="reportTypeSelect">
-                    <option value="complaints-overview">Complaints Overview</option>
-                    
+                    <option value="">All Categories</option>
+                    {% for value, label in category_choices %}
+                        <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
@@ -319,11 +421,6 @@
             <button type="button" class="btn-solid" id="generateReportBtn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
                 Generate Report
-            </button>
-
-            <button type="button" class="btn-solid" id="exportBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2h-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Export
             </button>
 
         </div>
@@ -418,15 +515,9 @@ dateRangeSelect.addEventListener("change", function(){
     }
 });
 
-/* ---------------- Generate Report / Export buttons ---------------- */
+/* ---------------- Generate Report button triggers print dialog ---------------- */
 document.getElementById("generateReportBtn").addEventListener("click", function(){
-    
-    alert("Generating report...");
-});
-
-document.getElementById("exportBtn").addEventListener("click", function(){
-    
-    alert("Exporting report...");
+    window.print();
 });
 
 
