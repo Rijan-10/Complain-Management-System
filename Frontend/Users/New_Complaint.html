@@ -66,6 +66,19 @@
     display:block;
 }
 
+.location-hint{
+    display:none;
+    font-size:13px;
+    font-weight:600;
+    color:#6B7280;
+    margin-top:10px;
+    line-height:1.5;
+}
+
+.location-hint.show{
+    display:block;
+}
+
 .page-title{
     color:#0B2D6D;
     font-size:22px;
@@ -457,6 +470,7 @@
                             <input type="text" class="location-input" id="longitudeInput" name="longitude" placeholder="Longitude" readonly required>
                         </div>
                     </div>
+                    <span class="location-hint" id="locationHint"></span>
                 </div>
 
                 <div class="form-section">
@@ -512,6 +526,7 @@
     const photoWarning = document.getElementById('photoWarning');
     const latitudeInput = document.getElementById('latitudeInput');
     const longitudeInput = document.getElementById('longitudeInput');
+    const locationHint = document.getElementById('locationHint');
     const categorySelect = document.getElementById('categorySelect');
     const descriptionInput = document.getElementById('descriptionInput');
     const cancelBtn = document.getElementById('cancelBtn');
@@ -520,7 +535,12 @@
     const modalYesBtn = document.getElementById('modalYesBtn');
 
     let uploadedPhotos = []; // holds {url, preview, uploading}
-    let exifLocationSet = false;
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                     (navigator.maxTouchPoints > 1 && window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    let geoUnavailable = false;
+    let desktopGeoUnavailable = false;
+    let desktopGeoAttempted = false;
 
     const cameraIconSVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1.5l1-1.5h7l1 1.5H18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 
@@ -580,11 +600,55 @@
 
     function refreshLocation(){
         const anchor = getAnchorGps();
-        if (anchor){
-            exifLocationSet = true;
-            latitudeInput.value = anchor.latitude.toFixed(6);
-            longitudeInput.value = anchor.longitude.toFixed(6);
+        if (!anchor) {
+            if (!isMobile) {
+                latitudeInput.value = '';
+                longitudeInput.value = '';
+                if (navigator.geolocation && !desktopGeoAttempted) {
+                    tryBrowserGeolocation();
+                } else if (!navigator.geolocation || desktopGeoUnavailable) {
+                    if (desktopGeoResettable) {
+                        desktopGeoAttempted = false;
+                        desktopGeoUnavailable = false;
+                        tryBrowserGeolocation();
+                    } else {
+                        showLocationHint('Location not available. Please take a photo with GPS enabled, or allow location access in your browser settings.');
+                    }
+                }
+            }
+            return;
         }
+        if (isMobile && !geoUnavailable) return;
+        latitudeInput.value = anchor.latitude.toFixed(6);
+        longitudeInput.value = anchor.longitude.toFixed(6);
+    }
+
+    function showLocationHint(msg){
+        locationHint.textContent = msg;
+        locationHint.classList.add('show');
+    }
+
+    function hideLocationHint(){
+        locationHint.classList.remove('show');
+        locationHint.textContent = '';
+    }
+
+    function tryBrowserGeolocation(){
+        if (!navigator.geolocation) {
+            desktopGeoAttempted = true;
+            showLocationHint('Browser geolocation is not supported. Please take a photo with GPS enabled.');
+            return;
+        }
+        desktopGeoAttempted = true;
+        showLocationHint('Getting your location...');
+        navigator.geolocation.getCurrentPosition(function(pos){
+            latitudeInput.value = pos.coords.latitude.toFixed(6);
+            longitudeInput.value = pos.coords.longitude.toFixed(6);
+            hideLocationHint();
+        }, function(err){
+            desktopGeoUnavailable = true;
+            showLocationHint('Location access denied or unavailable. Please take a photo with GPS metadata enabled, or enable location permissions in your browser.');
+        });
     }
 
     function recomputePhotoSpread(){
@@ -610,7 +674,7 @@
     }
 
     // --- Minimal EXIF GPS reader (no external library) ---
-    function exifGPS(dataView){
+    function jpegExifTiff(dataView){
         let o = 2;
         while (o + 4 <= dataView.byteLength){
             if (dataView.getUint8(o) !== 0xFF) break;
@@ -620,58 +684,126 @@
                 const head = [dataView.getUint8(o+4), dataView.getUint8(o+5), dataView.getUint8(o+6),
                               dataView.getUint8(o+7), dataView.getUint8(o+8), dataView.getUint8(o+9)];
                 if (head[0]===0x45 && head[1]===0x78 && head[2]===0x69 && head[3]===0x66 && head[4]===0x00 && head[5]===0x00){
-                    const tiff = o + 10;
-                    const e0 = dataView.getUint8(tiff), e1 = dataView.getUint8(tiff + 1);
-                    let le;
-                    if (e0 === 0x49 && e1 === 0x49) le = true;
-                    else if (e0 === 0x4D && e1 === 0x4D) le = false;
-                    else return null;
-                    if (dataView.getUint16(tiff + 2, le) !== 42) return null;
-                    const g16 = (p) => dataView.getUint16(tiff + p, le);
-                    const g32 = (p) => dataView.getUint32(tiff + p, le);
-                    const ifd0 = g32(4);
-                    if (ifd0 + 2 > dataView.byteLength) return null;
-                    const n = g16(ifd0);
-                    let gpsPtr = null;
-                    for (let i = 0; i < n && i < 200; i++){
-                        const e = ifd0 + 2 + i * 12;
-                        if (e + 12 > dataView.byteLength) break;
-                        if (g16(e) === 0x8825) gpsPtr = g32(e + 8);
-                    }
-                    if (gpsPtr === null) return null;
-                    const gpsN = g16(gpsPtr);
-                    let latRef = null, lat = null, lonRef = null, lon = null;
-                    for (let i = 0; i < gpsN && i < 200; i++){
-                        const e = gpsPtr + 2 + i * 12;
-                        if (e + 12 > dataView.byteLength) break;
-                        const tag = g16(e), type = g16(e + 2), count = g32(e + 4), valOff = e + 8;
-                        if (tag === 1 || tag === 3){
-                            const ref = String.fromCharCode(dataView.getUint8(tiff + valOff));
-                            if (tag === 1) latRef = ref; else lonRef = ref;
-                        } else if (tag === 2 || tag === 4){
-                            if (type === 5 && count === 3){
-                                const off = (count * 8 > 4) ? g32(valOff) : valOff;
-                                if (off + 24 > dataView.byteLength) continue;
-                                const d = g32(off) / g32(off + 4);
-                                const m = g32(off + 8) / g32(off + 12);
-                                const s = g32(off + 16) / g32(off + 20);
-                                const dec = d + m / 60 + s / 3600;
-                                if (tag === 2) lat = dec; else lon = dec;
-                            }
-                        }
-                    }
-                    if (lat !== null && lon !== null){
-                        if (latRef === 'S') lat = -lat;
-                        if (lonRef === 'W') lon = -lon;
-                        return { latitude: lat, longitude: lon };
-                    }
-                    return null;
+                    return o + 10;
                 }
             }
             if (len <= 0) break;
             o += 2 + len;
         }
+        return -1;
+    }
+
+    function pngExifTiff(dataView){
+        let o = 8;
+        while (o + 8 <= dataView.byteLength){
+            const len = dataView.getUint32(o);
+            const type = String.fromCharCode(dataView.getUint8(o+4), dataView.getUint8(o+5),
+                                             dataView.getUint8(o+6), dataView.getUint8(o+7));
+            if (type === 'eXIf'){
+                const start = o + 8;
+                if (dataView.getUint8(start)===0x45 && dataView.getUint8(start+1)===0x78 &&
+                    dataView.getUint8(start+2)===0x69 && dataView.getUint8(start+3)===0x66 &&
+                    dataView.getUint8(start+4)===0x00 && dataView.getUint8(start+5)===0x00){
+                    return start + 6;
+                }
+                return start;
+            }
+            o += 12 + len;
+        }
+        return -1;
+    }
+
+    function webpExifTiff(dataView){
+        let o = 12;
+        while (o + 8 <= dataView.byteLength){
+            const type = String.fromCharCode(dataView.getUint8(o), dataView.getUint8(o+1),
+                                             dataView.getUint8(o+2), dataView.getUint8(o+3));
+            const size = dataView.getUint32(o + 4, true);
+            if (type === 'EXIF'){
+                const start = o + 8;
+                if (dataView.getUint8(start)===0x45 && dataView.getUint8(start+1)===0x78 &&
+                    dataView.getUint8(start+2)===0x69 && dataView.getUint8(start+3)===0x66 &&
+                    dataView.getUint8(start+4)===0x00 && dataView.getUint8(start+5)===0x00){
+                    return start + 6;
+                }
+                return start;
+            }
+            o += 8 + size + (size & 1);
+        }
+        return -1;
+    }
+
+    function parseTiffGPS(dataView, tiff){
+        const e0 = dataView.getUint8(tiff), e1 = dataView.getUint8(tiff + 1);
+        let le;
+        if (e0 === 0x49 && e1 === 0x49) le = true;
+        else if (e0 === 0x4D && e1 === 0x4D) le = false;
+        else return null;
+        if (dataView.getUint16(tiff + 2, le) !== 42) return null;
+        const g16 = (p) => dataView.getUint16(tiff + p, le);
+        const g32 = (p) => dataView.getUint32(tiff + p, le);
+        const ifd0 = g32(4);
+        if (ifd0 + 2 > dataView.byteLength) return null;
+        const n = g16(ifd0);
+        let gpsPtr = null;
+        for (let i = 0; i < n && i < 200; i++){
+            const e = ifd0 + 2 + i * 12;
+            if (e + 12 > dataView.byteLength) break;
+            if (g16(e) === 0x8825) gpsPtr = g32(e + 8);
+        }
+        if (gpsPtr === null) return null;
+        const gpsN = g16(gpsPtr);
+        let latRef = null, lat = null, lonRef = null, lon = null;
+        for (let i = 0; i < gpsN && i < 200; i++){
+            const e = gpsPtr + 2 + i * 12;
+            if (e + 12 > dataView.byteLength) break;
+            const tag = g16(e), type = g16(e + 2), count = g32(e + 4), valOff = e + 8;
+            if (tag === 1 || tag === 3){
+                if (type === 2 && count > 0){
+                    const ref = String.fromCharCode(dataView.getUint8(tiff + valOff));
+                    if (tag === 1) latRef = ref; else lonRef = ref;
+                }
+            } else if (tag === 2 || tag === 4){
+                if (type === 5){
+                    const off = (count * 8 > 4) ? g32(valOff) : valOff;
+                    let dec = null;
+                    if (count === 3){
+                        if (off + 24 > dataView.byteLength) continue;
+                        const d = g32(off) / g32(off + 4);
+                        const m = g32(off + 8) / g32(off + 12);
+                        const s = g32(off + 16) / g32(off + 20);
+                        dec = d + m / 60 + s / 3600;
+                    } else if (count === 1){
+                        if (off + 8 > dataView.byteLength) continue;
+                        dec = g32(off) / g32(off + 4);
+                    }
+                    if (dec !== null && isFinite(dec)){
+                        if (tag === 2) lat = dec; else lon = dec;
+                    }
+                }
+            }
+        }
+        if (lat !== null && lon !== null){
+            if (latRef === 'S') lat = -lat;
+            if (lonRef === 'W') lon = -lon;
+            return { latitude: lat, longitude: lon };
+        }
         return null;
+    }
+
+    function exifGPS(dataView){
+        if (dataView.byteLength < 8) return null;
+        const b0 = dataView.getUint8(0), b1 = dataView.getUint8(1);
+        let tiff = -1;
+        if (b0 === 0x89 && b1 === 0x50 && dataView.getUint8(2) === 0x4E && dataView.getUint8(3) === 0x47){
+            tiff = pngExifTiff(dataView);
+        } else if (b0 === 0xFF && b1 === 0xD8){
+            tiff = jpegExifTiff(dataView);
+        } else if (b0 === 0x52 && dataView.getUint8(1) === 0x49 && dataView.getUint8(2) === 0x46 && dataView.getUint8(3) === 0x46){
+            tiff = webpExifTiff(dataView);
+        }
+        if (tiff < 0) return null;
+        return parseTiffGPS(dataView, tiff);
     }
 
     function readPhotoEXIF(file, cb){
@@ -734,6 +866,9 @@
         e.target.value = '';
         photoError.classList.remove('show');
 
+        desktopGeoAttempted = false;
+        desktopGeoUnavailable = false;
+
         const entry = { url: null, preview: URL.createObjectURL(file), uploading: true };
         uploadedPhotos.push(entry);
         renderPhotos();
@@ -743,6 +878,15 @@
                 entry.gps = gps;
                 refreshLocation();
                 recomputePhotoSpread();
+                if (!isMobile || geoUnavailable) hideLocationHint();
+            } else {
+                refreshLocation();
+                if (!isMobile || geoUnavailable){
+                    if (desktopGeoAttempted) {
+                        return;
+                    }
+                    showLocationHint('No GPS location found in this photo. The camera location setting may be off, or the file was processed and lost its GPS metadata.');
+                }
             }
         });
 
@@ -781,19 +925,16 @@
         descriptionInput.value = '';
     }
 
-    if (navigator.geolocation){
+    if (isMobile && navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(pos){
-            if (!exifLocationSet){
-                latitudeInput.value = pos.coords.latitude.toFixed(6);
-                longitudeInput.value = pos.coords.longitude.toFixed(6);
-            }
+            latitudeInput.value = pos.coords.latitude.toFixed(6);
+            longitudeInput.value = pos.coords.longitude.toFixed(6);
         }, function(){
-            latitudeInput.value = '';
-            longitudeInput.value = '';
+            geoUnavailable = true;
+            refreshLocation();
         });
-    } else {
-        latitudeInput.value = '';
-        longitudeInput.value = '';
+    } else if (!isMobile){
+        showLocationHint('Location will be detected from your photo\'s GPS metadata. If not available, your browser location will be used.');
     }
 
     complaintForm.addEventListener('submit', (e) => {
