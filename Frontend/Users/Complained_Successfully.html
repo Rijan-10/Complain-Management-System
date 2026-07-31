@@ -124,15 +124,13 @@
  
             <h1>Complaint Submitted Successfully!</h1>
             <p>Your complaint has been registered.</p>
- 
+
             <p class="id-label">Your complaint ID is</p>
-            <!-- Backend: replace with the actual generated complaint ID, e.g. {{ complaint.complaint_id }} -->
-            <span class="complaint-id">#--------</span>
- 
+            <span class="complaint-id">{{ complaint.complaint_id }}</span>
+
             <p class="track-note">You can track the status of your complaint from "My Complaints" section</p>
- 
-            <!-- Hover styled only — link/action to be wired up separately -->
-            <a href="#" class="primary-btn">Go to my complaints</a>
+
+            <a href="{% url 'user_dashboard' %}" class="primary-btn">Go to my complaints</a>
         </div>
     </div>
 

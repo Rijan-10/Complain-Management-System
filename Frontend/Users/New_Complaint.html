@@ -23,6 +23,49 @@
     box-shadow:0 1px 3px rgba(0,0,0,0.05);
 }
 
+.alert{
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:18px;
+}
+
+.alert-error{
+    background:#FBE3E3;
+    color:#C0392B;
+    border:1px solid #F2C7C7;
+}
+
+.field-error{
+    display:none;
+    color:#C0392B;
+    font-size:13px;
+    font-weight:600;
+    margin-top:10px;
+}
+
+.field-error.show{
+    display:block;
+}
+
+.field-warning{
+    display:none;
+    background:#FEF3C7;
+    color:#92400E;
+    border:1px solid #F59E0B;
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:13px;
+    font-weight:600;
+    margin-top:10px;
+    line-height:1.5;
+}
+
+.field-warning.show{
+    display:block;
+}
+
 .page-title{
     color:#0B2D6D;
     font-size:22px;
@@ -42,6 +85,11 @@
     font-weight:700;
     color:#1A1A1A;
     margin-bottom:12px;
+}
+
+.required-mark{
+    color:#DC2626;
+    margin-left:2px;
 }
 
 /* Photo upload */
@@ -96,6 +144,25 @@
     background:rgba(0,0,0,0.8);
 }
 
+.photo-thumb .thumb-uploading{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.photo-add-box.disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+}
+
 .photo-add-box{
     width:150px;
     height:110px;
@@ -145,8 +212,21 @@
     gap:16px;
 }
 
-.location-input{
+.location-field{
     flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.location-label{
+    font-size:13px;
+    font-weight:700;
+    color:#333;
+}
+
+.location-input{
+    width:100%;
     background:#F1F3F6;
     border:1px solid #E4E7EB;
     border-radius:8px;
@@ -344,44 +424,64 @@
     {% include 'partials/user_sidebar.html' with active='new_complaint' %}
 
     <div class="main-content">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         <div class="content-card">
             <h2 class="page-title">Submit New Complaint</h2>
 
-            <div class="form-section">
-                <label class="section-label">Upload Photo</label>
-                <div class="photo-upload-row" id="photoUploadRow"></div>
-                <input type="file" id="photoInput" accept="image/*" multiple hidden>
-            </div>
+            <form method="post" enctype="multipart/form-data" id="complaintForm">
+                {% csrf_token %}
 
-            <div class="form-section">
-                <label class="section-label">Location detected</label>
-                <div class="location-row">
-                    <input type="text" class="location-input" id="latitudeInput" placeholder="Latitude:" disabled readonly>
-                    <input type="text" class="location-input" id="longitudeInput" placeholder="Longitude:" disabled readonly>
+                <div class="form-section">
+                    <label class="section-label">Take a Photo<span class="required-mark">*</span></label>
+                    <div class="photo-upload-row" id="photoUploadRow"></div>
+                    <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
+                    <div id="photoUrlsContainer"></div>
+                    <span class="field-error" id="photoError">Please take a photo of the issue before submitting.</span>
+                    <span class="field-warning" id="photoWarning"></span>
                 </div>
-            </div>
 
-            <div class="form-section">
-                <label class="section-label">Select Category</label>
-                <div class="select-wrapper">
-                    <select class="category-select" id="categorySelect">
-                        <option value="" selected disabled>Category</option>
-                        <option value="sanitation">Sanitation</option>
-                        <option value="infrastructure">Infrastructure</option>
-                    </select>
-                    <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <div class="form-section">
+                    <label class="section-label">Location detected<span class="required-mark">*</span></label>
+                    <div class="location-row">
+                        <div class="location-field">
+                            <label class="location-label" for="latitudeInput">Latitude<span class="required-mark">*</span></label>
+                            <input type="text" class="location-input" id="latitudeInput" name="latitude" placeholder="Latitude" readonly required>
+                        </div>
+                        <div class="location-field">
+                            <label class="location-label" for="longitudeInput">Longitude<span class="required-mark">*</span></label>
+                            <input type="text" class="location-input" id="longitudeInput" name="longitude" placeholder="Longitude" readonly required>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-section">
-                <label class="section-label">Description</label>
-                <textarea class="description-box" id="descriptionInput" placeholder="Describe your complaint in detail"></textarea>
-            </div>
+                <div class="form-section">
+                    <label class="section-label">Select Category<span class="required-mark">*</span></label>
+                    <div class="select-wrapper">
+                        <select class="category-select" id="categorySelect" name="category" required>
+                            <option value="" selected disabled>Category</option>
+                            <option value="road_pothole">Road Pothole</option>
+                            <option value="garbage">Garbage</option>
+                            <option value="drainage">Drainage</option>
+                        </select>
+                        <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
 
-            <div class="form-actions">
-                <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
-                <button type="button" class="btn-submit" id="submitBtn">Submit Complaint</button>
-            </div>
+                <div class="form-section">
+                    <label class="section-label">Description<span class="required-mark">*</span></label>
+                    <textarea class="description-box" id="descriptionInput" name="description" placeholder="Describe your complaint in detail" required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-submit" id="submitBtn">Submit Complaint</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -399,8 +499,19 @@
 
 <script>
 (function(){
+    const cloudinaryConfig = {
+        cloudName: "{{ cloudinary_cloud_name }}",
+        uploadPreset: "{{ cloudinary_upload_preset }}",
+        folder: "{{ cloudinary_folder }}"
+    };
+
+    const complaintForm = document.getElementById('complaintForm');
     const photoInput = document.getElementById('photoInput');
     const photoUploadRow = document.getElementById('photoUploadRow');
+    const photoError = document.getElementById('photoError');
+    const photoWarning = document.getElementById('photoWarning');
+    const latitudeInput = document.getElementById('latitudeInput');
+    const longitudeInput = document.getElementById('longitudeInput');
     const categorySelect = document.getElementById('categorySelect');
     const descriptionInput = document.getElementById('descriptionInput');
     const cancelBtn = document.getElementById('cancelBtn');
@@ -408,45 +519,251 @@
     const modalNoBtn = document.getElementById('modalNoBtn');
     const modalYesBtn = document.getElementById('modalYesBtn');
 
-    let uploadedPhotos = []; // holds object URLs for previewed images
+    let uploadedPhotos = []; // holds {url, preview, uploading}
+    let exifLocationSet = false;
 
     const cameraIconSVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1.5l1-1.5h7l1 1.5H18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+
+    const uploadingSVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+
+    const photoUrlsContainer = document.getElementById('photoUrlsContainer');
+
+    function renderHiddenUrls(){
+        photoUrlsContainer.innerHTML = '';
+        uploadedPhotos.forEach(p => {
+            if (p.url){
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'photo_urls';
+                input.value = p.url;
+                photoUrlsContainer.appendChild(input);
+            }
+        });
+    }
+
+    function uploadToCloudinary(file, cb){
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('upload_preset', cloudinaryConfig.uploadPreset);
+        fd.append('folder', cloudinaryConfig.folder);
+        fetch('https://api.cloudinary.com/v1_1/' + cloudinaryConfig.cloudName + '/image/upload', {
+            method: 'POST',
+            body: fd
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.secure_url){
+                    cb(null, data.secure_url);
+                } else {
+                    cb((data && data.error && data.error.message) || 'Upload failed');
+                }
+            })
+            .catch(err => cb(err && err.message ? err.message : 'Upload failed'));
+    }
+
+    // --- 20m photo-spread check ---
+    function distanceMeters(lat1, lon1, lat2, lon2){
+        const R = 6371000;
+        const toRad = (d) => d * Math.PI / 180;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function getAnchorGps(){
+        const first = uploadedPhotos.find(p => p.gps);
+        return first ? first.gps : null;
+    }
+
+    function refreshLocation(){
+        const anchor = getAnchorGps();
+        if (anchor){
+            exifLocationSet = true;
+            latitudeInput.value = anchor.latitude.toFixed(6);
+            longitudeInput.value = anchor.longitude.toFixed(6);
+        }
+    }
+
+    function recomputePhotoSpread(){
+        photoWarning.classList.remove('show');
+        photoWarning.textContent = '';
+
+        const gpsPhotos = uploadedPhotos.map((p, i) => ({ p, i })).filter(x => x.p.gps);
+        if (gpsPhotos.length < 2) return;
+
+        const anchor = gpsPhotos[0].p.gps;
+        const offenders = [];
+        gpsPhotos.slice(1).forEach(({ p, i }) => {
+            const d = distanceMeters(anchor.latitude, anchor.longitude, p.gps.latitude, p.gps.longitude);
+            if (d > 20) offenders.push({ index: i, dist: d });
+        });
+
+        if (offenders.length){
+            photoWarning.textContent = 'Warning: all photos must be taken within 20m of each other. ' +
+                offenders.map(o => 'Photo #' + (o.index + 1) + ' is ' + Math.round(o.dist) + 'm from the first photo').join('; ') +
+                '. Please retake it within a 20m radius of the first photo.';
+            photoWarning.classList.add('show');
+        }
+    }
+
+    // --- Minimal EXIF GPS reader (no external library) ---
+    function exifGPS(dataView){
+        let o = 2;
+        while (o + 4 <= dataView.byteLength){
+            if (dataView.getUint8(o) !== 0xFF) break;
+            const marker = dataView.getUint8(o + 1);
+            const len = dataView.getUint16(o + 2);
+            if (marker === 0xE1 && len > 10){
+                const head = [dataView.getUint8(o+4), dataView.getUint8(o+5), dataView.getUint8(o+6),
+                              dataView.getUint8(o+7), dataView.getUint8(o+8), dataView.getUint8(o+9)];
+                if (head[0]===0x45 && head[1]===0x78 && head[2]===0x69 && head[3]===0x66 && head[4]===0x00 && head[5]===0x00){
+                    const tiff = o + 10;
+                    const e0 = dataView.getUint8(tiff), e1 = dataView.getUint8(tiff + 1);
+                    let le;
+                    if (e0 === 0x49 && e1 === 0x49) le = true;
+                    else if (e0 === 0x4D && e1 === 0x4D) le = false;
+                    else return null;
+                    if (dataView.getUint16(tiff + 2, le) !== 42) return null;
+                    const g16 = (p) => dataView.getUint16(tiff + p, le);
+                    const g32 = (p) => dataView.getUint32(tiff + p, le);
+                    const ifd0 = g32(4);
+                    if (ifd0 + 2 > dataView.byteLength) return null;
+                    const n = g16(ifd0);
+                    let gpsPtr = null;
+                    for (let i = 0; i < n && i < 200; i++){
+                        const e = ifd0 + 2 + i * 12;
+                        if (e + 12 > dataView.byteLength) break;
+                        if (g16(e) === 0x8825) gpsPtr = g32(e + 8);
+                    }
+                    if (gpsPtr === null) return null;
+                    const gpsN = g16(gpsPtr);
+                    let latRef = null, lat = null, lonRef = null, lon = null;
+                    for (let i = 0; i < gpsN && i < 200; i++){
+                        const e = gpsPtr + 2 + i * 12;
+                        if (e + 12 > dataView.byteLength) break;
+                        const tag = g16(e), type = g16(e + 2), count = g32(e + 4), valOff = e + 8;
+                        if (tag === 1 || tag === 3){
+                            const ref = String.fromCharCode(dataView.getUint8(tiff + valOff));
+                            if (tag === 1) latRef = ref; else lonRef = ref;
+                        } else if (tag === 2 || tag === 4){
+                            if (type === 5 && count === 3){
+                                const off = (count * 8 > 4) ? g32(valOff) : valOff;
+                                if (off + 24 > dataView.byteLength) continue;
+                                const d = g32(off) / g32(off + 4);
+                                const m = g32(off + 8) / g32(off + 12);
+                                const s = g32(off + 16) / g32(off + 20);
+                                const dec = d + m / 60 + s / 3600;
+                                if (tag === 2) lat = dec; else lon = dec;
+                            }
+                        }
+                    }
+                    if (lat !== null && lon !== null){
+                        if (latRef === 'S') lat = -lat;
+                        if (lonRef === 'W') lon = -lon;
+                        return { latitude: lat, longitude: lon };
+                    }
+                    return null;
+                }
+            }
+            if (len <= 0) break;
+            o += 2 + len;
+        }
+        return null;
+    }
+
+    function readPhotoEXIF(file, cb){
+        const reader = new FileReader();
+        reader.onload = function(){
+            try {
+                cb(exifGPS(new DataView(reader.result)));
+            } catch (err){
+                cb(null);
+            }
+        };
+        reader.onerror = function(){ cb(null); };
+        reader.readAsArrayBuffer(file);
+    }
 
     function renderPhotos(){
         photoUploadRow.innerHTML = '';
 
-        uploadedPhotos.forEach((url, index) => {
+        const anyUploading = uploadedPhotos.some(p => p.uploading);
+
+        uploadedPhotos.forEach((photo, index) => {
             const thumb = document.createElement('div');
             thumb.className = 'photo-thumb';
             thumb.innerHTML =
-                '<img src="' + url + '" alt="Uploaded complaint photo">' +
-                '<button type="button" class="remove-photo-btn" data-index="' + index + '" title="Remove photo">&times;</button>';
+                '<img src="' + photo.preview + '" alt="Uploaded complaint photo">' +
+                (photo.uploading ? '<div class="thumb-uploading">' + uploadingSVG + '<span>Uploading</span></div>' : '') +
+                '<button type="button" class="remove-photo-btn" data-index="' + index + '" title="Remove photo"' + (photo.uploading ? ' disabled' : '') + '>&times;</button>';
             photoUploadRow.appendChild(thumb);
         });
 
         const addBox = document.createElement('div');
-        addBox.className = 'photo-add-box';
-        addBox.innerHTML = cameraIconSVG + '<span>' + (uploadedPhotos.length === 0 ? 'Add Photo' : 'Add Another Photo') + '</span>';
-        addBox.addEventListener('click', () => photoInput.click());
+        addBox.className = 'photo-add-box' + (anyUploading ? ' disabled' : '');
+        addBox.innerHTML = cameraIconSVG + '<span>' + (anyUploading ? 'Uploading...' : (uploadedPhotos.length === 0 ? 'Take Photo' : 'Add Another Photo')) + '</span>';
+        if (!anyUploading){
+            addBox.addEventListener('click', () => {
+                photoError.classList.remove('show');
+                photoInput.click();
+            });
+        }
         photoUploadRow.appendChild(addBox);
 
         photoUploadRow.querySelectorAll('.remove-photo-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const idx = parseInt(btn.getAttribute('data-index'), 10);
-                URL.revokeObjectURL(uploadedPhotos[idx]);
+                const photo = uploadedPhotos[idx];
+                URL.revokeObjectURL(photo.preview);
                 uploadedPhotos.splice(idx, 1);
+                refreshLocation();
+                recomputePhotoSpread();
+                renderHiddenUrls();
                 renderPhotos();
             });
         });
     }
 
     photoInput.addEventListener('change', (e) => {
-        Array.from(e.target.files || []).forEach(file => {
-            uploadedPhotos.push(URL.createObjectURL(file));
-        });
-        photoInput.value = '';
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        e.target.value = '';
+        photoError.classList.remove('show');
+
+        const entry = { url: null, preview: URL.createObjectURL(file), uploading: true };
+        uploadedPhotos.push(entry);
         renderPhotos();
+
+        readPhotoEXIF(file, function(gps){
+            if (gps){
+                entry.gps = gps;
+                refreshLocation();
+                recomputePhotoSpread();
+            }
+        });
+
+        uploadToCloudinary(file, function(err, url){
+            if (err){
+                const idx = uploadedPhotos.indexOf(entry);
+                if (idx !== -1){
+                    URL.revokeObjectURL(entry.preview);
+                    uploadedPhotos.splice(idx, 1);
+                }
+                renderHiddenUrls();
+                renderPhotos();
+                photoError.textContent = 'Photo upload failed: ' + err;
+                photoError.classList.add('show');
+                return;
+            }
+            entry.url = url;
+            entry.uploading = false;
+            renderHiddenUrls();
+            renderPhotos();
+        });
     });
 
     function hasFormData(){
@@ -456,16 +773,56 @@
     }
 
     function resetForm(){
-        uploadedPhotos.forEach(url => URL.revokeObjectURL(url));
+        uploadedPhotos.forEach(p => URL.revokeObjectURL(p.preview));
         uploadedPhotos = [];
+        renderHiddenUrls();
         renderPhotos();
         categorySelect.value = '';
         descriptionInput.value = '';
     }
 
+    if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(pos){
+            if (!exifLocationSet){
+                latitudeInput.value = pos.coords.latitude.toFixed(6);
+                longitudeInput.value = pos.coords.longitude.toFixed(6);
+            }
+        }, function(){
+            latitudeInput.value = '';
+            longitudeInput.value = '';
+        });
+    } else {
+        latitudeInput.value = '';
+        longitudeInput.value = '';
+    }
+
+    complaintForm.addEventListener('submit', (e) => {
+        const uploading = uploadedPhotos.filter(p => p.uploading).length;
+        if (uploading > 0){
+            e.preventDefault();
+            photoError.textContent = 'Please wait, your photo is still uploading...';
+            photoError.classList.add('show');
+            photoUploadRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        if (photoWarning.classList.contains('show')){
+            e.preventDefault();
+            photoWarning.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        if (uploadedPhotos.length === 0){
+            e.preventDefault();
+            photoError.textContent = 'Please take a photo of the issue before submitting.';
+            photoError.classList.add('show');
+            photoUploadRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
     cancelBtn.addEventListener('click', () => {
         if (hasFormData()){
             cancelModal.classList.add('active');
+        } else {
+            window.location.href = "{% url 'user_dashboard' %}";
         }
     });
 
@@ -476,6 +833,7 @@
     modalYesBtn.addEventListener('click', () => {
         resetForm();
         cancelModal.classList.remove('active');
+        window.location.href = "{% url 'user_dashboard' %}";
     });
 
     cancelModal.addEventListener('click', (e) => {

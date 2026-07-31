@@ -137,3 +137,9 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR.parent / 'Photos'
+
+
+# Cloudinary (direct browser upload with unsigned preset)
+CLOUDINARY_CLOUD_NAME = 'gcv6k1oj'
+CLOUDINARY_UNSIGNED_PRESET = 'cms_upload'
+CLOUDINARY_FOLDER = 'CMS'

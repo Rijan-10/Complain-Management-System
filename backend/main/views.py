@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from main.models import Profile
+from main.models import Profile, Complaint, ComplaintImage
 
 def home(request):
     return render(request, 'Home_page.html')
@@ -86,6 +87,61 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return render(request, 'Logedout.html')
+
+@login_required(login_url='/login/')
+def new_complaint(request):
+    if request.method == 'POST':
+        category = request.POST.get('category', '')
+        description = request.POST.get('description', '').strip()
+        latitude = request.POST.get('latitude', '').strip()
+        longitude = request.POST.get('longitude', '').strip()
+        photo_urls = [u.strip() for u in request.POST.getlist('photo_urls') if u.strip()]
+
+        if not category:
+            messages.error(request, 'Please select a category')
+            return redirect('new_complaint')
+
+        if not description:
+            messages.error(request, 'Please describe your complaint')
+            return redirect('new_complaint')
+
+        if not photo_urls:
+            messages.error(request, 'Please take a photo of the issue')
+            return redirect('new_complaint')
+
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except ValueError:
+            messages.error(request, 'Location is required. Please allow location access and try again.')
+            return redirect('new_complaint')
+
+        complaint = Complaint.objects.create(
+            user=request.user,
+            category=category,
+            description=description,
+            latitude=latitude,
+            longitude=longitude,
+        )
+
+        for url in photo_urls:
+            ComplaintImage.objects.create(complaint=complaint, image_url=url)
+
+        messages.success(request, 'Complaint submitted successfully')
+        return redirect('complaint_success', complaint_id=complaint.complaint_id)
+
+    return render(request, 'New_Complaint.html', {
+        'cloudinary_cloud_name': settings.CLOUDINARY_CLOUD_NAME,
+        'cloudinary_upload_preset': settings.CLOUDINARY_UNSIGNED_PRESET,
+        'cloudinary_folder': settings.CLOUDINARY_FOLDER,
+    })
+
+@login_required(login_url='/login/')
+def complaint_success(request, complaint_id):
+    complaint = get_object_or_404(Complaint, complaint_id=complaint_id, user=request.user)
+    return render(request, 'Complained_Successfully.html', {
+        'complaint': complaint,
+    })
 
 @login_required(login_url='/login/')
 def admin_dashboard(request):
