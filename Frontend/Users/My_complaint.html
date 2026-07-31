@@ -66,6 +66,7 @@
 
 /* Status Badges */
 
+.status-pending,
 .status-progress,
 .status-resolved,
 .status-closed{
@@ -78,6 +79,10 @@
     text-align:center;
     cursor:default;   /* not editable */
     user-select:none; /* cannot select/edit */
+}
+
+.status-pending{
+    background:#8A93A3;
 }
 
 .status-progress{
@@ -138,7 +143,7 @@
                 <thead>
                     <tr>
                         <th>Complaint ID</th>
-                        <th>Subject</th>
+                        <th>Category</th>
                         <th>Date</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -146,39 +151,39 @@
                 </thead>
 
                 <tbody>
-
-                    <!--
-                        Django Backend Example
-
+                    {% if complaints %}
                         {% for complaint in complaints %}
                         <tr>
                             <td>{{ complaint.complaint_id }}</td>
-                            <td>{{ complaint.subject }}</td>
-                            <td>{{ complaint.date }}</td>
-
+                            <td>{{ complaint.get_category_display }}</td>
+                            <td>{{ complaint.created_at|date:"M d, Y" }}</td>
                             <td>
                                 <span class="
-                                    {% if complaint.status == 'In Progress' %}
+                                    {% if complaint.status == 'in_progress' %}
                                         status-progress
-                                    {% elif complaint.status == 'Resolved' %}
+                                    {% elif complaint.status == 'resolved' %}
                                         status-resolved
-                                    {% else %}
+                                    {% elif complaint.status == 'rejected' %}
                                         status-closed
+                                    {% else %}
+                                        status-pending
                                     {% endif %}
                                 ">
-                                    {{ complaint.status }}
+                                    {{ complaint.get_status_display }}
                                 </span>
                             </td>
-
                             <td>
-                                <a href="#" class="view-btn">View</a>
+                                <a href="{% url 'complaint_success' complaint.complaint_id %}" class="view-btn">View</a>
                             </td>
                         </tr>
                         {% endfor %}
-                    -->
-                    
-                
-                    
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="empty-placeholder">
+                                No complaints registered yet.
+                            </td>
+                        </tr>
+                    {% endif %}
                 </tbody>
 
             </table>

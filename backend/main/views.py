@@ -89,6 +89,14 @@ def logout_view(request):
     return render(request, 'Logedout.html')
 
 @login_required(login_url='/login/')
+def my_complaints(request):
+    complaints = Complaint.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'My_complaint.html', {
+        'full_name': display_name(request.user),
+        'complaints': complaints,
+    })
+
+@login_required(login_url='/login/')
 def new_complaint(request):
     if request.method == 'POST':
         category = request.POST.get('category', '')
