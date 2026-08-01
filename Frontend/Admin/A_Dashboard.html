@@ -207,8 +207,20 @@
   
         <div class="page-header-row">
             <h1 class="page-title">Dashboard</h1>
-            <svg class="next-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if forloop.last %}
+            <div class="toast-overlay" id="toastOverlay">
+                <div class="toast-badge toast-{{ message.tags }}">
+                    <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                    <span class="toast-text">{{ message }}</span>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
   
         <div class="stats-row">
   

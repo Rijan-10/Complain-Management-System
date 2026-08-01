@@ -240,10 +240,9 @@
                 <div class="profile-body">
                     <div class="profile-picture-col">
                         <div class="avatar-placeholder" id="avatarPlaceholder">
-                             
+                              
                             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
                         </div>
-                        <button type="button" class="change-picture-btn">Change Picture</button>
                     </div>
   
                     
@@ -279,7 +278,7 @@
   
                     <div class="activity-row">
                         <span class="activity-label">Last Login</span>
-                        <span class="activity-value" id="lastLoginValue">{{ last_login|date:"M j, Y, g:i a" }}</span>
+                        <span class="activity-value" id="lastLoginValue">{{ last_login|date:"M j, Y" }}</span>
                     </div>
   
                     <div class="activity-row">

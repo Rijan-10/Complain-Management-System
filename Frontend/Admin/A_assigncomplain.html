@@ -99,6 +99,11 @@
     color:white;
     background:#E8720C;
 }
+
+.status-badge.status-in_progress{ background:#E8720C; }
+.status-badge.status-resolved{ background:#1F8A4C; }
+.status-badge.status-rejected{ background:#000000; }
+.status-badge.status-pending{ background:#8A93A3; }
  
 /* ---- Form fields ---- */
 .form-group{
@@ -267,6 +272,16 @@
                             {% endfor %}
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="statusSelect">Status</label>
+                        <select id="statusSelect" name="status">
+                            <option value="pending" {% if complaint.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="in_progress" {% if complaint.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="resolved" {% if complaint.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                            <option value="rejected" {% if complaint.status == 'rejected' %}selected{% endif %}>Closed</option>
+                        </select>
+                    </div>
   
                     <div class="form-group">
                         <label for="prioritySelect">Priority</label>
@@ -280,7 +295,7 @@
   
                     <div class="form-group">
                         <label for="dueDateInput">Due Date</label>
-                        <input type="date" id="dueDateInput" name="due_date">
+                        <input type="date" id="dueDateInput" name="due_date" onclick="this.showPicker()">
                     </div>
   
                     <div class="form-group">
@@ -328,7 +343,7 @@
   
                 <div class="summary-row">
                     <span class="summary-label">Status</span>
-                    <span class="status-badge">In Progress</span>
+                    <span class="status-badge status-{{ complaint.status }}">{{ complaint.get_status_display }}</span>
                 </div>
             </div>
   

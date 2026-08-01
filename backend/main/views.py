@@ -4,7 +4,9 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from main.models import Profile, Complaint, ComplaintImage
+from django.utils import timezone
+from datetime import timedelta
+from main.models import Profile, Complaint, ComplaintImage, PasswordResetRequest
 
 
 def admin_required(view_func):
@@ -78,6 +80,36 @@ def signup_view(request):
     return render(request, 'Signup.html')
 
 
+def forgot_password(request):
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        email = request.POST.get('email', '').strip().lower()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+
+        if not (full_name and phone and email and password and confirm_password):
+            messages.error(request, 'All fields are required.')
+        elif not phone.isdigit() or len(phone) != 10:
+            messages.error(request, 'Phone number must be exactly 10 digits.')
+        elif len(password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+        elif password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+        else:
+            user = User.objects.filter(email__iexact=email).first()
+            PasswordResetRequest.objects.create(
+                user=user,
+                full_name=full_name,
+                phone=phone,
+                email=email,
+                requested_password=password,
+            )
+            return render(request, 'ForgotPassword.html', {'show_success': True})
+
+    return render(request, 'ForgotPassword.html')
+
+
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -96,11 +128,10 @@ def login_view(request):
             messages.error(request, 'Invalid email or password')
     
     last_message = None
-    if request.method == 'GET':
-        storage = messages.get_messages(request)
-        messages_list = list(storage)
-        if messages_list:
-            last_message = messages_list[-1]
+    storage = messages.get_messages(request)
+    messages_list = list(storage)
+    if messages_list:
+        last_message = messages_list[-1]
     
     return render(request, 'Login.html', {
         'last_message': last_message,
@@ -128,6 +159,11 @@ def user_dashboard(request):
 
 @login_required(login_url='/login/')
 def profile_view(request):
+    try:
+        if request.user.profile.role == 'admin':
+            return redirect('admin_profile')
+    except Profile.DoesNotExist:
+        pass
     profile = request.user.profile
     return render(request, 'Profile.html', {
         'full_name': display_name(request.user),
@@ -155,6 +191,11 @@ def logout_view(request):
 
 @login_required(login_url='/login/')
 def change_password(request):
+    try:
+        if request.user.profile.role == 'admin':
+            return redirect('admin_change_password')
+    except Profile.DoesNotExist:
+        pass
     if request.method == 'POST':
         current_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
@@ -320,21 +361,49 @@ def admin_users(request):
         'users': users,
         'status_filter': status_filter,
         'search_query': search_query,
+        'show_pw_success': request.session.pop('admin_password_changed', False),
     })
+
+
+@admin_required
+def admin_add_admin(request):
+    context = {
+        'full_name': display_name(request.user),
+        'form_values': {},
+    }
+
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name', '').strip()
+        email = request.POST.get('email', '').strip().lower()
+        phone = request.POST.get('phone', '').strip()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+
+        context['form_values'] = {'full_name': full_name, 'email': email, 'phone': phone}
+
+        if not full_name or not email or not phone or not password or not confirm_password:
+            messages.error(request, 'All fields are required.')
+        elif User.objects.filter(email__iexact=email).exists():
+            messages.error(request, 'An account with this email already exists.')
+        elif not phone.isdigit() or len(phone) != 10:
+            messages.error(request, 'Phone number must be exactly 10 digits.')
+        elif len(password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+        elif password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+        else:
+            user = User.objects.create_user(username=email, email=email, password=password, first_name=full_name)
+            Profile.objects.create(user=user, role='admin', phone=phone, full_name=full_name)
+            messages.success(request, f'Admin account created for {full_name}.')
+            return redirect('admin_users')
+
+    return render(request, 'A_add_admin.html', context)
 
 
 @admin_required
 def admin_complaint_detail(request, complaint_id):
     complaint = get_object_or_404(Complaint, complaint_id=complaint_id)
     images = complaint.images.all()
-
-    if request.method == 'POST':
-        new_status = request.POST.get('status')
-        if new_status in dict(Complaint.STATUS_CHOICES):
-            complaint.status = new_status
-            complaint.save()
-            messages.success(request, f'Complaint {complaint_id} status updated to {complaint.get_status_display()}.')
-            return redirect('admin_complaint_detail', complaint_id=complaint_id)
 
     return render(request, 'A_complaintdetail.html', {
         'full_name': display_name(request.user),
@@ -353,19 +422,35 @@ def admin_assign_complaint(request, complaint_id):
         priority = request.POST.get('priority')
         due_date = request.POST.get('due_date')
         note = request.POST.get('note')
+        new_status = request.POST.get('status')
         
         if not officer_id:
             messages.error(request, 'Please select an officer to assign.')
             return redirect('admin_assign_complaint', complaint_id=complaint_id)
-        
+
+        if new_status in dict(Complaint.STATUS_CHOICES):
+            complaint.status = new_status
+            complaint.save()
+
         messages.success(request, f'Complaint {complaint_id} has been assigned successfully.')
-        return redirect('admin_complaints')
+        return redirect('admin_dashboard')
 
     return render(request, 'A_assigncomplain.html', {
         'full_name': display_name(request.user),
         'complaint': complaint,
         'admins': admins,
     })
+
+
+@admin_required
+def admin_complaint_delete(request, complaint_id):
+    if request.method == 'POST':
+        complaint = get_object_or_404(Complaint, complaint_id=complaint_id)
+        cid = complaint.complaint_id
+        complaint.delete()
+        messages.success(request, f'Complaint {cid} has been deleted.')
+        return redirect('admin_complaints')
+    return redirect('admin_complaint_detail', complaint_id=complaint_id)
 
 
 @admin_required
@@ -385,11 +470,28 @@ def admin_profile(request):
 def admin_reports(request):
     complaints = Complaint.objects.all()
     category_filter = request.GET.get('category', '')
+    date_range = request.GET.get('date_range', '')
+    from_date = request.GET.get('from', '')
+    to_date = request.GET.get('to', '')
 
     if category_filter:
         complaints = complaints.filter(category=category_filter)
 
+    today = timezone.localdate()
+    if date_range == 'today':
+        complaints = complaints.filter(created_at__date=today)
+    elif date_range == 'last7':
+        complaints = complaints.filter(created_at__date__gte=today - timedelta(days=6))
+    elif date_range == 'last30':
+        complaints = complaints.filter(created_at__date__gte=today - timedelta(days=29))
+    elif date_range == 'custom':
+        if from_date:
+            complaints = complaints.filter(created_at__date__gte=from_date)
+        if to_date:
+            complaints = complaints.filter(created_at__date__lte=to_date)
+
     total_complaints = complaints.count()
+    pending_count = complaints.filter(status='pending').count()
     in_progress_count = complaints.filter(status='in_progress').count()
     resolved_count = complaints.filter(status='resolved').count()
     closed_count = complaints.filter(status='rejected').count()
@@ -402,12 +504,16 @@ def admin_reports(request):
     return render(request, 'A_reports.html', {
         'full_name': display_name(request.user),
         'total_complaints': total_complaints,
+        'pending_count': pending_count,
         'in_progress_count': in_progress_count,
         'resolved_count': resolved_count,
         'closed_count': closed_count,
         'monthly_counts': monthly_counts,
         'category_filter': category_filter,
         'category_choices': Complaint.CATEGORY_CHOICES,
+        'date_range': date_range,
+        'from_date': from_date,
+        'to_date': to_date,
     })
 
 
@@ -428,28 +534,56 @@ def admin_change_password(request):
             request.user.set_password(new_password)
             request.user.save()
             update_session_auth_hash(request, request.user)
-            messages.success(request, 'Password changed successfully.')
-            return redirect('admin_profile')
+            request.session['password_changed'] = True
+            return redirect('admin_change_password')
 
+    show_success = request.session.pop('password_changed', False)
     return render(request, 'A_change_password.html', {
         'full_name': display_name(request.user),
+        'show_success': show_success,
     })
 
 
 @admin_required
-def toggle_user_status(request, user_id):
+def admin_user_action(request, user_id):
     if request.method == 'POST':
         user = get_object_or_404(User, id=user_id)
         if user.profile.role == 'admin':
-            messages.error(request, 'Cannot change status of another admin.')
+            messages.error(request, 'Cannot modify another admin account.')
             return redirect('admin_users')
-        if user.profile.account_status == 'active':
-            user.profile.account_status = 'inactive'
-            messages.success(request, f'Account for {user.email} has been disabled.')
+        action = request.POST.get('action')
+        if action == 'delete':
+            email = user.email
+            user.delete()
+            messages.success(request, f'Account for {email} has been deleted.')
+        elif action == 'toggle':
+            if user.profile.account_status == 'active':
+                user.profile.account_status = 'inactive'
+                messages.success(request, f'Account for {user.email} has been disabled.')
+            else:
+                user.profile.account_status = 'active'
+                messages.success(request, f'Account for {user.email} has been enabled.')
+            user.profile.save()
+    return redirect('admin_users')
+
+
+@admin_required
+def admin_user_change_password(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+        if not new_password or not confirm_password:
+            messages.error(request, 'Please enter both password fields.')
+        elif len(new_password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+        elif new_password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
         else:
-            user.profile.account_status = 'active'
-            messages.success(request, f'Account for {user.email} has been enabled.')
-        user.profile.save()
+            user.set_password(new_password)
+            user.save()
+            request.session['admin_password_changed'] = True
+            messages.success(request, f'Password changed for {user.email}.')
     return redirect('admin_users')
 
 
@@ -457,4 +591,9 @@ def toggle_user_status(request, user_id):
 def admin_logout(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
-    return render(request, 'A_logedout.html')
+    last_message = None
+    storage = messages.get_messages(request)
+    messages_list = list(storage)
+    if messages_list:
+        last_message = messages_list[-1]
+    return render(request, 'A_logedout.html', {'last_message': last_message})

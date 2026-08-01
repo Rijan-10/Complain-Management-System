@@ -95,23 +95,6 @@
     min-width:190px;
 }
  
-.enter-btn{
-    height:44px;
-    padding:0 28px;
-    background:#1E64C8;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-weight:800;
-    font-size:14px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
- 
-.enter-btn:hover{
-    background:#0B2D6D;
-}
- 
 /* ---- Complaints table card ---- */
 .card{
     background:white;
@@ -211,8 +194,20 @@
   
         <div class="page-header-row">
             <h1 class="page-title">Manage Complaints</h1>
-            <svg class="next-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if forloop.last %}
+            <div class="toast-overlay" id="toastOverlay">
+                <div class="toast-badge toast-{{ message.tags }}">
+                    <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                    <span class="toast-text">{{ message }}</span>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
   
         <div class="filters-row">
             <div class="filter-group search-group">
@@ -240,8 +235,6 @@
                     <option value="drainage" {% if category_filter == 'drainage' %}selected{% endif %}>Drainage</option>
                 </select>
             </div>
-  
-            <button type="button" class="enter-btn" id="enterBtn">Enter</button>
         </div>
   
         <!-- ===================== COMPLAINTS TABLE ====================== -->
@@ -260,7 +253,7 @@
                 <tbody id="complaintsTableBody">
                     {% if complaints %}
                         {% for complaint in complaints %}
-                        <tr onclick="window.location.href='{% url 'admin_complaint_detail' complaint.complaint_id %}'">
+                        <tr data-category="{{ complaint.category }}" onclick="window.location.href='{% url 'admin_complaint_detail' complaint.complaint_id %}'">
                             <td data-label="Complaint ID">{{ complaint.complaint_id }}</td>
                             <td data-label="Category">{{ complaint.get_category_display }}</td>
                             <td data-label="Submitted by">{{ complaint.reporter_name }}</td>
@@ -278,12 +271,17 @@
                         </tr>
                         {% endfor %}
                     {% else %}
-                        <tr>
+                        <tr id="emptyComplaintsRow">
                             <td colspan="6" class="empty-state">
                                 Complaint Information will be displayed here.
                             </td>
                         </tr>
                     {% endif %}
+                    <tr id="noResultsRow" style="display:none;">
+                        <td colspan="6" class="empty-state">
+                            No complaints match your filters.
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -293,25 +291,39 @@
   
 <script>
 
-function updateEmptyState(){
-    const tbody = document.getElementById("complaintsTableBody");
-    const emptyState = tbody.querySelector(".empty-state");
-    if (emptyState) {
-        emptyState.style.display = tbody.children.length === 0 ? "block" : "none";
+var searchInput = document.getElementById("searchComplaintsInput");
+var statusSelect = document.getElementById("statusFilter");
+var categorySelect = document.getElementById("categoryFilter");
+var tbody = document.getElementById("complaintsTableBody");
+var noResultsRow = document.getElementById("noResultsRow");
+var dataRows = Array.prototype.filter.call(tbody.querySelectorAll("tr"), function(row){
+    return !row.id;
+});
+
+function filterTable(){
+    var search = searchInput.value.trim().toLowerCase();
+    var status = statusSelect.value;
+    var category = categorySelect.value;
+    var visible = 0;
+    dataRows.forEach(function(row){
+        var text = row.textContent.toLowerCase();
+        var badge = row.querySelector(".status-badge");
+        var rowStatus = badge ? badge.classList.contains("status-" + status) : false;
+        var matchSearch = !search || text.indexOf(search) !== -1;
+        var matchStatus = !status || rowStatus;
+        var matchCategory = !category || row.getAttribute("data-category") === category;
+        var show = matchSearch && matchStatus && matchCategory;
+        row.style.display = show ? "" : "none";
+        if(show) visible++;
+    });
+    if(noResultsRow){
+        noResultsRow.style.display = (dataRows.length > 0 && visible === 0) ? "" : "none";
     }
 }
-updateEmptyState();
 
-document.getElementById("enterBtn").addEventListener("click", function(){
-    const status = document.getElementById("statusFilter").value;
-    const category = document.getElementById("categoryFilter").value;
-    const search = document.getElementById("searchComplaintsInput").value;
-    let url = "{% url 'admin_complaints' %}?";
-    if (status) url += "status=" + encodeURIComponent(status) + "&";
-    if (category) url += "category=" + encodeURIComponent(category) + "&";
-    if (search) url += "search=" + encodeURIComponent(search) + "&";
-    window.location.href = url.slice(0, -1);
-});
+searchInput.addEventListener("input", filterTable);
+statusSelect.addEventListener("change", filterTable);
+categorySelect.addEventListener("change", filterTable);
 </script>
 </body>
 </html>

@@ -584,3 +584,102 @@ body{
         transform:translateX(-50%) translateY(-20px);
     }
 }
+
+/* ---- Logout Confirmation Modal ---- */
+
+.logout-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,15,25,0.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:10000;
+}
+
+.logout-modal-overlay.active{
+    display:flex;
+}
+
+.logout-modal-box{
+    background:#fff;
+    border-radius:16px;
+    padding:32px 28px 26px;
+    max-width:380px;
+    width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.28);
+    text-align:center;
+    animation:modalPopIn 0.25s ease;
+}
+
+.logout-modal-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    background:#FDECEC;
+    color:#DC2626;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.logout-modal-box h3{
+    font-size:20px;
+    color:#1A1A1A;
+    margin-bottom:10px;
+}
+
+.logout-modal-box p{
+    font-size:14px;
+    color:#5B6472;
+    line-height:1.55;
+    margin-bottom:26px;
+}
+
+.logout-modal-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+}
+
+.logout-modal-btn{
+    flex:1;
+    padding:11px 18px;
+    border:none;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.logout-modal-btn.cancel{
+    background:#EDEFF2;
+    color:#1A1A1A;
+}
+
+.logout-modal-btn.cancel:hover{
+    background:#E1E4E9;
+}
+
+.logout-modal-btn.confirm{
+    background:#DC2626;
+    color:#fff;
+}
+
+.logout-modal-btn.confirm:hover{
+    background:#B91C1C;
+}
+
+@keyframes modalPopIn{
+    from{
+        opacity:0;
+        transform:scale(0.92) translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}

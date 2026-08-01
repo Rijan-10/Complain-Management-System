@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS Admin - Add Admin</title>
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
+
+<style>
+.main-content{
+    flex:1;
+    padding:30px 40px;
+    background:#FAFBFC;
+    min-height:calc(100vh - 110px);
+}
+
+.page-title{
+    color:#0B2D6D;
+    font-size:26px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.page-header-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:22px;
+}
+
+.breadcrumb{
+    color:#666;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    padding:25px 30px;
+    margin-bottom:20px;
+    margin:0 auto;
+    max-width:560px;
+}
+
+.card h2{
+    color:#0B2D6D;
+    font-size:18px;
+    margin-bottom:6px;
+}
+
+.card-subtitle{
+    color:#666;
+    font-size:13px;
+    margin-bottom:24px;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-group:last-child{
+    margin-bottom:0;
+}
+
+.form-group label{
+    display:block;
+    font-size:14px;
+    color:#333;
+    margin-bottom:8px;
+}
+
+.form-group label span.required{
+    color:#DC2626;
+}
+
+.form-group input{
+    width:100%;
+    padding:12px 15px;
+    border:1px solid #C9CFD8;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    box-sizing:border-box;
+}
+
+.form-group input:focus{
+    border-color:#1E64C8;
+}
+
+.password-field{
+    position:relative;
+}
+
+.password-field input{
+    padding-right:45px;
+}
+
+.toggle-eye{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#666;
+    user-select:none;
+}
+
+.create-btn{
+    display:block;
+    margin:10px auto 0;
+    background:#1E64C8;
+    color:white;
+    border:none;
+    padding:14px 40px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.create-btn:hover{
+    background:#17509E;
+}
+
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:#1E64C8;
+    font-size:14px;
+    font-weight:600;
+    text-decoration:none;
+    margin-bottom:18px;
+}
+
+.back-link:hover{
+    text-decoration:underline;
+}
+</style>
+</head>
+<body>
+
+{% include 'partials/header.html' %}
+
+<div class="wrapper">
+    {% include 'partials/admin_sidebar.html' with active='users' %}
+
+    <div class="main-content">
+        <a href="{% url 'admin_users' %}" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            Back to Manage Users
+        </a>
+
+        <div class="page-header-row">
+            <h1 class="page-title">Add Admin</h1>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if forloop.last %}
+                    <div class="toast-overlay" id="toastOverlay">
+                        <div class="toast-badge toast-{{ message.tags }}">
+                            <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                            <span class="toast-text">{{ message }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <div class="card">
+            <h2>Create New Admin Account</h2>
+            <p class="card-subtitle">Fill in the details below. The new admin will be able to log in and manage the system.</p>
+
+            <form method="post" action="{% url 'admin_add_admin' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="fullName">Full Name <span class="required">*</span></label>
+                    <input type="text" id="fullName" name="full_name" placeholder="Enter full name" value="{{ form_values.full_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="Enter email address" value="{{ form_values.email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" placeholder="Phone number" value="{{ form_values.phone }}" pattern="[0-9]{10}" maxlength="10" title="Phone number must be exactly 10 digits" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <div class="password-field">
+                        <input type="password" id="password" name="password" placeholder="At least 8 characters" minlength="8" required>
+                        <span class="toggle-eye" onclick="togglePassword('password')">👁</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                    <div class="password-field">
+                        <input type="password" id="confirmPassword" name="confirm_password" placeholder="Re-enter password" required>
+                        <span class="toggle-eye" onclick="togglePassword('confirmPassword')">👁</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="create-btn">Create Admin</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(id){
+    const input = document.getElementById(id);
+    input.type = (input.type === "password") ? "text" : "password";
+}
+</script>
+</body>
+</html>
