@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS New Complaints</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 .main-content{
@@ -126,38 +126,41 @@
 
     <div class="main-content">
         <div class="status-card">
-            <div class="status-card-header">
-                <h2>Status Result</h2>
-            </div>
-            <table class="status-table">
-                <tbody>
-                    <tr>
-                        <td class="label">Complaint ID</td>
-                        <td class="value">--</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Subject</td>
-                        <td class="value">--</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Date</td>
-                        <td class="value">--</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Status</td>
-                        <td class="value">
-                            <!-- Backend: this stays plain "status-badge" (grey) until there's
-                                 real data. Once wired up, add the matching class:
-                                 status-inprogress (orange) / status-resolved (green) / status-closed (black) -->
-                            <span class="status-badge">--</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="label">Description</td>
-                        <td class="value">--</td>
-                    </tr>
-                </tbody>
-            </table>
+                <div class="status-card-header">
+                    <h2>Status Result</h2>
+                </div>
+                <table class="status-table">
+                    <tbody>
+                        <tr>
+                            <td class="label">Complaint ID</td>
+                            <td class="value">{{ complaint.complaint_id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Subject</td>
+                            <td class="value">{{ complaint.get_category_display }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Date</td>
+                            <td class="value">{{ complaint.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Status</td>
+                            <td class="value">
+                                <span class="status-badge
+                                    {% if complaint.status == 'in_progress' %}status-inprogress
+                                    {% elif complaint.status == 'resolved' %}status-resolved
+                                    {% elif complaint.status == 'rejected' %}status-closed
+                                    {% endif %}">
+                                    {{ complaint.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Description</td>
+                            <td class="value">{{ complaint.description }}</td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
     </div>
 </div>

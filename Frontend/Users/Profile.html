@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS My Profile</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 /* ================= My Profile page styles ================= */
@@ -159,23 +159,6 @@
     stroke:#1A1A1A;
 }
 
-.change-picture-btn{
-    background:white;
-    color:#1E64C8;
-    border:1.5px solid #1E64C8;
-    padding:10px 18px;
-    border-radius:8px;
-    font-weight:bold;
-    font-size:14px;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-}
-
-.change-picture-btn:hover{
-    background:#1E64C8;
-    color:white;
-}
-
 .profile-fields{
     flex:1;
     display:flex;
@@ -322,7 +305,6 @@
                         <div class="avatar-placeholder">
                             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
                         </div>
-                        <button type="button" class="change-picture-btn">Change Picture</button>
                     </div>
 
                         <div class="profile-fields">
@@ -342,7 +324,7 @@
                                 <span class="profile-value" id="phoneValue">{{ phone }}</span>
                             </div>
 
-                            <a  class="change-password-link">
+                            <a href="{% url 'change_password' %}" class="change-password-link">
                                 Change Password
                             </a>
 
@@ -357,7 +339,7 @@
 
                     <div class="activity-row">
                         <span class="activity-label">Last Login</span>
-                        <span class="activity-value" id="lastLoginValue">{{ last_login|date:"M j, Y, g:i a" }}</span>
+                        <span class="activity-value" id="lastLoginValue">{{ last_login|date:"M j, Y" }}</span>
                     </div>
 
                     <div class="activity-row">

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -296,7 +297,7 @@ body{
 <body>
 
 <div class="logo-section">
-   <img src="../../Photos/CMS_Logo.png" alt="Logo">
+   <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
     <div class="logo-text">
         <h1>KATHMANDU VALLEY</h1>
         <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
@@ -305,10 +306,10 @@ body{
 </div>
 
 <div class="buttons">
-    <button>Home</button>
-    <button>About</button>
-    <button>Contact Us</button>
-    <button>Log in </button>
+    <button onclick="location.href='{% url 'home' %}'">Home</button>
+    <button onclick="location.href='{% url 'about' %}'">About</button>
+    <button onclick="location.href='{% url 'contact' %}'">Contact Us</button>
+    <button onclick="location.href='{% url 'login' %}'">Log in </button>
 </div>
 <div class="page-content">
  
@@ -354,7 +355,7 @@ body{
  
             <!-- Reserved space for the illustration image -->
             <div class="image-placeholder">
-    <img src="..\..\Photos\User_Contact_Us.png" alt="Illustration">
+    <img src="{% static 'User_Contact_Us.png' %}" alt="Illustration">
 </div>
  
             <section class="info-card">

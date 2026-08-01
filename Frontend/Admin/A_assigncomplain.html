@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Assign Complaint</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 .main-content{
@@ -308,10 +308,17 @@
                     <span class="summary-label">Location</span>
                     <span class="summary-value">{{ complaint.latitude }}, {{ complaint.longitude }}</span>
                 </div>
+
+                {% if complaint.landmark %}
+                <div class="summary-row">
+                    <span class="summary-label">Landmark</span>
+                    <span class="summary-value">{{ complaint.landmark }}</span>
+                </div>
+                {% endif %}
   
                 <div class="summary-row">
                     <span class="summary-label">Submitted By</span>
-                    <span class="summary-value">{{ complaint.user.email }}</span>
+                    <span class="summary-value">{{ complaint.reporter_name }}</span>
                 </div>
   
                 <div class="summary-row">

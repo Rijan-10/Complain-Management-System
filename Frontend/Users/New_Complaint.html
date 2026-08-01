@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS New Complaints</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 /* ===== Main content / New Complaint form ===== */
@@ -298,6 +298,27 @@
     color:#ABB2BD;
 }
 
+/* Landmark (optional) */
+.landmark-input{
+    width:100%;
+    background:#F1F3F6;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    padding:14px 18px;
+    font-size:14px;
+    color:#1A1A1A;
+    outline:none;
+    transition:border-color 0.2s ease;
+}
+
+.landmark-input:focus{
+    border-color:#1E64C8;
+}
+
+.landmark-input::placeholder{
+    color:#ABB2BD;
+}
+
 /* Actions */
 .form-actions{
     display:flex;
@@ -337,6 +358,26 @@
 
 .btn-submit:hover{
     background:#164C9A;
+}
+
+/* Anonymous checkbox */
+.anonymous-check{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-right:auto;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    color:#333;
+    user-select:none;
+}
+
+.anonymous-check input{
+    width:18px;
+    height:18px;
+    accent-color:#1E64C8;
+    cursor:pointer;
 }
 
 /* Confirmation modal */
@@ -487,11 +528,20 @@
                 </div>
 
                 <div class="form-section">
+                    <label class="section-label">Popular Landmark Nearby</label>
+                    <input type="text" class="landmark-input" id="landmarkInput" name="landmark" maxlength="200" placeholder="e.g. Near Boudhanath Stupa, Durbarmarg">
+                </div>
+
+                <div class="form-section">
                     <label class="section-label">Description<span class="required-mark">*</span></label>
                     <textarea class="description-box" id="descriptionInput" name="description" placeholder="Describe your complaint in detail" required></textarea>
                 </div>
 
                 <div class="form-actions">
+                    <label class="anonymous-check">
+                        <input type="checkbox" name="is_anonymous" id="anonymousCheck">
+                        <span>Submit complaint anonymously</span>
+                    </label>
                     <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
                     <button type="submit" class="btn-submit" id="submitBtn">Submit Complaint</button>
                 </div>

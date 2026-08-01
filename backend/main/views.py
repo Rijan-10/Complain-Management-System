@@ -26,6 +26,14 @@ def home(request):
     return render(request, 'Home_page.html')
 
 
+def about_us(request):
+    return render(request, 'About_us.html')
+
+
+def contact_us(request):
+    return render(request, 'Contact_us.html')
+
+
 def display_name(user):
     try:
         return user.profile.full_name or user.first_name
@@ -134,7 +142,6 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
-    
     last_message = None
     storage = messages.get_messages(request)
     messages_list = list(storage)
@@ -143,6 +150,33 @@ def logout_view(request):
     
     return render(request, 'Logedout.html', {
         'last_message': last_message,
+    })
+
+
+@login_required(login_url='/login/')
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not request.user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+        elif new_password != confirm_password:
+            messages.error(request, 'New passwords do not match.')
+        elif len(new_password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+        else:
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            request.session['password_changed'] = True
+            return redirect('change_password')
+
+    show_success = request.session.pop('password_changed', False)
+    return render(request, 'Change_password.html', {
+        'full_name': display_name(request.user),
+        'show_success': show_success,
     })
 
 
@@ -187,8 +221,10 @@ def new_complaint(request):
             user=request.user,
             category=category,
             description=description,
+            landmark=request.POST.get('landmark', '').strip(),
             latitude=latitude,
             longitude=longitude,
+            is_anonymous=request.POST.get('is_anonymous') == 'on',
         )
 
         for url in photo_urls:
@@ -209,6 +245,15 @@ def complaint_success(request, complaint_id):
     complaint = get_object_or_404(Complaint, complaint_id=complaint_id, user=request.user)
     messages.success(request, 'Complaint submitted successfully.')
     return render(request, 'Complained_Successfully.html', {
+        'complaint': complaint,
+    })
+
+
+@login_required(login_url='/login/')
+def complaint_status(request, complaint_id):
+    complaint = get_object_or_404(Complaint, complaint_id=complaint_id, user=request.user)
+    return render(request, 'Status_Result.html', {
+        'full_name': display_name(request.user),
         'complaint': complaint,
     })
 

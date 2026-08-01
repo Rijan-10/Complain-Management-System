@@ -26,11 +26,19 @@ class Complaint(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='complaints')
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     description = models.TextField()
+    landmark = models.CharField(max_length=200, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    is_anonymous = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def reporter_name(self):
+        if self.is_anonymous:
+            return 'Anonymous'
+        return self.user.email
 
     def save(self, *args, **kwargs):
         if not self.complaint_id:

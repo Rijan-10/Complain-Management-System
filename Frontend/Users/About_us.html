@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -178,7 +179,7 @@ body{
 <body>
     <header class="site-header">
       <div class="logo-section">
-        <img src="..\..\Photos\CMS_Logo.png" alt="Logo">
+        <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
         <div class="logo-text">
             <h1>KATHMANDU VALLEY</h1>
             <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
@@ -187,10 +188,10 @@ body{
       </div>
  
       <div class="buttons">
-        <button>Home</button>
-        <button>About</button>
-        <button>Contact Us</button>
-        <button>Login</button>
+        <button onclick="location.href='{% url 'home' %}'">Home</button>
+        <button onclick="location.href='{% url 'about' %}'">About</button>
+        <button onclick="location.href='{% url 'contact' %}'">Contact Us</button>
+        <button onclick="location.href='{% url 'login' %}'">Login</button>
       </div>
     </header>
  
@@ -201,7 +202,7 @@ body{
       <p>Our mission is to provide a user-friendly platform that ensures every complaint is addressed and resolved in a timely manner.</p>
     </div>
     <div class="about-image">
-      <img src="..\..\Photos\Screenshot_2026-07-16_122947-removebg-preview_upscayl_4x_digital-art-4x.png" alt="About us illustration">
+      <img src="{% static 'Screenshot_2026-07-16_122947-removebg-preview_upscayl_4x_digital-art-4x.png' %}" alt="About us illustration">
     </div>
   </section>
  
@@ -211,7 +212,7 @@ body{
  
   <section class="features">
     <div class="features-image-placeholder">
-      <img src ="..\..\Photos\User_About_Us.png" alt="feature">
+      <img src ="{% static 'User_About_Us.png' %}" alt="feature">
     </div>
   </section>
 </body>

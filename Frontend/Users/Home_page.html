@@ -283,10 +283,10 @@ body{
 </div>
 
 <div class="buttons">
-    <button onclick="location.href='/'">Home</button>
-    <button>About</button>
-    <button>Contact Us</button>
-    <button onclick="location.href='/login/'">Log in</button>
+    <button onclick="location.href='{% url 'home' %}'">Home</button>
+    <button onclick="location.href='{% url 'about' %}'">About</button>
+    <button onclick="location.href='{% url 'contact' %}'">Contact Us</button>
+    <button onclick="location.href='{% url 'login' %}'">Log in</button>
 </div>
 
 <section class="hero">

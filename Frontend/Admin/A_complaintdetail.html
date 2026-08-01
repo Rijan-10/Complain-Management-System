@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Complaint Details</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 .main-content{
@@ -330,7 +330,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Submitted by</span>
-                    <span class="info-value">{{ complaint.user.email }}</span>
+                    <span class="info-value">{{ complaint.reporter_name }}</span>
                 </div>
             </div>
   
@@ -364,6 +364,13 @@
         <div class="details-card">
   
             <div class="details-left">
+                {% if complaint.landmark %}
+                <div class="detail-block">
+                    <h4>Popular Landmark</h4>
+                    <p>{{ complaint.landmark }}</p>
+                </div>
+                {% endif %}
+
                 <div class="detail-block">
                     <h4>Description</h4>
                     <p>{{ complaint.description }}</p>

@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS My Complaint</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 /* Main Body */
@@ -173,7 +173,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{% url 'complaint_success' complaint.complaint_id %}" class="view-btn">View</a>
+                                <a href="{% url 'complaint_status' complaint.complaint_id %}" class="view-btn">View</a>
                             </td>
                         </tr>
                         {% endfor %}

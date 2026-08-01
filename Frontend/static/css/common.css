@@ -339,6 +339,72 @@ body{
     }
 }
 
+/* ---- Collapsible sidebar (icons only, expands on hover) ---- */
+
+.sidebar.collapsible{
+    width:78px;
+    padding:25px 12px;
+    overflow:hidden;
+    transition:width 0.3s ease;
+}
+
+.sidebar.collapsible .nav-item{
+    justify-content:center;
+    gap:0;
+    padding:14px 0;
+    margin-bottom:8px;
+}
+
+.sidebar.collapsible .nav-label{
+    max-width:0;
+    opacity:0;
+    white-space:nowrap;
+    overflow:hidden;
+    transition:max-width 0.3s ease, opacity 0.2s ease;
+}
+
+.sidebar.collapsible:hover,
+.sidebar.collapsible:focus-within{
+    width:270px;
+}
+
+.sidebar.collapsible:hover .nav-item,
+.sidebar.collapsible:focus-within .nav-item{
+    justify-content:flex-start;
+    gap:14px;
+    padding:14px 18px;
+}
+
+.sidebar.collapsible:hover .nav-label,
+.sidebar.collapsible:focus-within .nav-label{
+    max-width:200px;
+    opacity:1;
+}
+
+@media (max-width: 900px){
+    .sidebar.collapsible{
+        width:270px;
+        max-width:80vw;
+        padding:25px 15px;
+        padding-top:80px;
+    }
+
+    .sidebar.collapsible .nav-item{
+        justify-content:flex-start;
+        gap:14px;
+        padding:14px 18px;
+    }
+
+    .sidebar.collapsible .nav-label{
+        max-width:200px;
+        opacity:1;
+    }
+
+    .sidebar.collapsible:hover{
+        width:270px;
+    }
+}
+
 /* ---- Responsive tables ---- */
 
 .table-responsive{

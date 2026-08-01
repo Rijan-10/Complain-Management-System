@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Dashboard</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 /* ==========================
@@ -154,13 +154,19 @@
 
 /* Status */
 
-.status{
+.status-pending,
+.status-progress,
+.status-resolved,
+.status-closed{
     display:inline-block;
     min-width:120px;
     padding:10px 18px;
     border-radius:12px;
     color:white;
     font-weight:bold;
+    text-align:center;
+    cursor:default;
+    user-select:none;
 }
 
 .status-pending{
@@ -168,11 +174,11 @@
 }
 
 .status-progress{
-    background:#FF6A1A;
+    background:#FF7A1A;
 }
 
 .status-resolved{
-    background:#08B64B;
+    background:#0BC15D;
 }
 
 .status-closed{
@@ -280,7 +286,7 @@
 
                 {% if recent_complaints %}
                     {% for complaint in recent_complaints %}
-                    <tr onclick="window.location.href='{% url 'complaint_success' complaint.complaint_id %}'">
+                    <tr onclick="window.location.href='{% url 'complaint_status' complaint.complaint_id %}'">
                         <td data-label="Complaint ID">{{ complaint.complaint_id }}</td>
                         <td data-label="Category">{{ complaint.get_category_display }}</td>
                         <td data-label="Date">{{ complaint.created_at|date:"M d, Y" }}</td>

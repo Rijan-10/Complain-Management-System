@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin Dashboard</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 .main-content{
@@ -265,7 +265,7 @@
                         <tr onclick="window.location.href='{% url 'admin_complaint_detail' complaint.complaint_id %}'">
                             <td data-label="Complaint ID">{{ complaint.complaint_id }}</td>
                             <td data-label="Category">{{ complaint.get_category_display }}</td>
-                            <td data-label="Submitted by">{{ complaint.user.email }}</td>
+                            <td data-label="Submitted by">{{ complaint.reporter_name }}</td>
                             <td data-label="Date">{{ complaint.created_at|date:"M d, Y" }}</td>
                             <td data-label="Status">
                                 <span class="status-badge status-{{ complaint.status }}">

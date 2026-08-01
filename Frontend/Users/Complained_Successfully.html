@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS New Complaints</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
 
 <style>
 /* ---- Added: main content area next to sidebar ---- */
@@ -111,7 +111,7 @@
 {% include 'partials/header.html' %}
 
 <div class="wrapper">
-    {% include 'partials/user_sidebar.html' with active='new_complaint' %}
+    {% include 'partials/user_sidebar.html' with active='my_complaints' %}
 
     <div class="main-content">
         <div class="success-card">
