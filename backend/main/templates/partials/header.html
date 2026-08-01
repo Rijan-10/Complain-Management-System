@@ -57,6 +57,8 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function(){
+
 (function(){
     var userMenu = document.getElementById('userMenu');
     var userMenuToggle = document.getElementById('userMenuToggle');
@@ -74,7 +76,7 @@
 
 (function(){
     var toggle = document.getElementById('mobileMenuToggle');
-    var sidebar = document.querySelector('.sidebar');
+    var sidebar = document.getElementById('sidebar');
     var overlay = document.getElementById('sidebarOverlay');
     if(!toggle || !sidebar || !overlay){ return; }
     function openMenu(){
@@ -144,4 +146,6 @@
         if(e.key === 'Escape'){ closeLogoutModal(); }
     });
 })();
+
+});
 </script>

@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS New Complaints</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=11">
 
 <style>
 .main-content{
@@ -36,31 +36,35 @@
  
 .status-table{
     width:100%;
-    border-collapse:collapse;
 }
- 
+
 .status-table tr{
+    display:flex;
+    align-items:center;
     border-bottom:1px solid #E4E7EB;
 }
- 
+
 .status-table tr:last-child{
     border-bottom:none;
 }
- 
+
 .status-table td{
     padding:16px 25px;
     font-size:15px;
-    vertical-align:middle;
 }
- 
+
 .status-table td.label{
-    width:200px;
+    flex:0 0 200px;
     color:#555;
     font-weight:bold;
+    white-space:nowrap;
 }
- 
+
 .status-table td.value{
+    flex:1;
+    min-width:0;
     color:#1A1A1A;
+    word-break:break-word;
 }
  
 /* Base badge: grey — this is also the default/no-data state */
@@ -113,8 +117,38 @@
         width:140px;
     }
 }
- 
 
+@media (max-width:600px){
+    .main-content{
+        padding:16px;
+    }
+    .status-card-header{
+        padding:14px 16px;
+    }
+    .status-card-header h2{
+        font-size:16px;
+    }
+    .status-table td{
+        padding:8px 10px;
+        font-size:13px;
+    }
+    .status-table td.label{
+        flex:0 0 105px;
+        padding-right:8px;
+        font-size:12px;
+        font-weight:700;
+        color:#666;
+    }
+    .status-table td.value{
+        flex:1;
+        min-width:0;
+    }
+    .status-badge{
+        min-width:80px;
+        font-size:12px;
+        height:24px;
+    }
+}
 </style>
 </head>
 <body>

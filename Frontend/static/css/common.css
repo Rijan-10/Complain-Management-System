@@ -491,20 +491,98 @@ body{
 
 /* ---- Responsive header ---- */
 
-@media (max-width: 480px){
+@media (max-width: 600px){
     .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
+        flex-wrap:nowrap;
+        min-height:0;
+        padding:10px 10px;
+        gap:8px;
+    }
+    .top-header > div:first-child{
+        flex:1;
+        min-width:0;
+        gap:8px;
     }
     .logo-section{
-        position:static;
-        width:100%;
+        width:auto;
         max-width:100%;
-        margin-bottom:10px;
+        min-width:0;
+        flex:1;
+        margin-bottom:0;
+    }
+    .logo-section img{
+        width:36px;
+        margin-right:8px;
+        flex-shrink:0;
+    }
+    .logo-text{
+        min-width:0;
+    }
+    .logo-text h1{
+        font-size:10px;
+        margin-bottom:2px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+    .logo-text h2{
+        font-size:7px;
+        margin-bottom:3px;
+        letter-spacing:0.5px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+    .logo-text p{
+        display:none;
+    }
+    .user-menu{
+        flex-shrink:0;
     }
     .user-info{
-        margin-left:auto;
+        flex-shrink:0;
+        gap:7px;
+        padding:5px 8px;
+    }
+    .user-info span{
+        font-size:13px;
+        white-space:nowrap;
+    }
+    .profile-placeholder{
+        width:32px;
+        height:32px;
+    }
+    .mobile-menu-toggle{
+        flex-shrink:0;
+    }
+}
+
+@media (max-width: 480px){
+    .top-header{
+        flex-wrap:nowrap;
+        height:auto;
+        padding:10px 10px;
+    }
+    .logo-section img{
+        width:36px;
+        margin-right:8px;
+    }
+    .logo-text h1{
+        font-size:9px;
+    }
+    .logo-text h2{
+        font-size:6px;
+    }
+    .user-info span{
+        font-size:12px;
+    }
+    .user-info{
+        gap:6px;
+        padding:5px 8px;
+    }
+    .profile-placeholder{
+        width:30px;
+        height:30px;
     }
 }
 
@@ -683,3 +761,222 @@ body{
         transform:scale(1) translateY(0);
     }
 }
+
+/* ---- Global mobile font & image sizing ----
+   !important is needed because every admin/user page loads this
+   file first and then its own inline <style> later in <head>,
+   which would otherwise win the cascade. */
+
+@media (max-width:600px){
+    body{
+        font-size:14px !important;
+    }
+
+    .main-content{
+        padding:20px 16px !important;
+    }
+
+    .page-title{
+        font-size:22px !important;
+    }
+
+    .top-header .logo-text h1{
+        font-size:14px !important;
+    }
+    .top-header .logo-text h2{
+        font-size:10px !important;
+    }
+    .top-header .logo-text p{
+        font-size:10px !important;
+    }
+    .user-info span{
+        font-size:13px !important;
+    }
+
+    .nav-item{
+        font-size:14px !important;
+        padding:13px 16px !important;
+    }
+
+    .card{
+        padding:16px !important;
+    }
+    .card h3,
+    .card-title{
+        font-size:16px !important;
+    }
+    .card-number{
+        font-size:26px !important;
+    }
+    .table-header h2{
+        font-size:16px !important;
+    }
+    .complaint-table th,
+    .complaint-table td{
+        font-size:12px !important;
+        padding:10px !important;
+    }
+
+    .stat-value{
+        font-size:24px !important;
+    }
+    .stat-label,
+    .stat-sub,
+    .stat-change{
+        font-size:12px !important;
+    }
+
+    .section-title{
+        font-size:14px !important;
+    }
+    .summary-title{
+        font-size:16px !important;
+    }
+    .info-text h3{
+        font-size:16px !important;
+    }
+
+    .filter-label{
+        font-size:12px !important;
+    }
+    .filter-input,
+    .filter-select{
+        font-size:14px !important;
+        height:42px !important;
+    }
+
+    .action-btn,
+    .primary-btn,
+    .btn-solid,
+    .btn-outline,
+    .login-btn,
+    .update-btn,
+    .create-btn,
+    .add-admin-btn,
+    .submit-btn,
+    .filter-btn,
+    .view-all-btn,
+    .view-btn,
+    .pw-set-btn,
+    .pw-cancel-btn,
+    .modal-btn,
+    .remove-photo-btn{
+        font-size:13px !important;
+        padding:10px 16px !important;
+    }
+
+    table th,
+    table td{
+        font-size:13px !important;
+    }
+
+    .status-badge{
+        font-size:11px !important;
+        padding:4px 10px !important;
+    }
+
+    .timeline-text{
+        font-size:13px !important;
+    }
+    .timeline-datetime{
+        font-size:12px !important;
+    }
+    .detail-label,
+    .info-label,
+    .profile-label,
+    .activity-label{
+        font-size:12px !important;
+    }
+    .detail-value,
+    .info-value,
+    .profile-value,
+    .activity-value{
+        font-size:14px !important;
+    }
+
+    .dropdown-item,
+    .toggle-btn{
+        font-size:13px !important;
+    }
+    .modal-box h3,
+    .modal-title{
+        font-size:17px !important;
+    }
+    .modal-box p{
+        font-size:13px !important;
+    }
+    .empty-state,
+    .empty-placeholder{
+        font-size:13px !important;
+    }
+
+    .status-card-header h2{
+        font-size:16px !important;
+    }
+    .success-card h1{
+        font-size:22px !important;
+    }
+    .success-card p{
+        font-size:13px !important;
+    }
+    .complaint-id{
+        font-size:24px !important;
+    }
+    .logout-content h1{
+        font-size:26px !important;
+    }
+    .logout-buttons button{
+        font-size:16px !important;
+    }
+    .home-icon{
+        font-size:26px !important;
+    }
+}
+
+/* ---- User Profile page (mobile only) ---- */
+
+@media (max-width:600px){
+    .profile-layout .profile-card{
+        padding:36px 24px !important;
+        border-radius:16px;
+        width:100%;
+    }
+    .profile-layout{
+        gap:20px;
+    }
+    .profile-card .profile-body{
+        gap:24px;
+    }
+    .profile-card .profile-fields{
+        width:100%;
+    }
+    .profile-card .profile-info-row{
+        padding-bottom:18px;
+        margin-bottom:22px;
+    }
+    .profile-card .profile-label{
+        font-size:13px !important;
+    }
+    .profile-card .profile-value{
+        font-size:16px !important;
+    }
+    .profile-card .avatar-placeholder{
+        width:130px;
+        height:130px;
+    }
+    .profile-card .change-password-link{
+        margin-top:10px;
+    }
+}
+
+/* Images never overflow the screen on small devices */
+.card img,
+.attachment-box img,
+.main-content img,
+.profile-picture-col img,
+.image-placeholder img{
+    max-width:100%;
+    height:auto;
+}
+
+

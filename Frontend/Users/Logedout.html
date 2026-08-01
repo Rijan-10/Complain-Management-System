@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kathmandu Valley CMS</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=9">
 
 <style>
 *{
@@ -203,7 +203,7 @@ body{
 .logout-image{
     width:250px;
     height:250px;
-}add
+}
 
 .logout-content h1{
     font-size:34px;
@@ -220,6 +220,67 @@ body{
     vertical-align:middle;
 }
 
+}
+
+@media(max-width:600px){
+    .logo-section{
+        position:static;
+        width:100%;
+        max-width:100%;
+        padding:16px 16px 0;
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+    }
+    .logo-section img{
+        width:60px;
+        margin-right:0;
+        margin-bottom:6px;
+    }
+    .logo-text h1{
+        font-size:14px;
+        margin-bottom:4px;
+    }
+    .logo-text h2{
+        font-size:10px;
+        margin-bottom:6px;
+    }
+    .logo-text p{
+        font-size:10px;
+    }
+
+    .buttons{
+        position:static;
+        justify-content:center;
+        flex-wrap:wrap;
+        gap:4px;
+        padding:12px 16px;
+    }
+    .buttons button{
+        font-size:12px;
+        padding:5px 9px;
+    }
+
+    .logout-container{
+        margin-top:20px;
+        width:92%;
+        padding:28px 16px;
+        gap:22px;
+    }
+    .logout-image{
+        width:170px;
+        height:170px;
+    }
+    .logout-image img{
+        max-width:170px;
+    }
+    .logout-content h1{
+        margin-bottom:24px;
+    }
+    .logout-buttons button{
+        width:230px;
+        padding:14px;
+    }
 }
 </style>
 </head>

@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS New Complaints</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=9">
 
 <style>
 /* ---- Added: main content area next to sidebar ---- */
@@ -102,13 +102,45 @@
         padding:35px 22px;
     }
 }
- 
 
+@media (max-width:600px){
+    .main-content{
+        padding:16px;
+    }
+    .success-card{
+        padding:26px 18px;
+    }
+    .success-icon{
+        margin-bottom:16px;
+    }
+    .success-icon svg{
+        width:76px;
+        height:76px;
+    }
+    .success-card p{
+        font-size:13px;
+        line-height:1.5;
+    }
+    .complaint-id{
+        margin:10px 0 16px;
+    }
+}
 </style>
 </head>
 <body>
  
 {% include 'partials/header.html' %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="toast-overlay">
+            <div class="toast-badge toast-{{ message.tags }}">
+                <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                <span class="toast-text">{{ message }}</span>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <div class="wrapper">
     {% include 'partials/user_sidebar.html' with active='my_complaints' %}

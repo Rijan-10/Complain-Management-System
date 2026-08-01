@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS My Profile</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=9">
 
 <style>
 /* ================= My Profile page styles ================= */
@@ -282,6 +282,42 @@
     .side-column{ width:100%; }
     .profile-body{ flex-direction:column; align-items:center; text-align:center; }
     .change-password-link{ align-self:center; }
+}
+
+@media (max-width:600px){
+    .profile-card{
+        padding:34px 24px !important;
+        border-radius:16px;
+    }
+    .profile-layout{
+        gap:20px;
+    }
+    .profile-body{
+        gap:24px;
+        align-items:center;
+        text-align:center;
+    }
+    .profile-fields{
+        width:100%;
+        align-items:center;
+    }
+    .profile-info-row{
+        padding-bottom:18px;
+        margin-bottom:22px;
+    }
+    .profile-label{
+        font-size:13px !important;
+    }
+    .profile-value{
+        font-size:16px !important;
+    }
+    .avatar-placeholder{
+        width:130px;
+        height:130px;
+    }
+    .change-password-link{
+        margin-top:10px;
+    }
 }
 </style>
 </head>

@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Complaint Details</title>
-<link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=11">
 
 <style>
 .main-content{
@@ -368,6 +368,72 @@
 
 .confirm-btn.delete:hover{
     background:#B91C1C;
+}
+
+@media (max-width:600px){
+    .main-content{
+        padding:20px 16px;
+    }
+    .page-title{
+        font-size:20px;
+    }
+    .top-action-row{
+        flex-wrap:wrap;
+        gap:10px;
+    }
+
+    /* Info card stacks vertically */
+    .info-card{
+        flex-direction:column;
+        padding:18px;
+        gap:16px;
+        margin-bottom:16px;
+    }
+    .info-divider{
+        display:none;
+    }
+    .info-col{
+        gap:12px;
+    }
+    .info-row{
+        gap:12px;
+    }
+    .info-label{
+        width:100px;
+        font-size:13px;
+    }
+    .info-value{
+        font-size:13px;
+        overflow-wrap:break-word;
+    }
+
+    /* Details card stacks vertically */
+    .details-card{
+        flex-direction:column;
+        padding:20px 18px;
+        gap:24px;
+    }
+    .details-right{
+        padding-left:0;
+        border-left:none;
+        border-top:1px solid #E4E7EB;
+        padding-top:20px;
+    }
+    .details-actions{
+        flex-wrap:wrap;
+    }
+    .attachment-box{
+        max-width:100%;
+        height:160px;
+    }
+    .back-btn{
+        padding:0 16px;
+        font-size:13px;
+    }
+    .status-badge{
+        font-size:12px;
+        padding:8px 16px;
+    }
 }
 </style>
 </head>

@@ -284,7 +284,6 @@ def new_complaint(request):
 @login_required(login_url='/login/')
 def complaint_success(request, complaint_id):
     complaint = get_object_or_404(Complaint, complaint_id=complaint_id, user=request.user)
-    messages.success(request, 'Complaint submitted successfully.')
     return render(request, 'Complained_Successfully.html', {
         'complaint': complaint,
     })

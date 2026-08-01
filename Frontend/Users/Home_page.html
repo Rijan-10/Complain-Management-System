@@ -18,22 +18,27 @@ body{
     background:white;
 }
 
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
-
+.site-header{
     display:flex;
     align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    padding:15px 24px;
+    border-bottom:1px solid #e5e7eb;
+}
 
-    width:420px;
-    max-width: calc(100vw - 240px);
+.logo-section{
+    display:flex;
+    align-items:center;
+    min-width:0;
 }
 
 .logo-section img{
-    width:96px;
+    width:88px;
     height:auto;
     margin-right:15px;
+    flex-shrink:0;
 }
 
 .logo-text h1{
@@ -60,12 +65,9 @@ body{
 }
 
 .buttons{
-    position: absolute;
-    top: 30px;
-    right: 20px;
-
     display: flex;
     gap: 6px;
+    flex-wrap:wrap;
 }
 
 .buttons button{
@@ -87,19 +89,21 @@ body{
 
 .hero{
     width:100%;
-    max-width:1400px;
+    max-width:1200px;
     margin:0 auto;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:60px;
-    padding:120px 80px 60px;
+    gap:48px;
+    padding:80px 40px 60px;
+    flex-wrap:wrap;
 }
 
 /* LEFT SIDE */
 
 .hero-left{
-    flex:0 0 42%;
+    flex:1 1 45%;
+    min-width:300px;
 }
 
 .hero-left h1{
@@ -125,24 +129,16 @@ body{
 
 .hero-buttons{
     display:flex;
-    gap:25px;    width:180px;
-    height:55px;
-    border-radius:8px;
-    font-size:18px;
-    margin-top:45px;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-top:40px;
 }
 
 .hero-buttons button{
-    padding:20px 45px;    /* Top/Bottom  Left/Right */
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
+    padding:16px 34px;
     white-space:nowrap;
-    font-size:18px;
+    font-size:17px;
     font-weight:bold;
-
     border-radius:10px;
 }
 
@@ -170,15 +166,86 @@ body{
     background:#f5f5f5;
 }
 
-/* RIGHT SIDE */
-
-.hero-right{
-    width:50%;
-    min-height:450px;
-
+.image{
+    flex:1 1 50%;
+    min-width:280px;
     display:flex;
     justify-content:center;
     align-items:center;
+}
+
+.image img{
+    width:100%;
+    max-width:560px;
+    height:auto;
+    display:block;
+}
+
+/* Responsive */
+@media (max-width:900px){
+    .hero{
+        flex-direction:column;
+        gap:36px;
+        padding:60px 24px 40px;
+        text-align:center;
+    }
+    .hero-left p{
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .hero-buttons{
+        justify-content:center;
+    }
+}
+
+@media (max-width:600px){
+    .site-header{
+        justify-content:center;
+        text-align:center;
+    }
+    .site-header .logo-text h1{ font-size:13px; }
+    .site-header .logo-text h2{ font-size:9px; }
+    .site-header .logo-text p{ font-size:9px; }
+    .hero-left h1{
+        font-size:26px;
+    }
+    .hero-left p{
+        font-size:15px;
+        line-height:1.5;
+    }
+    .hero-buttons button{
+        padding:12px 22px;
+        font-size:14px;
+    }
+    .image img{
+        max-width:320px;
+    }
+    .feature h3{
+        font-size:20px;
+    }
+    .feature p{
+        font-size:14px;
+    }
+    .features-heading h2{
+        font-size:22px;
+    }
+}
+
+@media (max-width:480px){
+    .site-header{
+        justify-content:center;
+        text-align:center;
+    }
+    .hero-left h1{
+        font-size:24px;
+    }
+    .hero-buttons button{
+        padding:12px 20px;
+        font-size:14px;
+    }
+    .image img{
+        max-width:280px;
+    }
 }
 
 .features{
@@ -248,46 +315,29 @@ body{
 
 }
 
-.image{
-    flex:0 0 58%;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-}
-
-.image img{
-    width:100%;
-    max-width:650px;
-    height:auto;
-    display:block;
-}
-
-.image img{
-    width:400px;   /* Adjust size as needed */
-    height:auto;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<div class="logo-section">
-    <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
-    <div class="logo-text">
-        <h1>KATHMANDU VALLEY</h1>
-        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-        <p>Report, Track and Resolve Together for a Better Valley</p>
+<header class="site-header">
+    <div class="logo-section">
+        <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
+        <div class="logo-text">
+            <h1>KATHMANDU VALLEY</h1>
+            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+            <p>Report, Track and Resolve Together for a Better Valley</p>
+        </div>
     </div>
-</div>
 
-<div class="buttons">
-    <button onclick="location.href='{% url 'home' %}'">Home</button>
-    <button onclick="location.href='{% url 'about' %}'">About</button>
-    <button onclick="location.href='{% url 'contact' %}'">Contact Us</button>
-    <button onclick="location.href='{% url 'login' %}'">Log in</button>
-</div>
+    <div class="buttons">
+        <button onclick="location.href='{% url 'home' %}'">Home</button>
+        <button onclick="location.href='{% url 'about' %}'">About</button>
+        <button onclick="location.href='{% url 'contact' %}'">Contact Us</button>
+        <button onclick="location.href='{% url 'login' %}'">Log in</button>
+    </div>
+</header>
 
 <section class="hero">
 
@@ -312,7 +362,7 @@ body{
     </div>
 
     <div class="image">
-        <img src="https://raw.githubusercontent.com/Rijan-10/Complain-Management-System/main/Photos/Screenshot_2026-07-15_155537-removebg-preview_upscayl_4x_digital-art-4x.png">
+        <img src="{% static 'Screenshot_2026-07-15_155537-removebg-preview_upscayl_4x_digital-art-4x.png' %}" alt="Complaint tracking illustration">
     </div>  
 
 </section>
