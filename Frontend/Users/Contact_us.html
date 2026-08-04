@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,22 +18,27 @@ body{
     background:white;
 }
 
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
-
+.site-header{
     display:flex;
     align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    padding:15px 24px;
+    border-bottom:1px solid var(--border);
+}
 
-    width:420px;
-    max-width: calc(100vw - 240px);
+.logo-section{
+    display:flex;
+    align-items:center;
+    min-width:0;
 }
 
 .logo-section img{
-    width:96px;
+    width:88px;
     height:auto;
     margin-right:15px;
+    flex-shrink:0;
 }
 
 .logo-text h1{
@@ -59,12 +65,9 @@ body{
 }
 
 .buttons{
-    position: absolute;
-    top: 30px;
-    right: 20px;
-
     display: flex;
     gap: 6px;
+    flex-wrap:wrap;
 }
 
 .buttons button{
@@ -97,14 +100,10 @@ body{
     --red:#e0393e;
     --border:#e3e6ec;
     --text-muted:#5b6577;
- 
-    /* Height reserved so page content clears the absolutely-positioned header.
-       Tweak this one number if your real logo.png is taller/shorter than assumed. */
-    --header-clearance:130px;
 }
  
 .page-content{
-    padding-top:var(--header-clearance);
+    padding-top:48px;
     padding-left:32px;
     padding-right:32px;
     padding-bottom:72px;
@@ -226,7 +225,7 @@ body{
 .info-column{ display:flex; flex-direction:column; gap:24px; }
  
 .image-placeholder{
-    min-height:260px;
+    min-height:200px;
     background:#fbfcfe;
     display:flex;
     align-items:center;
@@ -234,6 +233,12 @@ body{
     text-align:center;
     color:#93a0b5;
     padding:20px;
+}
+.image-placeholder img{
+    width:100%;
+    max-width:520px;
+    height:auto;
+    object-fit:contain;
 }
 .image-placeholder .ph-inner{ max-width:260px; }
 .image-placeholder svg{ width:40px; height:40px; margin-bottom:10px; opacity:.7; }
@@ -284,26 +289,42 @@ body{
     .contact-grid{ grid-template-columns:1fr; }
 }
 @media (max-width:700px){
-    :root{ --header-clearance:230px; } /* header text wraps onto more lines on narrow screens */
+    .page-content{ padding-top:32px; }
+    .page-heading h2{ font-size:22px; }
+    .page-heading p{ font-size:13px; }
 }
 @media (max-width:520px){
     .info-grid{ grid-template-columns:1fr; }
     .page-content{ padding-left:18px; padding-right:18px; }
-    :root{ --header-clearance:250px; }
+    .contact-form input,
+    .contact-form textarea{ font-size:15px; }
+    .contact-form label{ font-size:12px; }
+    .contact-form .submit-btn{ font-size:14px; }
+    .info-item h4{ font-size:.8rem; }
+    .info-item p{ font-size:.75rem; }
+    .image-placeholder img{ max-width:100%; }
 }
 </style>
 </head>
 <body>
 
-<div class="logo-section">
-   <img src="../../Photos/CMS_Logo.png" alt="Logo">
-    <div class="logo-text">
-        <h1>KATHMANDU VALLEY</h1>
-        <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-        <p>Report, Track and Resolve Together for a Better Valley</p>
+<header class="site-header">
+    <div class="logo-section">
+        <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
+        <div class="logo-text">
+            <h1>KATHMANDU VALLEY</h1>
+            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+            <p>Report, Track and Resolve Together for a Better Valley</p>
+        </div>
     </div>
-</div>
 
+    <div class="buttons">
+        <button onclick="location.href='{% url 'home' %}'">Home</button>
+        <button onclick="location.href='{% url 'about' %}'">About</button>
+        <button onclick="location.href='{% url 'contact' %}'">Contact Us</button>
+        <button onclick="location.href='{% url 'login' %}'">Log in</button>
+    </div>
+</header>
 <div class="buttons">
     <button>Home</button>
     <button>About</button>
@@ -354,7 +375,7 @@ body{
  
             <!-- Reserved space for the illustration image -->
             <div class="image-placeholder">
-    <img src="..\..\Photos\User_Contact_Us.png" alt="Illustration">
+    <img src="{% static 'User_Contact_Us.png' %}" alt="Illustration">
 </div>
  
             <section class="info-card">

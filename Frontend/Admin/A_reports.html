@@ -1,178 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Report and Analytics</title>
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=11">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    background:white;
-}
-
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
-
-    display:flex;
-    align-items:center;
-
-    width:420px;
-    max-width: calc(100vw - 160px);
-}
-
-@media (max-width: 480px){
-    .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
-    }
-    .logo-section{
-        position:static;
-        width:100%;
-        max-width:100%;
-        margin-bottom:10px;
-    }
-    .user-info{
-        margin-left:auto;
-    }
-}
-
-.logo-section img{
-    width:96px;
-    height:auto;
-    margin-right:15px;
-}
-
-.logo-text h1{
-    color:#0B2D6D;
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:8px;
-}
-
-.logo-text h2{
-    color:#555;
-    font-size:11px;
-    font-weight:500;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:10px;
-}
-
-.logo-text p{
-    color:#1E64C8;
-    font-size:11px;
-    font-weight:600;
-    font-weight:bold;
-}
-
-.top-header{
-    position:relative;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    height:110px;
-    padding:0 30px;
-    background:#F7F8FA;
-    border-bottom:1px solid #E4E7EB;
-}
-
-.user-info{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
-
-.user-info:hover{
-    background:#E8F0FE;
-}
-
-.profile-placeholder{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#E4E8EE;
-    border:1px solid #C9CFD8;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
-
-.user-info span{
-    font-size:15px;
-    color:#333;
-}
-
-.dropdown-arrow{
-    flex-shrink:0;
-}
-
-.wrapper{
-    display:flex;
-    align-items:flex-start;
-}
-
-.sidebar{
-    width:270px;
-    background:white;
-    border-right:1px solid #E4E7EB;
-    padding:25px 15px;
-}
-
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:15px;
-    color:#1A1A1A;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-    text-decoration:none;
-}
-
-.nav-item svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-    flex-shrink:0;
-}
-
-.nav-item:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
-
-.nav-item:hover svg{
-    stroke:#1E64C8;
-}
-
-.nav-item.active{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
-
-.nav-item.active svg{
-    stroke:#1E64C8;
-}
-
 .main-content{
     flex:1;
     padding:30px 40px;
@@ -405,6 +240,7 @@ body{
 }
 
 .legend-swatch.total{ background:#1E64C8; }
+.legend-swatch.pending{ background:#8A93A3; }
 .legend-swatch.progress{ background:#E8720C; }
 .legend-swatch.resolved{ background:#1F8A4C; }
 .legend-swatch.closed{ background:#1A1A1A; }
@@ -424,11 +260,72 @@ body{
 }
 
 @media (max-width:600px){
+    .main-content{
+        padding:20px 16px;
+    }
+    .page-title{
+        font-size:20px;
+        margin-bottom:18px;
+    }
+
+    /* Report Type + Date Range share the same line */
+    .controls-row{
+        gap:10px;
+        margin-bottom:18px;
+    }
+    .control-group{
+        flex:1 1 calc(50% - 5px);
+        min-width:0;
+    }
+    .control-group select,
+    .control-group input[type="date"]{
+        min-width:0;
+        width:100%;
+        height:40px;
+        font-size:13px;
+        padding:0 30px 0 12px;
+        background-position:right 8px center;
+    }
+    .custom-date-row{
+        flex:1 1 100%;
+        flex-wrap:wrap;
+    }
+    .custom-date-row input[type="date"]{
+        flex:1;
+        min-width:0;
+    }
+    .btn-solid{
+        flex:1 1 100%;
+        justify-content:center;
+        height:42px;
+    }
+
+    /* Smaller stat cards */
     .stats-row{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(2, 1fr);
+        gap:12px;
+        margin-bottom:18px;
+    }
+    .stat-card{
+        padding:14px;
+        gap:6px;
+    }
+    .stat-label{
+        font-size:13px;
+    }
+    .stat-value{
+        font-size:24px;
     }
     .chart-card{
-        padding-bottom:150px;
+        min-width:0;
+        padding:18px 14px;
+    }
+    .chart-title{
+        font-size:14px;
+        margin-bottom:12px;
+    }
+    .chart-canvas-wrap{
+        height:220px;
     }
     .donut-legend{
         position:static;
@@ -437,90 +334,168 @@ body{
         margin-top:20px;
     }
     .donut-canvas-wrap{
-        margin-right:0;
+        margin:0 auto;
+        width:180px;
+        height:180px;
+    }
+}
+
+/* ---- Print styles ---- */
+@media print{
+    .buttons,
+    .sidebar,
+    .controls-row,
+    .top-header,
+    .sidebar-overlay,
+    .mobile-menu-toggle{
+        display:none !important;
+    }
+    .wrapper{
+        display:block !important;
+    }
+    .main-content{
+        padding:10px !important;
+        background:white !important;
+        min-height:0 !important;
+    }
+    .page-title{
+        font-size:22px !important;
+        margin-bottom:14px !important;
+    }
+    .stats-row{
+        grid-template-columns:repeat(4, 1fr) !important;
+        gap:14px !important;
+        margin-bottom:18px !important;
+    }
+    .stat-card{
+        border:1px solid #ccc !important;
+        border-radius:6px !important;
+        box-shadow:none !important;
+        padding:14px 16px !important;
+        break-inside:avoid;
+    }
+    .stat-label{
+        font-size:12px !important;
+        margin-bottom:4px !important;
+    }
+    .stat-value{
+        font-size:24px !important;
+    }
+    .charts-row{
+        display:flex !important;
+        flex-direction:column !important;
+        gap:16px !important;
+    }
+    .chart-card{
+        border:1px solid #ccc !important;
+        border-radius:6px !important;
+        box-shadow:none !important;
+        padding:16px 20px !important;
+        break-inside:avoid;
+        margin-bottom:0 !important;
+        flex:1 1 100% !important;
+        min-width:0 !important;
+    }
+    .chart-title{
+        font-size:15px !important;
+        margin-bottom:10px !important;
+    }
+    .chart-canvas-wrap{
+        height:330px !important;
+    }
+    .chart-canvas-wrap canvas{
+        max-width:100% !important;
+        max-height:330px !important;
+    }
+    .donut-wrap{
+        display:flex !important;
+        flex-direction:row !important;
+        align-items:center !important;
+        justify-content:center !important;
+        gap:45px !important;
+        height:300px !important;
+    }
+    .donut-canvas-wrap{
+        width:220px !important;
+        height:220px !important;
+        margin-right:0 !important;
+        flex-shrink:0 !important;
+        overflow:hidden !important;
+    }
+    .donut-canvas-wrap canvas{
+        width:220px !important;
+        height:220px !important;
+        max-width:220px !important;
+        max-height:220px !important;
+    }
+    .donut-legend{
+        position:static !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:flex-start !important;
+        text-align:left !important;
+        margin-top:0 !important;
+        gap:12px !important;
+        right:auto !important;
+        bottom:auto !important;
+    }
+    .legend-item{
+        font-size:13px !important;
+    }
+    .legend-swatch{
+        width:14px !important;
+        height:14px !important;
+    }
+    body{
+        font-size:12px;
+        margin:0 !important;
+    }
+    @page{
+        size:A4;
+        margin:12mm;
     }
 }
 </style>
 </head>
 <body>
 
-<div class="top-header">
-    <div class="logo-section">
-        <img src="..\..\Photos\CMS_Logo.png" alt="Logo">
-        <div class="logo-text">
-            <h1>KATHMANDU VALLEY</h1>
-            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-            <p>Report, Track and Resolve Together for a Better Valley</p>
-        </div>
-    </div>
-
-    <div class="user-info">
-        <div class="profile-placeholder">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-        </div>
-        <span>Admin CMS</span>
-        <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
-</div>
+{% include 'partials/header.html' %}
 
 <div class="wrapper">
-    <div class="sidebar">
-        <a href="Dashboard.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-            Dashboard
-        </a>
-        <a href="Users.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5S15.5 16.4 15.5 20"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 13.2c2.9.4 5 2.7 5 6.8"/></svg>
-            Users
-        </a>
-        <a href="Complaints.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-            Complaints
-        </a>
-        <a href="Reports.html" class="nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 12h3M8 16h8M8 8h8"/></svg>
-            Reports
-        </a>
-        <a href="Change Password.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-            Change Password
-        </a>
-        <a href="Profile.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-            Profile
-        </a>
-    </div>
+    {% include 'partials/admin_sidebar.html' with active='reports' %}
 
     <div class="main-content">
 
         <h1 class="page-title">Report and Analytics</h1>
 
         <!-- ===================== CONTROLS ====================== -->
-        <div class="controls-row">
+        <form class="controls-row" id="reportFilterForm" method="get" action="{% url 'admin_reports' %}">
 
             <div class="control-group">
                 <label for="reportTypeSelect">Report Type</label>
-                <select id="reportTypeSelect">
-                    <option value="complaints-overview">Complaints Overview</option>
-                    
+                <select id="reportTypeSelect" name="category">
+                    <option value="">All Categories</option>
+                    {% for value, label in category_choices %}
+                        <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
             <div class="control-group">
                 <label for="dateRangeSelect">Date Range</label>
-                <select id="dateRangeSelect">
-                    <option value="">Select Date Range</option>
-                    <option value="today">Today</option>
-                    <option value="last7">Last 7 Days</option>
-                    <option value="last30">Last 30 Days</option>
-                    <option value="custom">Custom Date</option>
+                <select id="dateRangeSelect" name="date_range">
+                    <option value="">All Date Range</option>
+                    <option value="today" {% if date_range == 'today' %}selected{% endif %}>Today</option>
+                    <option value="last7" {% if date_range == 'last7' %}selected{% endif %}>Last 7 Days</option>
+                    <option value="last30" {% if date_range == 'last30' %}selected{% endif %}>Last 30 Days</option>
+                    <option value="custom" {% if date_range == 'custom' %}selected{% endif %}>Custom Date</option>
                 </select>
             </div>
 
-            <div class="control-group custom-date-row" id="customDateRow">
-                <input type="date" id="customFromDate">
+            <div class="control-group custom-date-row {% if date_range == 'custom' %}show{% endif %}" id="customDateRow">
+                <input type="date" id="customFromDate" name="from" value="{{ from_date }}">
                 <span>to</span>
-                <input type="date" id="customToDate">
+                <input type="date" id="customToDate" name="to" value="{{ to_date }}">
             </div>
 
             <button type="button" class="btn-solid" id="generateReportBtn">
@@ -528,12 +503,7 @@ body{
                 Generate Report
             </button>
 
-            <button type="button" class="btn-solid" id="exportBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Export
-            </button>
-
-        </div>
+        </form>
 
         <!-- ===================== STAT CARDS ====================== -->
         <div class="stats-row">
@@ -541,28 +511,28 @@ body{
             <div class="stat-card total">
                 <span class="stat-label">Total Complaints</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="totalComplaintsValue"><!-- {{ total_complaints }} --></span>
+                    <span class="stat-value">{{ total_complaints }}</span>
                 </div>
             </div>
 
             <div class="stat-card progress">
                 <span class="stat-label">In Progress</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="inProgressValue"><!-- {{ in_progress_count }} --></span>
+                    <span class="stat-value">{{ in_progress_count }}</span>
                 </div>
             </div>
 
             <div class="stat-card resolved">
                 <span class="stat-label">Resolved</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="resolvedValue"><!-- {{ resolved_count }} --></span>
+                    <span class="stat-value">{{ resolved_count }}</span>
                 </div>
             </div>
 
             <div class="stat-card closed">
                 <span class="stat-label">Closed</span>
                 <div class="stat-value-row">
-                    <span class="stat-value" id="closedValue"><!-- {{ closed_count }} --></span>
+                    <span class="stat-value">{{ closed_count }}</span>
                 </div>
             </div>
 
@@ -587,8 +557,8 @@ body{
                     </div>
                     <div class="donut-legend">
                         <div class="legend-item">
-                            <span class="legend-swatch total"></span>
-                            Total Complaints <span class="legend-percent" id="totalPercentLabel"></span>
+                            <span class="legend-swatch pending"></span>
+                            Pending <span class="legend-percent" id="pendingPercentLabel"></span>
                         </div>
                         <div class="legend-item">
                             <span class="legend-swatch progress"></span>
@@ -613,41 +583,46 @@ body{
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
 <script>
-/* ---------------- Custom date range toggle ---------------- */
+/* ---------------- Report filters auto-submit on change ---------------- */
+const reportFilterForm = document.getElementById("reportFilterForm");
 const dateRangeSelect = document.getElementById("dateRangeSelect");
 const customDateRow = document.getElementById("customDateRow");
+
+document.getElementById("reportTypeSelect").addEventListener("change", function(){
+    reportFilterForm.submit();
+});
 
 dateRangeSelect.addEventListener("change", function(){
     if(this.value === "custom"){
         customDateRow.classList.add("show");
     } else {
         customDateRow.classList.remove("show");
+        reportFilterForm.submit();
     }
 });
 
-/* ---------------- Generate Report / Export buttons ---------------- */
-document.getElementById("generateReportBtn").addEventListener("click", function(){
-    
-    alert("Generating report...");
+document.getElementById("customFromDate").addEventListener("change", function(){
+    reportFilterForm.submit();
 });
 
-document.getElementById("exportBtn").addEventListener("click", function(){
-    
-    alert("Exporting report...");
+document.getElementById("customToDate").addEventListener("change", function(){
+    reportFilterForm.submit();
+});
+
+/* ---------------- Generate Report prints the current filtered report ---------------- */
+document.getElementById("generateReportBtn").addEventListener("click", function(){
+    window.print();
 });
 
 
 const reportData = {
-    totalComplaints: 0,
-    totalComplaintsChange: 0,
-    inProgress: 0,
-    inProgressChange: 0,
-    resolved: 0,
-    resolvedChange: 0,
-    closed: 0,
-    closedChange: 0,
+    totalComplaints: {{ total_complaints }},
+    pending: {{ pending_count }},
+    inProgress: {{ in_progress_count }},
+    resolved: {{ resolved_count }},
+    closed: {{ closed_count }},
     months: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
-    monthlyCounts: [null, null, null, null, null, null, null, null, null, null, null, null] // no line drawn until real data arrives
+    monthlyCounts: {{ monthly_counts|safe }}
 };
 
 const ctxLine = document.getElementById("complaintsLineChart").getContext("2d");
@@ -665,7 +640,7 @@ const lineChart = new Chart(ctxLine, {
             pointBackgroundColor: "#1E64C8",
             pointRadius: 4,
             fill: true,
-            spanGaps: false // keeps the chart blank (just axes) when values are null
+            spanGaps: false
         }]
     },
     options: {
@@ -678,9 +653,8 @@ const lineChart = new Chart(ctxLine, {
             y: {
                 beginAtZero: true,
                 min: 0,
-                max: 100,
                 ticks: {
-                    stepSize: 20 // whole-number ticks: 0, 20, 40, 60, 80, 100
+                    stepSize: 1
                 },
                 grid: { color: "#EEF0F3" }
             },
@@ -696,10 +670,10 @@ const ctxDonut = document.getElementById("complaintsDonutChart").getContext("2d"
 const donutChart = new Chart(ctxDonut, {
     type: "doughnut",
     data: {
-        labels: ["No data"],
+        labels: ["Pending", "In Progress", "Resolved", "Closed"],
         datasets: [{
-            data: [1],
-            backgroundColor: ["#E4E7EB"],
+            data: [reportData.pending, reportData.inProgress, reportData.resolved, reportData.closed],
+            backgroundColor: ["#8A93A3", "#E8720C", "#1F8A4C", "#1A1A1A"],
             borderWidth: 0
         }]
     },
@@ -709,17 +683,27 @@ const donutChart = new Chart(ctxDonut, {
         cutout: "65%",
         plugins: {
             legend: { display: false },
-            tooltip: { enabled: false } // no tooltip on the empty placeholder ring
+            tooltip: { 
+                enabled: true,
+                callbacks: {
+                    label: function(context){
+                        const value = context.parsed;
+                        const total = context.dataset.data.reduce((a,b)=>a+b, 0);
+                        const pct = total > 0 ? ((value/total)*100).toFixed(1) : 0;
+                        return context.label + ": " + pct + "%";
+                    }
+                }
+            }
         }
     }
 });
 
 function updatePercentLabels(){
-    const total = reportData.totalComplaints + reportData.inProgress + reportData.resolved + reportData.closed;
+    const total = reportData.pending + reportData.inProgress + reportData.resolved + reportData.closed;
     const donutCenterText = document.getElementById("donutCenterText");
 
     if(total === 0){
-        document.getElementById("totalPercentLabel").textContent = "";
+        document.getElementById("pendingPercentLabel").textContent = "";
         document.getElementById("progressPercentLabel").textContent = "";
         document.getElementById("resolvedPercentLabel").textContent = "";
         document.getElementById("closedPercentLabel").textContent = "";
@@ -728,55 +712,14 @@ function updatePercentLabels(){
     }
 
     donutCenterText.textContent = "";
-    document.getElementById("totalPercentLabel").textContent =
-        ((reportData.totalComplaints/total)*100).toFixed(1) + "%";
+    document.getElementById("pendingPercentLabel").textContent =
+        ((reportData.pending/total)*100).toFixed(1) + "%";
     document.getElementById("progressPercentLabel").textContent =
         ((reportData.inProgress/total)*100).toFixed(1) + "%";
     document.getElementById("resolvedPercentLabel").textContent =
         ((reportData.resolved/total)*100).toFixed(1) + "%";
     document.getElementById("closedPercentLabel").textContent =
         ((reportData.closed/total)*100).toFixed(1) + "%";
-}
-
-function updateStatCards(){
-    document.getElementById("totalComplaintsValue").textContent = reportData.totalComplaints || "";
-    document.getElementById("inProgressValue").textContent = reportData.inProgress || "";
-    document.getElementById("resolvedValue").textContent = reportData.resolved || "";
-    document.getElementById("closedValue").textContent = reportData.closed || "";
-}
-
-
-function updateReportData(data){
-    Object.assign(reportData, data);
-
-    updateStatCards();
-    updatePercentLabels();
-
-    // Line chart: replace the null placeholder values with real counts
-    lineChart.data.labels = reportData.months;
-    lineChart.data.datasets[0].data = reportData.monthlyCounts;
-    lineChart.update();
-
-    // Donut chart: replace the single gray placeholder ring with the
-    // real 4-colour breakdown
-    donutChart.data.labels = ["Total Complaints", "In Progress", "Resolved", "Closed"];
-    donutChart.data.datasets[0].backgroundColor = ["#1E64C8", "#E8720C", "#1F8A4C", "#1A1A1A"];
-    donutChart.data.datasets[0].data = [
-        reportData.totalComplaints,
-        reportData.inProgress,
-        reportData.resolved,
-        reportData.closed
-    ];
-    donutChart.options.plugins.tooltip.enabled = true;
-    donutChart.options.plugins.tooltip.callbacks = {
-        label: function(context){
-            const value = context.parsed;
-            const total = context.dataset.data.reduce((a,b)=>a+b, 0);
-            const pct = total > 0 ? ((value/total)*100).toFixed(1) : 0;
-            return context.label + ": " + pct + "%";
-        }
-    };
-    donutChart.update();
 }
 
 updatePercentLabels();

@@ -1,178 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Complaint Details</title>
- 
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=11">
+
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
- 
-body{
-    background:white;
-}
- 
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
- 
-    display:flex;
-    align-items:center;
- 
-    width:420px;
-    max-width: calc(100vw - 160px);
-}
- 
-@media (max-width: 480px){
-    .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
-    }
-    .logo-section{
-        position:static;
-        width:100%;
-        max-width:100%;
-        margin-bottom:10px;
-    }
-    .user-info{
-        margin-left:auto;
-    }
-}
- 
-.logo-section img{
-    width:96px;
-    height:auto;
-    margin-right:15px;
-}
- 
-.logo-text h1{
-    color:#0B2D6D;
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:8px;
-}
- 
-.logo-text h2{
-    color:#555;
-    font-size:11px;
-    font-weight:500;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:10px;
-}
- 
-.logo-text p{
-    color:#1E64C8;
-    font-size:11px;
-    font-weight:600;
-    font-weight:bold;
-}
- 
-.top-header{
-    position:relative;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    height:110px;
-    padding:0 30px;
-    background:#F7F8FA;
-    border-bottom:1px solid #E4E7EB;
-}
- 
-.user-info{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
- 
-.user-info:hover{
-    background:#E8F0FE;
-}
- 
-.profile-placeholder{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#E4E8EE;
-    border:1px solid #C9CFD8;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
- 
-.user-info span{
-    font-size:15px;
-    color:#333;
-}
- 
-.dropdown-arrow{
-    flex-shrink:0;
-}
- 
-.wrapper{
-    display:flex;
-    align-items:flex-start;
-}
- 
-.sidebar{
-    width:270px;
-    background:white;
-    border-right:1px solid #E4E7EB;
-    padding:25px 15px;
-}
- 
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:15px;
-    color:#1A1A1A;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-    text-decoration:none;
-}
- 
-.nav-item svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-    flex-shrink:0;
-}
- 
-.nav-item:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item:hover svg{
-    stroke:#1E64C8;
-}
- 
-.nav-item.active{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item.active svg{
-    stroke:#1E64C8;
-}
- 
 .main-content{
     flex:1;
     padding:30px 40px;
@@ -216,7 +51,7 @@ body{
 }
  
 .status-badge{
-    display:none; /* shown only once real status data comes from the backend */
+    display:inline-block;
     font-weight:700;
     font-size:14px;
     padding:10px 22px;
@@ -224,9 +59,11 @@ body{
     color:white;
 }
  
-.status-badge.status-in-progress{ background:#E8720C; }
+.status-badge.status-in_progress{ background:#E8720C; }
 .status-badge.status-resolved{ background:#1F8A4C; }
-.status-badge.status-closed{ background:#000000; }
+.status-badge.status-rejected{ background:#000000; }
+.status-badge.status-pending{ background:#8A93A3; }
+.status-badge.status-pending{ background:#8A93A3; }
  
 .page-title{
     color:#0B2D6D;
@@ -275,24 +112,6 @@ body{
     font-size:14px;
     color:#1A1A1A;
     font-weight:600;
-}
- 
-.status-select{
-    height:38px;
-    padding:0 14px;
-    border:1px solid #D6DAE1;
-    border-radius:8px;
-    font-size:14px;
-    color:#1A1A1A;
-    background:#F7F8FA;
-    outline:none;
-    cursor:pointer;
-    appearance:none;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
-    background-repeat:no-repeat;
-    background-position:right 12px center;
-    padding-right:34px;
-    min-width:160px;
 }
  
 /* ---- Main details card (subject/description/attachments | timeline) ---- */
@@ -363,19 +182,35 @@ body{
 .action-btn{
     height:42px;
     padding:0 22px;
-    border:1px solid #1E64C8;
-    background:white;
-    color:#1E64C8;
+    border:none;
+    background:#1E64C8;
+    color:white;
     border-radius:8px;
     font-weight:700;
     font-size:14px;
     cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
+    transition:background 0.2s ease, transform 0.15s ease;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
 }
- 
+
 .action-btn:hover{
-    background:#1E64C8;
-    color:white;
+    background:#0B2D6D;
+    transform:translateY(-1px);
+}
+
+.action-btn:active{
+    transform:translateY(0);
+}
+
+.action-btn.danger{
+    background:#DC2626;
+}
+
+.action-btn.danger:hover{
+    background:#B91C1C;
 }
  
 .timeline-title{
@@ -442,235 +277,339 @@ body{
     color:#8A93A3;
     font-size:14px;
 }
+
+/* ---- Confirm delete modal ---- */
+.confirm-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:1000;
+}
+
+.confirm-overlay.active{
+    display:flex;
+}
+
+.confirm-box{
+    background:#fff;
+    border-radius:14px;
+    padding:30px;
+    max-width:400px;
+    width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+    text-align:center;
+    animation:modalPopIn 0.25s ease;
+}
+
+@keyframes modalPopIn{
+    from{ opacity:0; transform:scale(0.92) translateY(10px); }
+    to{ opacity:1; transform:scale(1) translateY(0); }
+}
+
+.confirm-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    background:#FDECEC;
+    color:#DC2626;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.confirm-box h3{
+    font-size:20px;
+    color:#1A1A1A;
+    margin-bottom:10px;
+}
+
+.confirm-box p{
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+    margin-bottom:24px;
+}
+
+.confirm-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+}
+
+.confirm-btn{
+    flex:1;
+    padding:11px 18px;
+    border:none;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.confirm-btn.cancel{
+    background:#EDEFF2;
+    color:#1A1A1A;
+}
+
+.confirm-btn.cancel:hover{
+    background:#E1E4E9;
+}
+
+.confirm-btn.delete{
+    background:#DC2626;
+    color:#fff;
+}
+
+.confirm-btn.delete:hover{
+    background:#B91C1C;
+}
+
+@media (max-width:600px){
+    .main-content{
+        padding:20px 16px;
+    }
+    .page-title{
+        font-size:20px;
+    }
+    .top-action-row{
+        flex-wrap:wrap;
+        gap:10px;
+    }
+
+    /* Info card stacks vertically */
+    .info-card{
+        flex-direction:column;
+        padding:18px;
+        gap:16px;
+        margin-bottom:16px;
+    }
+    .info-divider{
+        display:none;
+    }
+    .info-col{
+        gap:12px;
+    }
+    .info-row{
+        gap:12px;
+    }
+    .info-label{
+        width:100px;
+        font-size:13px;
+    }
+    .info-value{
+        font-size:13px;
+        overflow-wrap:break-word;
+    }
+
+    /* Details card stacks vertically */
+    .details-card{
+        flex-direction:column;
+        padding:20px 18px;
+        gap:24px;
+    }
+    .details-right{
+        padding-left:0;
+        border-left:none;
+        border-top:1px solid #E4E7EB;
+        padding-top:20px;
+    }
+    .details-actions{
+        flex-wrap:wrap;
+    }
+    .attachment-box{
+        max-width:100%;
+        height:160px;
+    }
+    .back-btn{
+        padding:0 16px;
+        font-size:13px;
+    }
+    .status-badge{
+        font-size:12px;
+        padding:8px 16px;
+    }
+}
 </style>
 </head>
 <body>
  
-<div class="top-header">
-    <div class="logo-section">
-        <img src="../../Photos/CMS_Logo.png" alt="Logo">
-        <div class="logo-text">
-            <h1>KATHMANDU VALLEY</h1>
-            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-            <p>Report, Track and Resolve Together for a Better Valley</p>
-        </div>
-    </div>
- 
-    <div class="user-info">
-        <div class="profile-placeholder">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-        </div>
-        <span>Admin CMS</span>
-        <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
-</div>
- 
+{% include 'partials/header.html' %}
+
 <div class="wrapper">
-    <div class="sidebar">
-        <a href="Dashboard.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-            Dashboard
-        </a>
-        <a href="Users.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5S15.5 16.4 15.5 20"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 13.2c2.9.4 5 2.7 5 6.8"/></svg>
-            Users
-        </a>
-        <a href="Complaints.html" class="nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-            Complaints
-        </a>
-        <a href="Reports.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 12h3M8 16h8M8 8h8"/></svg>
-            Reports
-        </a>
-        <a href="Change Password.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-            Change Password
-        </a>
-        <a href="Profile.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-            Profile
-        </a>
-    </div>
- 
+    {% include 'partials/admin_sidebar.html' with active='complaints' %}
+
     <div class="main-content">
- 
+  
         <div class="top-action-row">
             <h1 class="page-title">Complaint Details</h1>
- 
-            <span class="status-badge" id="topStatusBadge"></span>
+  
+            <span class="status-badge status-{{ complaint.status }}" id="topStatusBadge">{{ complaint.get_status_display }}</span>
         </div>
- 
+
+{% if messages %}
+    {% for message in messages %}
+        {% if forloop.last %}
+            <div class="toast-overlay" id="toastOverlay">
+                <div class="toast-badge toast-{{ message.tags }}">
+                    <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                    <span class="toast-text">{{ message }}</span>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+  
         <!-- ===================== BASIC INFO ====================== -->
         <div class="info-card">
             <div class="info-col">
                 <div class="info-row">
                     <span class="info-label">Complaint ID</span>
-                    <span class="info-value" id="complaintIdValue"></span>
+                    <span class="info-value">{{ complaint.complaint_id }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Category</span>
-                    <span class="info-value" id="categoryValue"></span>
+                    <span class="info-value">{{ complaint.get_category_display }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Submitted by</span>
-                    <span class="info-value" id="submittedByValue"></span>
+                    <span class="info-value">{{ complaint.reporter_name }}</span>
                 </div>
             </div>
- 
+  
             <div class="info-divider"></div>
- 
+  
             <div class="info-col">
                 <div class="info-row">
                     <span class="info-label">Date</span>
-                    <span class="info-value" id="dateValue"></span>
+                    <span class="info-value">{{ complaint.created_at|date:"M d, Y" }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Location</span>
-                    <span class="info-value" id="locationValue"></span>
+                    <span class="info-value">{{ complaint.latitude }}, {{ complaint.longitude }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Status</span>
-                    <select class="status-select" id="statusSelect">
-                        <option value="">Select Status</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="resolved">Resolved</option>
-                        <option value="closed">Closed</option>
-                    </select>
+                    <span class="info-value">{{ complaint.get_status_display }}</span>
                 </div>
             </div>
         </div>
- 
+  
         <!-- ===================== SUBJECT / DESCRIPTION / ATTACHMENTS + TIMELINE ====================== -->
         <div class="details-card">
- 
+  
             <div class="details-left">
+                {% if complaint.landmark %}
                 <div class="detail-block">
-                    <h4>Subject</h4>
-                    <p id="subjectValue"></p>
+                    <h4>Popular Landmark</h4>
+                    <p>{{ complaint.landmark }}</p>
                 </div>
- 
+                {% endif %}
+
                 <div class="detail-block">
                     <h4>Description</h4>
-                    <p id="descriptionValue"></p>
+                    <p>{{ complaint.description }}</p>
                 </div>
- 
+  
                 <div class="detail-block">
                     <h4>Attachments</h4>
-                    <div class="attachment-box" id="attachmentBox">
-                        Attachment will be displayed here.
-                        <img id="attachmentImage" alt="Complaint attachment">
-                    </div>
+                    {% if images %}
+                        {% for img in images %}
+                        <div class="attachment-box">
+                            <img src="{{ img.image_url }}" alt="Complaint attachment" style="display:block;">
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="attachment-box">
+                            No attachments.
+                        </div>
+                    {% endif %}
                 </div>
- 
+  
                 <div class="details-actions">
-                    <button type="button" class="action-btn" id="assignOfficerBtn">Assign Officer</button>
-                    <button type="button" class="action-btn" id="updateBtn">Update</button>
+                    <a href="{% url 'admin_assign_complaint' complaint.complaint_id %}" class="action-btn">Assign Officer</a>
+                    <form method="post" action="{% url 'admin_complaint_delete' complaint.complaint_id %}" id="deleteForm">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn danger" id="deleteBtn">Delete Complaint</button>
+                    </form>
                 </div>
             </div>
- 
+  
             <div class="details-right">
                 <h3 class="timeline-title">Timeline</h3>
-                <ul class="timeline-list" id="timelineList"></ul>
-                <div class="empty-state" id="timelineEmptyState">
-                    Timeline will be displayed here.
-                </div>
+                <ul class="timeline-list">
+                    <li class="timeline-item">
+                        <div class="timeline-datetime">{{ complaint.created_at|date:"M d, Y, g:i a" }}</div>
+                        <div class="timeline-text">Complaint submitted</div>
+                    </li>
+                    {% if complaint.updated_at != complaint.created_at %}
+                    <li class="timeline-item">
+                        <div class="timeline-datetime">{{ complaint.updated_at|date:"M d, Y, g:i a" }}</div>
+                        <div class="timeline-text">Status updated to {{ complaint.get_status_display }}</div>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
- 
+  
         </div>
- 
+  
         <div class="bottom-action-row">
-            <a href="Complaints.html" class="back-btn">
+            <a href="{% url 'admin_complaints' %}" class="back-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
                 Back to complaints
             </a>
         </div>
- 
+  
     </div>
 </div>
- 
-<script>
- 
 
-const complaintData = {
-    complaintId: "",
-    category: "",
-    submittedBy: "",
-    date: "",
-    location: "",
-    status: "",       // "in-progress" | "resolved" | "closed"
-    subject: "",
-    description: "",
-    attachmentUrl: "",
-    timeline: []      // e.g. [{ datetime: "...", text: "..." }, ...]
-};
- 
-function renderComplaintDetails(data){
-    document.getElementById("complaintIdValue").textContent = data.complaintId || "";
-    document.getElementById("categoryValue").textContent = data.category || "";
-    document.getElementById("submittedByValue").textContent = data.submittedBy || "";
-    document.getElementById("dateValue").textContent = data.date || "";
-    document.getElementById("locationValue").textContent = data.location || "";
-    document.getElementById("subjectValue").textContent = data.subject || "";
-    document.getElementById("descriptionValue").textContent = data.description || "";
- 
-    // Status select + top-right status badge
-    const statusSelect = document.getElementById("statusSelect");
-    const topStatusBadge = document.getElementById("topStatusBadge");
-    if (data.status) {
-        statusSelect.value = data.status;
-        topStatusBadge.textContent =
-            data.status === "in-progress" ? "In Progress" :
-            data.status === "resolved" ? "Resolved" :
-            data.status === "closed" ? "Closed" : "";
-        topStatusBadge.className = "status-badge status-" + data.status;
-        topStatusBadge.style.display = "inline-block";
-    }
- 
-    // Attachment image
-    const attachmentBox = document.getElementById("attachmentBox");
-    const attachmentImage = document.getElementById("attachmentImage");
-    if (data.attachmentUrl) {
-        attachmentImage.src = data.attachmentUrl;
-        attachmentImage.style.display = "block";
-        attachmentBox.firstChild.textContent = "";
-    }
- 
-    // Timeline
-    const timelineList = document.getElementById("timelineList");
-    const timelineEmptyState = document.getElementById("timelineEmptyState");
-    timelineList.innerHTML = "";
-    if (data.timeline && data.timeline.length > 0) {
-        data.timeline.forEach(function(entry){
-            const li = document.createElement("li");
-            li.className = "timeline-item";
-            li.innerHTML =
-                '<div class="timeline-datetime">' + entry.datetime + '</div>' +
-                '<div class="timeline-text">' + entry.text + '</div>';
-            timelineList.appendChild(li);
-        });
-        timelineEmptyState.style.display = "none";
-    } else {
-        timelineEmptyState.style.display = "block";
-    }
+<div class="confirm-overlay" id="deleteModal">
+    <div class="confirm-box">
+        <div class="confirm-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        </div>
+        <h3>Delete Complaint?</h3>
+        <p>Are you sure you want to delete this complaint?<br>This will permanently remove it and cannot be undone.</p>
+        <div class="confirm-actions">
+            <button type="button" class="confirm-btn cancel" id="deleteCancel">Cancel</button>
+            <button type="button" class="confirm-btn delete" id="deleteConfirm">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script>
+var deleteBtn = document.getElementById("deleteBtn");
+var deleteForm = document.getElementById("deleteForm");
+var deleteModal = document.getElementById("deleteModal");
+var deleteConfirm = document.getElementById("deleteConfirm");
+var deleteCancel = document.getElementById("deleteCancel");
+
+if(deleteBtn && deleteModal){
+    deleteBtn.addEventListener("click", function(e){
+        e.preventDefault();
+        deleteModal.classList.add("active");
+    });
+    deleteConfirm.addEventListener("click", function(){
+        deleteForm.submit();
+    });
+    deleteCancel.addEventListener("click", function(){
+        deleteModal.classList.remove("active");
+    });
+    deleteModal.addEventListener("click", function(e){
+        if(e.target === deleteModal){
+            deleteModal.classList.remove("active");
+        }
+    });
 }
- 
-renderComplaintDetails(complaintData);
- 
-document.getElementById("assignOfficerBtn").addEventListener("click", function(){
-    // 
-document.getElementById("updateBtn").addEventListener("click", function(){
-    // 
-});
 </script>
+
 </body>
 </html>
  
-
-
-
-
-
-
 
 

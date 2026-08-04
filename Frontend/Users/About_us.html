@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,22 +31,22 @@ body{
     align-items:center;
     justify-content:space-between;
     flex-wrap:wrap;
-    padding:15px 20px;
+    gap:12px;
+    padding:15px 24px;
     border-bottom:1px solid var(--border);
 }
  
 .logo-section{
     display:flex;
     align-items:center;
- 
-    width:420px;
-    max-width: calc(100vw - 240px);
+    min-width:0;
 }
  
 .logo-section img{
-    width:96px;
+    width:88px;
     height:auto;
     margin-right:15px;
+    flex-shrink:0;
 }
  
 .logo-text h1{
@@ -72,38 +73,40 @@ body{
 }
  
 .buttons{
-    display: flex;
-    gap: 6px;
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
 }
  
 .buttons button{
-    background: transparent;
-    border: none;
-    color: #0B2D6D;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 6px 12px;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 6px;
+    background:transparent;
+    border:none;
+    color:#0B2D6D;
+    font-size:14px;
+    font-weight:bold;
+    padding:6px 12px;
+    cursor:pointer;
+    transition:0.3s;
+    border-radius:6px;
 }
  
 .buttons button:hover{
-    background-color: #0B2D6D;
-    color: white;
+    background-color:#0B2D6D;
+    color:white;
 }
  
  .about{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:40px;
-    padding:50px 60px 30px;
-    flex-wrap:wrap;
+    gap:48px;
+    padding:60px 40px;
+    max-width:1200px;
+    margin:0 auto;
   }
  
   .about-text{
-    flex:1;
+    flex:1 1 50%;
     min-width:300px;
   }
  
@@ -119,27 +122,28 @@ body{
     line-height:1.8;
     color:#333;
     margin-bottom:18px;
-    max-width:560px;
+    max-width:520px;
   }
  
 .about-image{
-    flex:1;
+    flex:1 1 50%;
     display:flex;
     justify-content:center;
     align-items:center;
-    margin-top:30px;
-    min-height:380px;
+    min-width:280px;
 }
  
 .about-image img{
     width:100%;
-    max-width:520px;
+    max-width:500px;
     height:auto;
     object-fit:contain;
 }
  
     .features-heading{
-    padding:10px 60px 0;
+    padding:10px 40px 0;
+    max-width:1200px;
+    margin:0 auto;
   }
  
   .features-heading h2{
@@ -151,34 +155,65 @@ body{
   .features{
     border-top:1px solid var(--border);
     margin-top:30px;
-    padding:40px 60px;
+    padding:40px;
+    max-width:1200px;
+    margin:30px auto 0;
   }
  
   .features-image-placeholder{
     width:100%;
-    min-height:260px;
     display:flex;
     align-items:center;
     justify-content:center;
-    color:var(--gray);
-    font-size:14px;
-    background:#fff;
+  }
+
+  .features-image-placeholder img{
+    width:100%;
+    max-width:900px;
+    height:auto;
+    object-fit:contain;
   }
  
-   @media (max-width: 768px){
-    header{ padding:16px 20px; }
-    nav ul{ gap:20px; }
-    .about{ padding:40px 24px; }
+  @media (max-width: 860px){
+    .about{
+      flex-direction:column;
+      gap:28px;
+      padding:40px 24px;
+      text-align:center;
+    }
+    .about-text p{
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .about-image img{
+      max-width:420px;
+    }
     .features-heading{ padding:10px 24px 0; }
-    .features{ padding:30px 24px; }
+    .features{ padding:24px; }
   }
- 
-</style>
+
+  @media (max-width: 480px){
+    .site-header{
+      justify-content:center;
+      text-align:center;
+    }
+    .site-header .logo-text h1{ font-size:13px; }
+    .site-header .logo-text h2{ font-size:9px; }
+    .site-header .logo-text p{ font-size:9px; }
+    .about-text h2{ font-size:24px; }
+    .about-text p{ font-size:14px; line-height:1.5; }
+    .about-image img{ max-width:300px; }
+    .features-heading h2{ font-size:22px; }
+    .features-heading p{ font-size:13px; }
+    .feature h3{ font-size:19px; }
+    .feature p{ font-size:13px; }
+  }
+ </style>
 </head>
 <body>
     <header class="site-header">
       <div class="logo-section">
-        <img src="..\..\Photos\CMS_Logo.png" alt="Logo">
+        <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
         <div class="logo-text">
             <h1>KATHMANDU VALLEY</h1>
             <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
@@ -187,10 +222,10 @@ body{
       </div>
  
       <div class="buttons">
-        <button>Home</button>
-        <button>About</button>
-        <button>Contact Us</button>
-        <button>Login</button>
+        <button onclick="location.href='{% url 'home' %}'">Home</button>
+        <button onclick="location.href='{% url 'about' %}'">About</button>
+        <button onclick="location.href='{% url 'contact' %}'">Contact Us</button>
+        <button onclick="location.href='{% url 'login' %}'">Login</button>
       </div>
     </header>
  
@@ -201,7 +236,7 @@ body{
       <p>Our mission is to provide a user-friendly platform that ensures every complaint is addressed and resolved in a timely manner.</p>
     </div>
     <div class="about-image">
-      <img src="..\..\Photos\Screenshot_2026-07-16_122947-removebg-preview_upscayl_4x_digital-art-4x.png" alt="About us illustration">
+      <img src="{% static 'Screenshot_2026-07-16_122947-removebg-preview_upscayl_4x_digital-art-4x.png' %}" alt="About us illustration">
     </div>
   </section>
  
@@ -211,7 +246,7 @@ body{
  
   <section class="features">
     <div class="features-image-placeholder">
-      <img src ="..\..\Photos\User_About_Us.png" alt="feature">
+      <img src ="{% static 'User_About_Us.png' %}" alt="feature">
     </div>
   </section>
 </body>

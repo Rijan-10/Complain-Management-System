@@ -1,178 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Manage Users</title>
- 
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=11">
+
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
- 
-body{
-    background:white;
-}
- 
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
- 
-    display:flex;
-    align-items:center;
- 
-    width:420px;
-    max-width: calc(100vw - 160px);
-}
- 
-@media (max-width: 480px){
-    .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
-    }
-    .logo-section{
-        position:static;
-        width:100%;
-        max-width:100%;
-        margin-bottom:10px;
-    }
-    .user-info{
-        margin-left:auto;
-    }
-}
- 
-.logo-section img{
-    width:96px;
-    height:auto;
-    margin-right:15px;
-}
- 
-.logo-text h1{
-    color:#0B2D6D;
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:8px;
-}
- 
-.logo-text h2{
-    color:#555;
-    font-size:11px;
-    font-weight:500;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:10px;
-}
- 
-.logo-text p{
-    color:#1E64C8;
-    font-size:11px;
-    font-weight:600;
-    font-weight:bold;
-}
- 
-.top-header{
-    position:relative;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    height:110px;
-    padding:0 30px;
-    background:#F7F8FA;
-    border-bottom:1px solid #E4E7EB;
-}
- 
-.user-info{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
- 
-.user-info:hover{
-    background:#E8F0FE;
-}
- 
-.profile-placeholder{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#E4E8EE;
-    border:1px solid #C9CFD8;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
- 
-.user-info span{
-    font-size:15px;
-    color:#333;
-}
- 
-.dropdown-arrow{
-    flex-shrink:0;
-}
- 
-.wrapper{
-    display:flex;
-    align-items:flex-start;
-}
- 
-.sidebar{
-    width:270px;
-    background:white;
-    border-right:1px solid #E4E7EB;
-    padding:25px 15px;
-}
- 
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:15px;
-    color:#1A1A1A;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-    text-decoration:none;
-}
- 
-.nav-item svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-    flex-shrink:0;
-}
- 
-.nav-item:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item:hover svg{
-    stroke:#1E64C8;
-}
- 
-.nav-item.active{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item.active svg{
-    stroke:#1E64C8;
-}
- 
 .main-content{
     flex:1;
     padding:30px 40px;
@@ -198,6 +33,26 @@ body{
     cursor:pointer;
     stroke:#0B2D6D;
     flex-shrink:0;
+}
+
+.add-admin-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#1E64C8;
+    color:white;
+    border:none;
+    padding:11px 20px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    text-decoration:none;
+    transition:background 0.2s ease;
+}
+
+.add-admin-btn:hover{
+    background:#17509E;
 }
  
 /* ---- Filter row ---- */
@@ -256,21 +111,74 @@ body{
     padding-right:38px;
 }
  
-.enter-btn{
-    height:44px;
-    padding:0 28px;
-    background:#1E64C8;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-weight:800;
-    font-size:14px;
-    cursor:pointer;
-    transition:background 0.2s ease;
+.action-menu{
+    position:relative;
+    display:inline-block;
 }
- 
-.enter-btn:hover{
-    background:#0B2D6D;
+
+.more-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#555;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+.more-btn:hover{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+
+.action-dropdown{
+    position:absolute;
+    right:0;
+    top:calc(100% + 4px);
+    background:#fff;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    box-shadow:0 12px 28px rgba(0,0,0,0.12);
+    min-width:190px;
+    padding:6px;
+    z-index:50;
+    display:none;
+}
+
+.action-menu.open .action-dropdown{
+    display:block;
+}
+
+.dropdown-item{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    color:#1A1A1A;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+
+.dropdown-item.danger{
+    color:#C0392B;
+}
+
+.dropdown-item.danger:hover{
+    background:#FBE3E3;
+    color:#C0392B;
 }
  
 /* ---- Users table card ---- */
@@ -332,8 +240,42 @@ body{
     gap:14px;
 }
  
-.action-icons svg{
+.action-icons form{
+    display:inline;
+}
+ 
+.toggle-btn{
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    font-size:12px;
+    font-weight:700;
     cursor:pointer;
+    transition:background 0.2s ease;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+}
+ 
+.toggle-btn.enable{
+    background:#D9F5DF;
+    color:#1F8A4C;
+}
+ 
+.toggle-btn.enable:hover{
+    background:#1F8A4C;
+    color:white;
+}
+ 
+.toggle-btn.disable{
+    background:#FBE3E3;
+    color:#C0392B;
+}
+ 
+.toggle-btn.disable:hover{
+    background:#C0392B;
+    color:white;
 }
  
 .edit-icon{
@@ -350,89 +292,312 @@ body{
     color:#8A93A3;
     font-size:14px;
 }
+
+/* ---- Confirm action modal ---- */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+}
+
+.modal-box{
+    background:#fff;
+    border-radius:14px;
+    padding:30px;
+    max-width:420px;
+    width:90%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+    text-align:center;
+}
+
+.modal-box h3{
+    font-size:20px;
+    color:#1A1A1A;
+    margin-bottom:12px;
+}
+
+.modal-box p{
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+    margin-bottom:24px;
+}
+
+.modal-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+}
+
+.modal-btn{
+    padding:10px 22px;
+    border:none;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.modal-btn.cancel{
+    background:#EDEFF2;
+    color:#1A1A1A;
+}
+
+.modal-btn.cancel:hover{
+    background:#E1E4E9;
+}
+
+.modal-btn.confirm{
+    background:#1E64C8;
+    color:white;
+}
+
+.modal-btn.confirm:hover{
+    background:#0B2D6D;
+}
+
+.modal-btn.confirm.danger{
+    background:#C0392B;
+}
+
+.modal-btn.confirm.danger:hover{
+    background:#8E2416;
+}
+
+/* ---- Inline change password row ---- */
+.password-change-row td{
+    background:#F7F9FC;
+    padding:16px 24px;
+}
+
+.password-change-box{
+    display:flex;
+    align-items:flex-end;
+    gap:16px;
+    flex-wrap:wrap;
+}
+
+.password-change-box .pw-field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.password-change-box label{
+    font-size:13px;
+    color:#333;
+    font-weight:600;
+}
+
+.password-change-box input{
+    padding:11px 14px;
+    border:1px solid #C9CFD8;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    width:220px;
+}
+
+.password-change-box input:focus{
+    border-color:#1E64C8;
+}
+
+.pw-set-btn{
+    padding:11px 24px;
+    border:none;
+    border-radius:8px;
+    background:#1E64C8;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.pw-set-btn:hover{
+    background:#17509E;
+}
+
+.pw-cancel-btn{
+    padding:11px 24px;
+    border:none;
+    border-radius:8px;
+    background:#EDEFF2;
+    color:#1A1A1A;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.pw-cancel-btn:hover{
+    background:#E1E4E9;
+}
+
+/* ---- Success modal icon ---- */
+.success-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    background:linear-gradient(135deg, #2ECC71, #1FA857);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 8px 20px rgba(46,204,113,.35);
+}
+
+.success-icon svg{
+    width:32px;
+    height:32px;
+    stroke:#fff;
+}
  
 @media (max-width:600px){
-    .users-table{
+    .main-content{
+        padding:20px 16px;
+    }
+    .page-title{
+        font-size:20px;
+    }
+
+    /* Search + Status on the same line */
+    .filters-row{
+        flex-wrap:nowrap;
+        gap:10px;
+        margin-bottom:18px;
+    }
+    .filter-group.search-group{
+        flex:1;
+        min-width:0;
+    }
+    .filter-group:not(.search-group){
+        flex:0 0 auto;
+    }
+    .filter-input, .filter-select{
+        height:40px;
+        padding:0 12px;
+        font-size:13px;
+    }
+    .filter-select{
+        min-width:0;
+        width:118px;
+        padding-right:26px;
+        background-position:right 8px center;
+    }
+    .filter-label{
+        font-size:12px;
+    }
+
+    /* Stacked user cards */
+    .users-table thead{
+        display:none;
+    }
+    .users-table,
+    .users-table tbody,
+    .users-table tr,
+    .users-table td{
         display:block;
-        overflow-x:auto;
+        width:100%;
+    }
+    .users-table tr{
+        border:1px solid #E4E7EB;
+        border-radius:12px;
+        padding:8px 16px;
+        margin-bottom:12px;
+        background:#fff;
+    }
+    .users-table td{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:12px;
+        padding:8px 0;
+        border-bottom:none;
+        text-align:right;
+        font-size:14px;
+    }
+    .users-table td[data-label]::before{
+        content:attr(data-label);
+        font-weight:700;
+        color:#666;
+        font-size:12px;
+        text-align:left;
+        flex-shrink:0;
+    }
+    .users-table td:last-child{
+        padding-bottom:4px;
+    }
+    .users-table td.empty-state{
+        justify-content:center;
+        text-align:center;
+        padding:20px 0;
+    }
+    .users-table tr.password-change-row{
+        border:none;
+        background:transparent;
+        padding:0;
+        margin-top:-6px;
+    }
+    .users-table tr.password-change-row td{
+        padding:4px 0;
+        text-align:left;
     }
 }
 </style>
 </head>
 <body>
  
-<div class="top-header">
-    <div class="logo-section">
-        <img src="../../Photos/CMS_Logo.png" alt="Logo">
-        <div class="logo-text">
-            <h1>KATHMANDU VALLEY</h1>
-            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-            <p>Report, Track and Resolve Together for a Better Valley</p>
-        </div>
-    </div>
- 
-    <div class="user-info">
-        <div class="profile-placeholder">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-        </div>
-        <span>Admin CMS</span>
-        <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
-</div>
- 
+{% include 'partials/header.html' %}
+
 <div class="wrapper">
-    <div class="sidebar">
-        <a href="Dashboard.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-            Dashboard
-        </a>
-        <a href="Users.html" class="nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5S15.5 16.4 15.5 20"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 13.2c2.9.4 5 2.7 5 6.8"/></svg>
-            Users
-        </a>
-        <a href="Complaints.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-            Complaints
-        </a>
-        <a href="Reports.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 12h3M8 16h8M8 8h8"/></svg>
-            Reports
-        </a>
-        <a href="Change Passsword.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-            Change Password
-        </a>
-        <a href="Profile.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-            Profile
-        </a>
-    </div>
- 
+    {% include 'partials/admin_sidebar.html' with active='users' %}
+
     <div class="main-content">
- 
+  
+        {% if messages %}
+            {% for message in messages %}
+                {% if forloop.last %}
+                    <div class="toast-overlay" id="toastOverlay">
+                        <div class="toast-badge toast-{{ message.tags }}">
+                            <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                            <span class="toast-text">{{ message }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
         <div class="page-header-row">
             <h1 class="page-title">Manage Users</h1>
-            <svg class="next-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            <a href="{% url 'admin_add_admin' %}" class="add-admin-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Admin
+            </a>
         </div>
- 
+  
         <div class="filters-row">
             <div class="filter-group search-group">
                 <span class="filter-label">Search Users</span>
-                <input type="text" class="filter-input" id="searchUsersInput" placeholder="Search Users">
+                <input type="text" class="filter-input" id="searchUsersInput" placeholder="Search Users" value="{{ search_query }}">
             </div>
- 
+  
             <div class="filter-group">
                 <span class="filter-label">Status</span>
                 <select class="filter-select" id="statusFilter">
                     <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+                    <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactive</option>
                 </select>
             </div>
- 
-            <button type="button" class="enter-btn" id="enterBtn">Enter</button>
         </div>
- 
+  
         <!-- ===================== USERS TABLE ====================== -->
         <div class="card">
             <table class="users-table">
@@ -447,36 +612,217 @@ body{
                     </tr>
                 </thead>
                 <tbody id="usersTableBody">
- 
+                    {% if users %}
+                        {% for user in users %}
+                        <tr>
+                            <td data-label="User ID">{{ user.id }}</td>
+                            <td data-label="Full Name">{{ user.profile.full_name|default:user.first_name }}</td>
+                            <td data-label="Email">{{ user.email }}</td>
+                            <td data-label="Status">
+                                <span class="status-badge status-{{ user.profile.account_status }}">
+                                    {{ user.profile.account_status|capfirst }}
+                                </span>
+                            </td>
+                            <td data-label="Joined On">{{ user.date_joined|date:"M d, Y" }}</td>
+                            <td data-label="Action">
+                                <div class="action-menu">
+                                    <button type="button" class="more-btn" aria-label="User actions">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>
+                                    </button>
+                                    <div class="action-dropdown">
+                                        <form method="post" action="{% url 'admin_user_action' user.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="toggle">
+                                            <button type="submit" class="dropdown-item" data-title="{% if user.profile.account_status == 'active' %}Disable Account{% else %}Enable Account{% endif %}" data-message="{% if user.profile.account_status == 'active' %}Are you sure you want to disable this account? The user will no longer be able to log in.{% else %}Are you sure you want to enable this account? The user will be able to log in again.{% endif %}">{% if user.profile.account_status == 'active' %}Disable Account{% else %}Enable Account{% endif %}</button>
+                                        </form>
+                                        <form method="post" action="{% url 'admin_user_action' user.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete">
+                                            <button type="submit" class="dropdown-item danger" data-title="Delete Account" data-message="Are you sure you want to delete this account? This will permanently remove the user and their complaints. This action cannot be undone.">Delete Account</button>
+                                        </form>
+                                        <button type="button" class="dropdown-item change-pw" data-row="pwrow-{{ user.id }}">Change Password</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="pwrow-{{ user.id }}" class="password-change-row" style="display:none;">
+                            <td colspan="6">
+                                <form method="post" action="{% url 'admin_user_change_password' user.id %}" class="password-change-box">
+                                    {% csrf_token %}
+                                    <div class="pw-field">
+                                        <label for="newPw-{{ user.id }}">New Password</label>
+                                        <input type="password" id="newPw-{{ user.id }}" name="new_password" placeholder="Enter new password" required>
+                                    </div>
+                                    <div class="pw-field">
+                                        <label for="confirmPw-{{ user.id }}">Confirm Password</label>
+                                        <input type="password" id="confirmPw-{{ user.id }}" name="confirm_password" placeholder="Re-enter new password" required>
+                                    </div>
+                                    <button type="submit" class="pw-set-btn">Set Password</button>
+                                    <button type="button" class="pw-cancel-btn pw-cancel">Cancel</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr id="emptyUsersRow">
+                            <td colspan="6" class="empty-state">
+                                User Information will be displayed here.
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr id="noResultsRow" style="display:none;">
+                        <td colspan="6" class="empty-state">
+                            No users match your filters.
+                        </td>
+                    </tr>
                 </tbody>
             </table>
- 
-            <!-- Shown only when there is no data yet / table body is empty -->
-            <div class="empty-state" id="emptyState">
-                User Information will be displayed here.
-            </div>
         </div>
- 
+  
     </div>
 </div>
- 
+
+<div class="modal-overlay" id="actionModalOverlay" style="display:none;">
+    <div class="modal-box">
+        <h3 id="modalTitle">Confirm Action</h3>
+        <p id="modalMessage"></p>
+        <div class="modal-actions">
+            <button type="button" class="modal-btn cancel" id="modalCancel">Cancel</button>
+            <button type="button" class="modal-btn confirm" id="modalConfirm">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="pwSuccessModal" style="display:none;">
+    <div class="modal-box">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h3 id="pwSuccessTitle" style="font-size:20px;color:#1FA857;margin-bottom:12px;">Password Changed!</h3>
+        <p id="pwSuccessMsg" style="font-size:14px;color:#555;line-height:1.5;margin-bottom:24px;">The user's password has been changed successfully.</p>
+        <button type="button" class="modal-btn confirm" id="pwSuccessOk">Continue</button>
+    </div>
+</div>
+
 <script>
- 
-// Toggle empty-state message based on whether the table has rows.
-function updateEmptyState(){
-    const tbody = document.getElementById("usersTableBody");
-    const emptyState = document.getElementById("emptyState");
-    emptyState.style.display = tbody.children.length === 0 ? "block" : "none";
-}
-updateEmptyState();
- 
-document.getElementById("enterBtn").addEventListener("click", function(){
+
+var searchInput = document.getElementById("searchUsersInput");
+var statusSelect = document.getElementById("statusFilter");
+var tbody = document.getElementById("usersTableBody");
+var noResultsRow = document.getElementById("noResultsRow");
+var dataRows = Array.prototype.filter.call(tbody.querySelectorAll("tr"), function(row){
+    return !row.id;
+});
+
+function filterTable(){
+    var search = searchInput.value.trim().toLowerCase();
+    var status = statusSelect.value;
+    var visible = 0;
+    dataRows.forEach(function(row){
+        var text = row.textContent.toLowerCase();
+        var badge = row.querySelector(".status-badge");
+        var rowStatus = badge ? (badge.classList.contains("status-active") ? "active" : "inactive") : "";
+        var matchSearch = !search || text.indexOf(search) !== -1;
+        var matchStatus = !status || rowStatus === status;
+        var show = matchSearch && matchStatus;
+        row.style.display = show ? "" : "none";
+        if(show) visible++;
     });
+    if(noResultsRow){
+        noResultsRow.style.display = (dataRows.length > 0 && visible === 0) ? "" : "none";
+    }
+}
+
+searchInput.addEventListener("input", filterTable);
+statusSelect.addEventListener("change", filterTable);
+
+document.querySelectorAll(".more-btn").forEach(function(btn){
+    btn.addEventListener("click", function(e){
+        e.stopPropagation();
+        btn.closest(".action-menu").classList.toggle("open");
+    });
+});
+
+document.addEventListener("click", function(e){
+    if(!e.target.closest(".action-menu")){
+        document.querySelectorAll(".action-menu.open").forEach(function(m){
+            m.classList.remove("open");
+        });
+    }
+});
+
+var modalOverlay = document.getElementById("actionModalOverlay");
+var modalTitle = document.getElementById("modalTitle");
+var modalMessage = document.getElementById("modalMessage");
+var modalConfirm = document.getElementById("modalConfirm");
+var modalCancel = document.getElementById("modalCancel");
+var pendingForm = null;
+
+function closeModal(){
+    modalOverlay.style.display = "none";
+    pendingForm = null;
+}
+
+document.querySelectorAll(".action-dropdown .dropdown-item").forEach(function(item){
+    item.addEventListener("click", function(e){
+        e.preventDefault();
+        var menu = item.closest(".action-menu");
+        if(menu){ menu.classList.remove("open"); }
+        if(item.classList.contains("change-pw")){
+            var row = document.getElementById(item.getAttribute("data-row"));
+            if(row){
+                var show = row.style.display === "none";
+                row.style.display = show ? "" : "none";
+                if(show){
+                    var firstInput = row.querySelector("input");
+                    if(firstInput){ firstInput.focus(); }
+                }
+            }
+            return;
+        }
+        pendingForm = item.closest("form");
+        modalTitle.textContent = item.getAttribute("data-title");
+        modalMessage.textContent = item.getAttribute("data-message");
+        modalConfirm.classList.toggle("danger", item.classList.contains("danger"));
+        modalOverlay.style.display = "flex";
+    });
+});
+
+document.querySelectorAll(".pw-cancel").forEach(function(btn){
+    btn.addEventListener("click", function(){
+        var row = btn.closest("tr.password-change-row");
+        if(row){ row.style.display = "none"; }
+    });
+});
+
+modalConfirm.addEventListener("click", function(){
+    if(pendingForm){ pendingForm.submit(); }
+});
+
+modalCancel.addEventListener("click", closeModal);
+
+modalOverlay.addEventListener("click", function(e){
+    if(e.target === modalOverlay){ closeModal(); }
+});
+
+{% if show_pw_success %}
+(function(){
+    var pwModal = document.getElementById("pwSuccessModal");
+    if(pwModal){
+        pwModal.style.display = "flex";
+        document.getElementById("pwSuccessOk").addEventListener("click", function(){
+            pwModal.style.display = "none";
+        });
+        pwModal.addEventListener("click", function(e){
+            if(e.target === pwModal){ pwModal.style.display = "none"; }
+        });
+    }
+})();
+{% endif %}
+
 </script>
 </body>
 </html>
  
-
-
 
 

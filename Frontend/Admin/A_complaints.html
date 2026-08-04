@@ -1,178 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS Admin - Manage Complaints</title>
- 
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=10">
+
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
- 
-body{
-    background:white;
-}
- 
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
- 
-    display:flex;
-    align-items:center;
- 
-    width:420px;
-    max-width: calc(100vw - 160px);
-}
- 
-@media (max-width: 480px){
-    .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
-    }
-    .logo-section{
-        position:static;
-        width:100%;
-        max-width:100%;
-        margin-bottom:10px;
-    }
-    .user-info{
-        margin-left:auto;
-    }
-}
- 
-.logo-section img{
-    width:96px;
-    height:auto;
-    margin-right:15px;
-}
- 
-.logo-text h1{
-    color:#0B2D6D;
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:8px;
-}
- 
-.logo-text h2{
-    color:#555;
-    font-size:11px;
-    font-weight:500;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:10px;
-}
- 
-.logo-text p{
-    color:#1E64C8;
-    font-size:11px;
-    font-weight:600;
-    font-weight:bold;
-}
- 
-.top-header{
-    position:relative;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    height:110px;
-    padding:0 30px;
-    background:#F7F8FA;
-    border-bottom:1px solid #E4E7EB;
-}
- 
-.user-info{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
- 
-.user-info:hover{
-    background:#E8F0FE;
-}
- 
-.profile-placeholder{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#E4E8EE;
-    border:1px solid #C9CFD8;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
- 
-.user-info span{
-    font-size:15px;
-    color:#333;
-}
- 
-.dropdown-arrow{
-    flex-shrink:0;
-}
- 
-.wrapper{
-    display:flex;
-    align-items:flex-start;
-}
- 
-.sidebar{
-    width:270px;
-    background:white;
-    border-right:1px solid #E4E7EB;
-    padding:25px 15px;
-}
- 
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:15px;
-    color:#1A1A1A;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-    text-decoration:none;
-}
- 
-.nav-item svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-    flex-shrink:0;
-}
- 
-.nav-item:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item:hover svg{
-    stroke:#1E64C8;
-}
- 
-.nav-item.active{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item.active svg{
-    stroke:#1E64C8;
-}
- 
 .main-content{
     flex:1;
     padding:30px 40px;
@@ -260,23 +95,6 @@ body{
     min-width:190px;
 }
  
-.enter-btn{
-    height:44px;
-    padding:0 28px;
-    background:#1E64C8;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-weight:800;
-    font-size:14px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
- 
-.enter-btn:hover{
-    background:#0B2D6D;
-}
- 
 /* ---- Complaints table card ---- */
 .card{
     background:white;
@@ -311,6 +129,15 @@ body{
     border-bottom:none;
 }
  
+.complaints-table tbody tr{
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.complaints-table tbody tr:hover{
+    background:#F5F7FA;
+}
+ 
 .status-badge{
     display:inline-block;
     width:fit-content;
@@ -322,17 +149,10 @@ body{
     color:white;
 }
  
-.status-badge.status-in-progress{
-    background:#E8720C;
-}
- 
-.status-badge.status-resolved{
-    background:#1F8A4C;
-}
- 
-.status-badge.status-closed{
-    background:#000000;
-}
+.status-badge.status-in_progress{ background:#E8720C; }
+.status-badge.status-resolved{ background:#1F8A4C; }
+.status-badge.status-rejected{ background:#000000; }
+.status-badge.status-pending{ background:#8A93A3; }
  
 .action-icons{
     display:flex;
@@ -356,6 +176,41 @@ body{
 }
  
 @media (max-width:600px){
+    .main-content{
+        padding:20px 16px;
+    }
+    .page-title{
+        font-size:20px;
+    }
+
+    /* Search full width; Status + Category share the same line */
+    .filters-row{
+        gap:10px;
+        margin-bottom:18px;
+    }
+    .filter-group.search-group{
+        flex:1 1 100%;
+        min-width:0;
+    }
+    .filter-group:not(.search-group){
+        flex:1 1 calc(50% - 5px);
+        min-width:0;
+    }
+    .filter-input, .filter-select{
+        height:40px;
+        padding:0 12px;
+        font-size:13px;
+    }
+    .filter-select{
+        min-width:0;
+        width:100%;
+        padding-right:26px;
+        background-position:right 8px center;
+    }
+    .filter-label{
+        font-size:12px;
+    }
+
     .complaints-table{
         display:block;
         overflow-x:auto;
@@ -365,106 +220,64 @@ body{
 </head>
 <body>
  
-<div class="top-header">
-    <div class="logo-section">
-        <img src="../../Photos/CMS_Logo.png" alt="Logo">
-        <div class="logo-text">
-            <h1>KATHMANDU VALLEY</h1>
-            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-            <p>Report, Track and Resolve Together for a Better Valley</p>
-        </div>
-    </div>
- 
-    <div class="user-info">
-        <div class="profile-placeholder">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-        </div>
-        <span>Admin CMS</span>
-        <svg class="dropdown-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
-</div>
- 
+{% include 'partials/header.html' %}
+
 <div class="wrapper">
-    <div class="sidebar">
-        <a href="Dashboard.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-            Dashboard
-        </a>
-        <a href="Users.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5S15.5 16.4 15.5 20"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 13.2c2.9.4 5 2.7 5 6.8"/></svg>
-            Users
-        </a>
-        <a href="Complaints.html" class="nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-            Complaints
-        </a>
-        <a href="Reports.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 12h3M8 16h8M8 8h8"/></svg>
-            Reports
-        </a>
-        <a href="Change Password.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-            Change Password
-        </a>
-        <a href="Profile.html" class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-            Profile
-        </a>
-    </div>
- 
+    {% include 'partials/admin_sidebar.html' with active='complaints' %}
+
     <div class="main-content">
- 
+  
         <div class="page-header-row">
             <h1 class="page-title">Manage Complaints</h1>
-            <svg class="next-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
- 
+
+{% if messages %}
+    {% for message in messages %}
+        {% if forloop.last %}
+            <div class="toast-overlay" id="toastOverlay">
+                <div class="toast-badge toast-{{ message.tags }}">
+                    <span class="toast-icon">{{ message.tags|yesno:'✓,!' }}</span>
+                    <span class="toast-text">{{ message }}</span>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+  
         <div class="filters-row">
             <div class="filter-group search-group">
                 <span class="filter-label">Search Complaints</span>
-                <input type="text" class="filter-input" id="searchComplaintsInput" placeholder="Search Complaints">
+                <input type="text" class="filter-input" id="searchComplaintsInput" placeholder="Search Complaints" value="{{ search_query }}">
             </div>
- 
+  
             <div class="filter-group">
                 <span class="filter-label">Status</span>
                 <select class="filter-select" id="statusFilter">
                     <option value="">All Status</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="resolved">Resolved</option>
-                    <option value="closed">Closed</option>
+                    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>Resolved</option>
+                    <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Closed</option>
                 </select>
             </div>
- 
+  
             <div class="filter-group">
                 <span class="filter-label">Category</span>
                 <select class="filter-select" id="categoryFilter">
                     <option value="">All Category</option>
-                    <option value="infrastructure">Infrastructure</option>
-                    <option value="sanitation">Sanitation</option>
+                    <option value="road_pothole" {% if category_filter == 'road_pothole' %}selected{% endif %}>Road Pothole</option>
+                    <option value="garbage" {% if category_filter == 'garbage' %}selected{% endif %}>Garbage</option>
+                    <option value="drainage" {% if category_filter == 'drainage' %}selected{% endif %}>Drainage</option>
                 </select>
             </div>
- 
-            <div class="filter-group">
-                <span class="filter-label">Date Range</span>
-                <select class="filter-select date-range-select" id="dateRangeFilter">
-                    <option value="">Select Date Range</option>
-                    <option value="today">Today</option>
-                    <option value="7days">Last 7 Days</option>
-                    <option value="30days">Last 30 Days</option>
-                    <option value="custom">Custom Range</option>
-                </select>
-            </div>
- 
-            <button type="button" class="enter-btn" id="enterBtn">Enter</button>
         </div>
- 
+  
         <!-- ===================== COMPLAINTS TABLE ====================== -->
         <div class="card">
             <table class="complaints-table">
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>Subject</th>
+                        <th>Complaint ID</th>
                         <th>Category</th>
                         <th>Submitted by</th>
                         <th>Date</th>
@@ -473,34 +286,82 @@ body{
                     </tr>
                 </thead>
                 <tbody id="complaintsTableBody">
- 
+                    {% if complaints %}
+                        {% for complaint in complaints %}
+                        <tr data-category="{{ complaint.category }}" onclick="window.location.href='{% url 'admin_complaint_detail' complaint.complaint_id %}'">
+                            <td data-label="Complaint ID">{{ complaint.complaint_id }}</td>
+                            <td data-label="Category">{{ complaint.get_category_display }}</td>
+                            <td data-label="Submitted by">{{ complaint.reporter_name }}</td>
+                            <td data-label="Date">{{ complaint.created_at|date:"M d, Y" }}</td>
+                            <td data-label="Status">
+                                <span class="status-badge status-{{ complaint.status }}">
+                                    {{ complaint.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'admin_complaint_detail' complaint.complaint_id %}" class="view-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr id="emptyComplaintsRow">
+                            <td colspan="6" class="empty-state">
+                                Complaint Information will be displayed here.
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr id="noResultsRow" style="display:none;">
+                        <td colspan="6" class="empty-state">
+                            No complaints match your filters.
+                        </td>
+                    </tr>
                 </tbody>
             </table>
- 
-            <!-- Shown only when there is no data yet / table body is empty -->
-            <div class="empty-state" id="emptyState">
-                Complaint Information will be displayed here.
-            </div>
         </div>
- 
+  
     </div>
 </div>
- 
+  
 <script>
- 
-// Toggle empty-state message based on whether the table has rows.
-function updateEmptyState(){
-    const tbody = document.getElementById("complaintsTableBody");
-    const emptyState = document.getElementById("emptyState");
-    emptyState.style.display = tbody.children.length === 0 ? "block" : "none";
-}
-updateEmptyState();
- 
-document.getElementById("enterBtn").addEventListener("click", function(){
-    
+
+var searchInput = document.getElementById("searchComplaintsInput");
+var statusSelect = document.getElementById("statusFilter");
+var categorySelect = document.getElementById("categoryFilter");
+var tbody = document.getElementById("complaintsTableBody");
+var noResultsRow = document.getElementById("noResultsRow");
+var dataRows = Array.prototype.filter.call(tbody.querySelectorAll("tr"), function(row){
+    return !row.id;
 });
+
+function filterTable(){
+    var search = searchInput.value.trim().toLowerCase();
+    var status = statusSelect.value;
+    var category = categorySelect.value;
+    var visible = 0;
+    dataRows.forEach(function(row){
+        var text = row.textContent.toLowerCase();
+        var badge = row.querySelector(".status-badge");
+        var rowStatus = badge ? badge.classList.contains("status-" + status) : false;
+        var matchSearch = !search || text.indexOf(search) !== -1;
+        var matchStatus = !status || rowStatus;
+        var matchCategory = !category || row.getAttribute("data-category") === category;
+        var show = matchSearch && matchStatus && matchCategory;
+        row.style.display = show ? "" : "none";
+        if(show) visible++;
+    });
+    if(noResultsRow){
+        noResultsRow.style.display = (dataRows.length > 0 && visible === 0) ? "" : "none";
+    }
+}
+
+searchInput.addEventListener("input", filterTable);
+statusSelect.addEventListener("change", filterTable);
+categorySelect.addEventListener("change", filterTable);
 </script>
 </body>
 </html>
  
+
 

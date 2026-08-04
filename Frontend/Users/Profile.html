@@ -1,188 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CMS My Profile</title>
+<link rel="stylesheet" href="{% static 'css/common.css' %}?v=9">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    background:white;
-}
-
-.logo-section{
-    position:absolute;
-    top:15px;
-    left:20px;
-
-    display:flex;
-    align-items:center;
-
-    width:420px;
-    max-width: calc(100vw - 160px);
-}
-
-@media (max-width: 480px){
-    .top-header{
-        flex-wrap:wrap;
-        height:auto;
-        padding:15px 15px 90px;
-    }
-    .logo-section{
-        position:static;
-        width:100%;
-        max-width:100%;
-        margin-bottom:10px;
-    }
-    .user-info{
-        margin-left:auto;
-    }
-}
-
-.logo-section img{
-    width:96px;
-    height:auto;
-    margin-right:15px;
-}
-
-.logo-text h1{
-    color:#0B2D6D;
-    font-size:16px;
-    font-weight:800;
-    margin-bottom:8px;
-}
-
-.logo-text h2{
-    color:#555;
-    font-size:11px;
-    font-weight:500;
-    font-weight:bold;
-    letter-spacing:1px;
-    margin-bottom:10px;
-}
-
-.logo-text p{
-    color:#1E64C8;
-    font-size:11px;
-    font-weight:600;
-    font-weight:bold;
-}
-
-/* ================= Continuation below (nothing above this line was changed) ================= */
-
-.top-header{
-    position:relative;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    height:110px;
-    padding:0 30px;
-    background:#F7F8FA;
-    border-bottom:1px solid #E4E7EB;
-}
-
-/* space reserved for the user's profile picture + name, dropdown arrow removed
-   but the whole block still highlights on hover */
-.user-info{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.2s ease;
-}
-
-.user-info:hover{
-    background:#E8F0FE;
-}
-
-.profile-placeholder{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    overflow:hidden;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid #C9CFD8;
-    background:#E4E8EE;
-}
-
-.profile-placeholder img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-.user-info span{
-    font-size:15px;
-    color:#333;
-}
-
-.wrapper{
-    display:flex;
-    align-items:flex-start;
-}
-
-.sidebar{
-    width:270px;
-    background:white;
-    border-right:1px solid #E4E7EB;
-    padding:25px 15px;
-}
-
-.nav-item{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:15px;
-    color:#1A1A1A;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-}
-
-.nav-item svg{
-    stroke:#1A1A1A;
-    transition:stroke 0.2s ease;
-    flex-shrink:0;
-}
-
-.nav-item:hover{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
-
-.nav-item:hover svg{
-    stroke:#1E64C8;
-}
-
-.nav-item.active{
-    background:#E8F0FE;
-    color:#1E64C8;
-}
- 
-.nav-item.active svg{
-    stroke:#1E64C8;
-}
+/* ================= My Profile page styles ================= */
 
 .main-content{
     flex:1;
     padding:30px 40px;
     background:#FAFBFC;
-    min-height:calc(100vh - 110px);
+    min-height:calc(100vh - 130px);
 }
 
 .page-title{
@@ -266,8 +98,6 @@ body{
     background:#17509E;
 }
 
-/* ================= My Profile page additions (nothing above this line was changed) ================= */
-
 .profile-layout{
     display:flex;
     align-items:flex-start;
@@ -327,23 +157,6 @@ body{
     width:70%;
     height:70%;
     stroke:#1A1A1A;
-}
-
-.change-picture-btn{
-    background:white;
-    color:#1E64C8;
-    border:1.5px solid #1E64C8;
-    padding:10px 18px;
-    border-radius:8px;
-    font-weight:bold;
-    font-size:14px;
-    cursor:pointer;
-    transition:background 0.2s ease, color 0.2s ease;
-}
-
-.change-picture-btn:hover{
-    background:#1E64C8;
-    color:white;
 }
 
 .profile-fields{
@@ -464,78 +277,56 @@ body{
     color:#1A1A1A;
 }
 
-.profile-fields{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-}
-
-.change-password-link{
-    align-self:flex-end;
-    color:#0B2D6D;
-    font-weight:700;
-    font-size:14px;
-    text-decoration:none;
-    margin-top:10px;
-}
-
-.change-password-link:hover{
-    color:#1E64C8;
-    text-decoration:underline;
-}
-
-
 @media (max-width:900px){
     .profile-layout{ flex-direction:column; }
     .side-column{ width:100%; }
     .profile-body{ flex-direction:column; align-items:center; text-align:center; }
     .change-password-link{ align-self:center; }
 }
+
+@media (max-width:600px){
+    .profile-card{
+        padding:34px 24px !important;
+        border-radius:16px;
+    }
+    .profile-layout{
+        gap:20px;
+    }
+    .profile-body{
+        gap:24px;
+        align-items:center;
+        text-align:center;
+    }
+    .profile-fields{
+        width:100%;
+        align-items:center;
+    }
+    .profile-info-row{
+        padding-bottom:18px;
+        margin-bottom:22px;
+    }
+    .profile-label{
+        font-size:13px !important;
+    }
+    .profile-value{
+        font-size:16px !important;
+    }
+    .avatar-placeholder{
+        width:130px;
+        height:130px;
+    }
+    .change-password-link{
+        margin-top:10px;
+    }
+}
 </style>
 </head>
 <body>
 
-<div class="top-header">
-    <div class="logo-section">
-       <img src="../../Photos/CMS_Logo.png" alt="Logo">
-        <div class="logo-text">
-            <h1>KATHMANDU VALLEY</h1>
-            <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-            <p>Report, Track and Resolve Together for a Better Valley</p>
-        </div>
-    </div>
-
-    <div class="user-info">
-        <div class="profile-placeholder">
-            <img src="..\..\Photos\Profile_icon-.png" alt="Profile_icon-">
-        </div>
-        <span>Hello, User</span>
-    </div>
-</div>
+{% include 'partials/header.html' %}
 
 <div class="wrapper">
-    <div class="sidebar">
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
-            Dashboard
-        </div>
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-            New Complaint
-        </div>
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-            My Complaints
-        </div>
-        <div class="nav-item active">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-            Profile
-        </div>
-        <div class="nav-item">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-            Change Password
-        </div>
-    </div>
+    {% include 'partials/user_sidebar.html' with active='profile' %}
 
     <div class="main-content">
         <h1 class="page-title">My Profile</h1>
@@ -550,27 +341,26 @@ body{
                         <div class="avatar-placeholder">
                             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
                         </div>
-                        <button type="button" class="change-picture-btn">Change Picture</button>
                     </div>
 
                         <div class="profile-fields">
 
                             <div class="profile-info-row">
                                 <span class="profile-label">Full Name</span>
-                                <span class="profile-value" id="fullNameValue">User Name</span>
+                                <span class="profile-value" id="fullNameValue">{{ full_name }}</span>
                             </div>
 
                             <div class="profile-info-row">
                                 <span class="profile-label">Email Address</span>
-                                <span class="profile-value" id="emailValue">user@example.com</span>
+                                <span class="profile-value" id="emailValue">{{ email }}</span>
                             </div>
 
                             <div class="profile-info-row">
                                 <span class="profile-label">Phone Number</span>
-                                <span class="profile-value" id="phoneValue">98XXXXXXXX</span>
+                                <span class="profile-value" id="phoneValue">{{ phone }}</span>
                             </div>
 
-                            <a  class="change-password-link">
+                            <a href="{% url 'change_password' %}" class="change-password-link">
                                 Change Password
                             </a>
 
@@ -585,26 +375,21 @@ body{
 
                     <div class="activity-row">
                         <span class="activity-label">Last Login</span>
-                        <!-- backend: document.getElementById('lastLoginValue').textContent = data.lastLogin -->
-                        <span class="activity-value" id="lastLoginValue">--</span>
+                        <span class="activity-value" id="lastLoginValue">{{ last_login|date:"M j, Y" }}</span>
                     </div>
 
                     <div class="activity-row">
                         <span class="activity-label">Account Status</span>
-                        <!-- backend: set textContent to the status, and add class
-                             "status-active" or "status-inactive" to color the badge -->
-                        <span class="status-badge" id="accountStatusValue">--</span>
+                        <span class="status-badge status-{% if account_status == 'active' %}active{% else %}inactive{% endif %}" id="accountStatusValue">{{ account_status|capfirst }}</span>
                     </div>
                 </div>
 
-                <button type="button" class="logout-btn" id="logoutBtn">Logout</button>
+                <a href="{% url 'logout' %}" class="logout-btn" style="display:block; text-align:center; text-decoration:none;">Logout</a>
             </div>
 
         </div>
     </div>
 </div>
-
-
 
 </body>
 </html>

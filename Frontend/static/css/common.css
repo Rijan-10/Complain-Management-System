@@ -1,0 +1,982 @@
+/* ============================================================
+   Shared layout: header, user card + dropdown, sidebar nav
+   Used by every logged-in page via partials/header.html
+   and partials/*_sidebar.html
+   ============================================================ */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:white;
+}
+
+/* ---- Top header ---- */
+
+.top-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 25px;
+    background:white;
+    border-bottom:1px solid #E4E7EB;
+    min-height:130px;
+}
+
+.logo-section{
+    display:flex;
+    align-items:center;
+}
+
+.logo-section img{
+    width:96px;
+    height:auto;
+    margin-right:15px;
+}
+
+.logo-text h1{
+    color:#0B2D6D;
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.logo-text h2{
+    color:#555;
+    font-size:11px;
+    font-weight:500;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:10px;
+}
+
+.logo-text p{
+    color:#1E64C8;
+    font-size:11px;
+    font-weight:600;
+    font-weight:bold;
+}
+
+/* ---- User card + dropdown menu ---- */
+
+.user-menu{
+    position:relative;
+}
+
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.user-info:hover{
+    background:#E8F0FE;
+}
+
+.profile-placeholder{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    overflow:hidden;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #C9CFD8;
+    background:#E4E8EE;
+}
+
+.profile-placeholder img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.user-info span{
+    font-size:15px;
+    color:#333;
+}
+
+.chevron{
+    margin-left:4px;
+    stroke:#333;
+    transition:transform 0.2s ease;
+}
+
+.user-menu.open .chevron{
+    transform:rotate(180deg);
+}
+
+.user-dropdown{
+    position:absolute;
+    top:calc(100% + 10px);
+    right:0;
+    background:#fff;
+    border:1px solid #E4E7EB;
+    border-radius:10px;
+    box-shadow:0 12px 28px rgba(0,0,0,0.12);
+    min-width:200px;
+    padding:8px;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-6px);
+    transition:opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index:100;
+}
+
+.user-menu.open .user-dropdown{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+.user-dropdown a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 14px;
+    border-radius:8px;
+    color:#1A1A1A;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+.user-dropdown a:hover{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+
+.user-dropdown a svg{
+    stroke:#1A1A1A;
+    transition:stroke 0.2s ease;
+}
+
+.user-dropdown a:hover svg{
+    stroke:#1E64C8;
+}
+
+.user-dropdown .divider{
+    height:1px;
+    background:#E4E7EB;
+    margin:6px 10px;
+}
+
+.user-dropdown .logout-link,
+.user-dropdown .logout-link svg{
+    color:#C0392B;
+    stroke:#C0392B;
+}
+
+.user-dropdown .logout-link:hover{
+    background:#FBE3E3;
+}
+
+/* ---- Layout: sidebar + main ---- */
+
+.wrapper{
+    display:flex;
+    align-items:flex-start;
+}
+
+.sidebar{
+    width:270px;
+    min-height:calc(100vh - 130px);
+    border-right:1px solid #E4E7EB;
+    background:white;
+    padding:25px 15px;
+    transition:transform 0.3s ease;
+}
+
+/* ---- Mobile sidebar toggle ---- */
+
+.mobile-menu-toggle{
+    display:none;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+    border-radius:8px;
+    transition:background 0.2s ease;
+}
+
+.mobile-menu-toggle:hover{
+    background:#E8F0FE;
+}
+
+.mobile-menu-toggle svg{
+    stroke:#1A1A1A;
+}
+
+.sidebar-overlay{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(0,0,0,0.5);
+    z-index:150;
+}
+
+/* ---- Responsive: mobile sidebar becomes off-canvas ---- */
+
+@media (max-width: 900px){
+    .mobile-menu-toggle{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .sidebar{
+        position:fixed;
+        top:0;
+        left:0;
+        bottom:0;
+        z-index:200;
+        transform:translateX(-100%);
+        box-shadow:4px 0 20px rgba(0,0,0,0.15);
+        padding-top:80px;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .sidebar-overlay.open{
+        display:block;
+    }
+
+    .wrapper{
+        flex-direction:column;
+    }
+
+    .main-content{
+        width:100%;
+        min-height:calc(100vh - 130px);
+    }
+}
+
+/* ---- Nav item ---- */
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 18px;
+    border-radius:8px;
+    margin-bottom:6px;
+    font-weight:bold;
+    font-size:15px;
+    color:#1A1A1A;
+    cursor:pointer;
+    text-decoration:none;
+    transition:background 0.2s ease, color 0.2s ease;
+}
+
+.nav-item svg{
+    stroke:#1A1A1A;
+    transition:stroke 0.2s ease;
+    flex-shrink:0;
+}
+
+.nav-item:hover{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+
+.nav-item:hover svg{
+    stroke:#1E64C8;
+}
+
+.nav-item.active{
+    background:#E8F0FE;
+    color:#1E64C8;
+}
+
+.nav-item.active svg{
+    stroke:#1E64C8;
+}
+
+/* ---- Sidebar close button (mobile only) ---- */
+
+.sidebar-close{
+    display:none;
+    position:absolute;
+    top:15px;
+    right:15px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+    border-radius:8px;
+    transition:background 0.2s ease;
+}
+
+.sidebar-close:hover{
+    background:#E8F0FE;
+}
+
+.sidebar-close svg{
+    stroke:#1A1A1A;
+}
+
+@media (max-width: 900px){
+    .sidebar-close{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+}
+
+/* ---- Collapsible sidebar (icons only, expands on hover) ---- */
+
+.sidebar.collapsible{
+    width:78px;
+    padding:25px 12px;
+    overflow:hidden;
+    transition:width 0.3s ease;
+}
+
+.sidebar.collapsible .nav-item{
+    justify-content:center;
+    gap:0;
+    padding:14px 0;
+    margin-bottom:8px;
+}
+
+.sidebar.collapsible .nav-label{
+    max-width:0;
+    opacity:0;
+    white-space:nowrap;
+    overflow:hidden;
+    transition:max-width 0.3s ease, opacity 0.2s ease;
+}
+
+.sidebar.collapsible:hover,
+.sidebar.collapsible:focus-within{
+    width:270px;
+}
+
+.sidebar.collapsible:hover .nav-item,
+.sidebar.collapsible:focus-within .nav-item{
+    justify-content:flex-start;
+    gap:14px;
+    padding:14px 18px;
+}
+
+.sidebar.collapsible:hover .nav-label,
+.sidebar.collapsible:focus-within .nav-label{
+    max-width:200px;
+    opacity:1;
+}
+
+@media (max-width: 900px){
+    .sidebar.collapsible{
+        width:270px;
+        max-width:80vw;
+        padding:25px 15px;
+        padding-top:80px;
+    }
+
+    .sidebar.collapsible .nav-item{
+        justify-content:flex-start;
+        gap:14px;
+        padding:14px 18px;
+    }
+
+    .sidebar.collapsible .nav-label{
+        max-width:200px;
+        opacity:1;
+    }
+
+    .sidebar.collapsible:hover{
+        width:270px;
+    }
+}
+
+/* ---- Responsive tables ---- */
+
+.table-responsive{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table-responsive::-webkit-scrollbar{
+    height:6px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb{
+    background:#C9CFD8;
+    border-radius:3px;
+}
+
+@media (max-width: 600px){
+    table{
+        display:block;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+    thead{
+        display:none;
+    }
+    tbody{
+        display:block;
+    }
+    tr{
+        display:block;
+        border:1px solid #E4E7EB;
+        border-radius:10px;
+        margin-bottom:12px;
+        padding:12px;
+        background:white;
+    }
+    td{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:10px 0;
+        border-bottom:1px solid #F2F2F2;
+        text-align:right;
+    }
+    td:last-child{
+        border-bottom:none;
+    }
+    td::before{
+        content:attr(data-label);
+        font-weight:600;
+        color:#555;
+        text-align:left;
+        margin-right:12px;
+    }
+}
+
+/* ---- Responsive forms ---- */
+
+@media (max-width: 600px){
+    .form-group{
+        margin-bottom:16px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    select,
+    textarea{
+        width:100%;
+        height:44px;
+        font-size:16px;
+    }
+    button,
+    .btn-solid,
+    .btn-outline,
+    .action-btn,
+    .primary-btn,
+    .login-btn{
+        min-height:44px;
+        min-width:44px;
+    }
+}
+
+/* ---- Responsive header ---- */
+
+@media (max-width: 600px){
+    .top-header{
+        flex-wrap:nowrap;
+        min-height:0;
+        padding:10px 10px;
+        gap:8px;
+    }
+    .top-header > div:first-child{
+        flex:1;
+        min-width:0;
+        gap:8px;
+    }
+    .logo-section{
+        width:auto;
+        max-width:100%;
+        min-width:0;
+        flex:1;
+        margin-bottom:0;
+    }
+    .logo-section img{
+        width:36px;
+        margin-right:8px;
+        flex-shrink:0;
+    }
+    .logo-text{
+        min-width:0;
+    }
+    .logo-text h1{
+        font-size:10px;
+        margin-bottom:2px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+    .logo-text h2{
+        font-size:7px;
+        margin-bottom:3px;
+        letter-spacing:0.5px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+    .logo-text p{
+        display:none;
+    }
+    .user-menu{
+        flex-shrink:0;
+    }
+    .user-info{
+        flex-shrink:0;
+        gap:7px;
+        padding:5px 8px;
+    }
+    .user-info span{
+        font-size:13px;
+        white-space:nowrap;
+    }
+    .profile-placeholder{
+        width:32px;
+        height:32px;
+    }
+    .mobile-menu-toggle{
+        flex-shrink:0;
+    }
+}
+
+@media (max-width: 480px){
+    .top-header{
+        flex-wrap:nowrap;
+        height:auto;
+        padding:10px 10px;
+    }
+    .logo-section img{
+        width:36px;
+        margin-right:8px;
+    }
+    .logo-text h1{
+        font-size:9px;
+    }
+    .logo-text h2{
+        font-size:6px;
+    }
+    .user-info span{
+        font-size:12px;
+    }
+    .user-info{
+        gap:6px;
+        padding:5px 8px;
+    }
+    .profile-placeholder{
+        width:30px;
+        height:30px;
+    }
+}
+
+/* ---- Toast Notifications ---- */
+
+.toast-overlay{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:9999;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    animation:toastIn 0.4s ease, toastOut 0.4s ease 3.6s forwards;
+    pointer-events:none;
+}
+
+.toast-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 24px;
+    border-radius:50px;
+    font-size:15px;
+    font-weight:700;
+    color:white;
+    box-shadow:0 12px 30px rgba(0,0,0,0.18);
+    pointer-events:auto;
+    max-width:90vw;
+}
+
+.toast-badge.toast-success{
+    background:#1F8A4C;
+}
+
+.toast-badge.toast-error{
+    background:#D93025;
+}
+
+.toast-badge.toast-warning{
+    background:#E8720C;
+}
+
+.toast-badge.toast-info{
+    background:#1E64C8;
+}
+
+.toast-icon{
+    font-size:18px;
+    font-weight:800;
+}
+
+.toast-text{
+    font-size:14px;
+    line-height:1.3;
+}
+
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateX(-50%) translateY(-20px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes toastOut{
+    from{
+        opacity:1;
+        transform:translateX(-50%) translateY(0);
+    }
+    to{
+        opacity:0;
+        transform:translateX(-50%) translateY(-20px);
+    }
+}
+
+/* ---- Logout Confirmation Modal ---- */
+
+.logout-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,15,25,0.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:10000;
+}
+
+.logout-modal-overlay.active{
+    display:flex;
+}
+
+.logout-modal-box{
+    background:#fff;
+    border-radius:16px;
+    padding:32px 28px 26px;
+    max-width:380px;
+    width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.28);
+    text-align:center;
+    animation:modalPopIn 0.25s ease;
+}
+
+.logout-modal-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    background:#FDECEC;
+    color:#DC2626;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.logout-modal-box h3{
+    font-size:20px;
+    color:#1A1A1A;
+    margin-bottom:10px;
+}
+
+.logout-modal-box p{
+    font-size:14px;
+    color:#5B6472;
+    line-height:1.55;
+    margin-bottom:26px;
+}
+
+.logout-modal-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+}
+
+.logout-modal-btn{
+    flex:1;
+    padding:11px 18px;
+    border:none;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.2s ease;
+}
+
+.logout-modal-btn.cancel{
+    background:#EDEFF2;
+    color:#1A1A1A;
+}
+
+.logout-modal-btn.cancel:hover{
+    background:#E1E4E9;
+}
+
+.logout-modal-btn.confirm{
+    background:#DC2626;
+    color:#fff;
+}
+
+.logout-modal-btn.confirm:hover{
+    background:#B91C1C;
+}
+
+@keyframes modalPopIn{
+    from{
+        opacity:0;
+        transform:scale(0.92) translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+
+/* ---- Global mobile font & image sizing ----
+   !important is needed because every admin/user page loads this
+   file first and then its own inline <style> later in <head>,
+   which would otherwise win the cascade. */
+
+@media (max-width:600px){
+    body{
+        font-size:14px !important;
+    }
+
+    .main-content{
+        padding:20px 16px !important;
+    }
+
+    .page-title{
+        font-size:22px !important;
+    }
+
+    .top-header .logo-text h1{
+        font-size:14px !important;
+    }
+    .top-header .logo-text h2{
+        font-size:10px !important;
+    }
+    .top-header .logo-text p{
+        font-size:10px !important;
+    }
+    .user-info span{
+        font-size:13px !important;
+    }
+
+    .nav-item{
+        font-size:14px !important;
+        padding:13px 16px !important;
+    }
+
+    .card{
+        padding:16px !important;
+    }
+    .card h3,
+    .card-title{
+        font-size:16px !important;
+    }
+    .card-number{
+        font-size:26px !important;
+    }
+    .table-header h2{
+        font-size:16px !important;
+    }
+    .complaint-table th,
+    .complaint-table td{
+        font-size:12px !important;
+        padding:10px !important;
+    }
+
+    .stat-value{
+        font-size:24px !important;
+    }
+    .stat-label,
+    .stat-sub,
+    .stat-change{
+        font-size:12px !important;
+    }
+
+    .section-title{
+        font-size:14px !important;
+    }
+    .summary-title{
+        font-size:16px !important;
+    }
+    .info-text h3{
+        font-size:16px !important;
+    }
+
+    .filter-label{
+        font-size:12px !important;
+    }
+    .filter-input,
+    .filter-select{
+        font-size:14px !important;
+        height:42px !important;
+    }
+
+    .action-btn,
+    .primary-btn,
+    .btn-solid,
+    .btn-outline,
+    .login-btn,
+    .update-btn,
+    .create-btn,
+    .add-admin-btn,
+    .submit-btn,
+    .filter-btn,
+    .view-all-btn,
+    .view-btn,
+    .pw-set-btn,
+    .pw-cancel-btn,
+    .modal-btn,
+    .remove-photo-btn{
+        font-size:13px !important;
+        padding:10px 16px !important;
+    }
+
+    table th,
+    table td{
+        font-size:13px !important;
+    }
+
+    .status-badge{
+        font-size:11px !important;
+        padding:4px 10px !important;
+    }
+
+    .timeline-text{
+        font-size:13px !important;
+    }
+    .timeline-datetime{
+        font-size:12px !important;
+    }
+    .detail-label,
+    .info-label,
+    .profile-label,
+    .activity-label{
+        font-size:12px !important;
+    }
+    .detail-value,
+    .info-value,
+    .profile-value,
+    .activity-value{
+        font-size:14px !important;
+    }
+
+    .dropdown-item,
+    .toggle-btn{
+        font-size:13px !important;
+    }
+    .modal-box h3,
+    .modal-title{
+        font-size:17px !important;
+    }
+    .modal-box p{
+        font-size:13px !important;
+    }
+    .empty-state,
+    .empty-placeholder{
+        font-size:13px !important;
+    }
+
+    .status-card-header h2{
+        font-size:16px !important;
+    }
+    .success-card h1{
+        font-size:22px !important;
+    }
+    .success-card p{
+        font-size:13px !important;
+    }
+    .complaint-id{
+        font-size:24px !important;
+    }
+    .logout-content h1{
+        font-size:26px !important;
+    }
+    .logout-buttons button{
+        font-size:16px !important;
+    }
+    .home-icon{
+        font-size:26px !important;
+    }
+}
+
+/* ---- User Profile page (mobile only) ---- */
+
+@media (max-width:600px){
+    .profile-layout .profile-card{
+        padding:36px 24px !important;
+        border-radius:16px;
+        width:100%;
+    }
+    .profile-layout{
+        gap:20px;
+    }
+    .profile-card .profile-body{
+        gap:24px;
+    }
+    .profile-card .profile-fields{
+        width:100%;
+    }
+    .profile-card .profile-info-row{
+        padding-bottom:18px;
+        margin-bottom:22px;
+    }
+    .profile-card .profile-label{
+        font-size:13px !important;
+    }
+    .profile-card .profile-value{
+        font-size:16px !important;
+    }
+    .profile-card .avatar-placeholder{
+        width:130px;
+        height:130px;
+    }
+    .profile-card .change-password-link{
+        margin-top:10px;
+    }
+}
+
+/* Images never overflow the screen on small devices */
+.card img,
+.attachment-box img,
+.main-content img,
+.profile-picture-col img,
+.image-placeholder img{
+    max-width:100%;
+    height:auto;
+}
+
+
