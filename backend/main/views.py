@@ -116,11 +116,19 @@ def login_view(request):
         password = request.POST.get('password')
         user = authenticate(request, email=email, password=password)
         if user is not None:
-            if user.profile.account_status != 'active':
+            profile, created = Profile.objects.get_or_create(
+                user=user,
+                defaults={
+                    'role': 'admin' if user.is_staff else 'user',
+                    'full_name': user.first_name or user.email,
+                    'account_status': 'active',
+                },
+            )
+            if profile.account_status != 'active':
                 messages.error(request, 'Your account has been disabled. Please contact support.')
                 return redirect('login')
             login(request, user)
-            role = user.profile.role
+            role = profile.role
             if role == 'admin':
                 return redirect('admin_dashboard')
             return redirect('user_dashboard')
