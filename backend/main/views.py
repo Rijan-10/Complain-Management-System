@@ -586,6 +586,12 @@ def admin_user_change_password(request, user_id):
     return redirect('admin_users')
 
 
+def custom_404(request, exception=None):
+    response = render(request, '404.html', {'requested_path': request.path}, status=404)
+    response['X-CMS-404'] = '1'
+    return response
+
+
 @admin_required
 def admin_logout(request):
     logout(request)
