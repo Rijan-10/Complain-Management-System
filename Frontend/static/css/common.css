@@ -969,6 +969,52 @@ body{
     }
 }
 
+/* ---- Mid-size / half-desktop windows (side-by-side user + admin demo) ---- */
+
+@media (max-width:1100px) and (min-width:601px){
+    body .main-content{
+        padding:26px 22px;
+    }
+    table.complaints-table{
+        display:block;
+        overflow-x:auto;
+    }
+}
+
+@media (max-width:900px) and (min-width:601px){
+    .top-header{
+        padding:12px 16px;
+        min-height:0;
+        gap:10px;
+    }
+    .top-header .logo-section img{
+        width:56px;
+        margin-right:10px;
+    }
+    .top-header .logo-text h1{
+        font-size:13px;
+        margin-bottom:3px;
+    }
+    .top-header .logo-text h2{
+        font-size:9px;
+        margin-bottom:4px;
+    }
+    .top-header .logo-text p{
+        display:none;
+    }
+    .top-header .user-info{
+        padding:6px 10px;
+        gap:8px;
+    }
+    .top-header .user-info span{
+        font-size:13px;
+    }
+    .top-header .profile-placeholder{
+        width:36px;
+        height:36px;
+    }
+}
+
 /* Images never overflow the screen on small devices */
 .card img,
 .attachment-box img,
