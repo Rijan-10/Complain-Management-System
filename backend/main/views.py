@@ -194,6 +194,7 @@ def logout_view(request):
     
     return render(request, 'Logedout.html', {
         'last_message': last_message,
+        'hide_user_menu': True,
     })
 
 
@@ -609,4 +610,4 @@ def admin_logout(request):
     messages_list = list(storage)
     if messages_list:
         last_message = messages_list[-1]
-    return render(request, 'A_logedout.html', {'last_message': last_message})
+    return render(request, 'A_logedout.html', {'last_message': last_message, 'hide_user_menu': True})
