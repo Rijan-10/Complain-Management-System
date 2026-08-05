@@ -14,6 +14,7 @@
         </div>
     </div>
 
+    {% if request.user.is_authenticated %}
     <div class="user-menu" id="userMenu">
         <div class="user-info" id="userMenuToggle">
             <div class="profile-placeholder">
@@ -38,6 +39,7 @@
             </a>
         </div>
     </div>
+    {% endif %}
 </div>
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
