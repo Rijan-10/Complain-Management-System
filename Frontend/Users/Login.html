@@ -17,28 +17,27 @@ body{
     background:white;
 }
 
-.top-bar{
-    position:absolute;
-    top:15px;
-    left:20px;
-    right:20px;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-    flex-wrap:wrap;
+.page{
+    position:relative;
+    min-height:100vh;
 }
 
 .logo-section{
+    position:absolute;
+    top:15px;
+    left:20px;
+
     display:flex;
     align-items:center;
 
-    flex:1 1 auto;
-    min-width:0;     
+    max-width:450px;     
 }
 
 .back-home{
+    position:absolute;
+    top:20px;
+    right:24px;
+
     flex-shrink:0;
 
     display:inline-flex;
@@ -277,22 +276,56 @@ body{
 
 @media(min-width:601px) and (max-width:1100px){
 
+.page{
+    display:flex;
+    flex-wrap:wrap;
+}
+
 .container{
     gap:32px;
     padding:24px;
+    flex:0 0 100%;
+    order:3;
 }
 
-.top-bar{
+.logo-section{
     position:relative;
     top:auto;
     left:auto;
-    right:auto;
-    width:100%;
+    flex:1 1 auto;
+    min-width:0;
+    max-width:100%;
     padding:14px 20px;
+    order:1;
+}
+
+.back-home{
+    position:relative;
+    top:auto;
+    right:auto;
+    flex:0 0 auto;
+    align-self:center;
+    margin-right:20px;
+    order:2;
 }
 
 @media (max-width:600px){
+    .page{
+        display:flex;
+        flex-wrap:wrap;
+    }
+    .logo-section{
+        order:1;
+        flex:0 0 100%;
+        position:relative;
+        top:auto;
+        left:auto;
+        max-width:100%;
+        padding:12px 16px;
+    }
     .container{
+        order:2;
+        flex:0 0 100%;
         gap:24px;
         padding:20px;
     }
@@ -311,15 +344,14 @@ body{
         width:220px;
         height:220px;
     }
-    .top-bar{
+    .back-home{
+        order:3;
         position:relative;
         top:auto;
-        left:auto;
         right:auto;
-        width:100%;
-        padding:12px 16px;
-    }
-    .back-home{
+        flex:0 0 auto;
+        align-self:flex-start;
+        margin:0 0 18px 16px;
         font-size:13px;
         padding:8px 14px;
     }
@@ -420,7 +452,7 @@ body{
 </style>
 </head>
 <body>
-<div class="top-bar">
+<div class="page">
 <div class="logo-section">
     <img src="{% static 'CMS_Logo.png' %}" alt="Logo">
     <div class="logo-text">
@@ -428,8 +460,6 @@ body{
         <h2>COMPLAINT MANAGEMENT SYSTEM</h2>
         <p>Report, Track and Resolve Together for a Better Valley</p>
     </div>
-</div>
-<a href="{% url 'home' %}" class="back-home">&#8592; Back to Home</a>
 </div>
 <div class="container">
 
@@ -496,6 +526,8 @@ body{
 
     </div>
 
+</div>
+<a href="{% url 'home' %}" class="back-home">&#8592; Back to Home</a>
 </div>
 <script>
 function togglePassword() {
